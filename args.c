@@ -13,8 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int          gNumArgs;
-static const char **gpArgv;
+int          gNumArgs;
+const char **gpArgv;
 
 /*
  *    Initializes the argument parser.
@@ -82,4 +82,13 @@ s32 args_get_int( const char *spArg ) {
     }
 
     return -1;
+}
+
+/*
+ *    Returns the executable name.
+ *
+ *    @return const char *    The executable name.
+ */
+const char *args_get_executable( void ) {
+    return gpArgv[ 0 ];
 }

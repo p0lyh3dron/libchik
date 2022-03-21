@@ -47,3 +47,10 @@ const char *args_get_str( const char *spArg );
  *    @return s32             The value of the argument, or -1 if it is not present.
  */
 s32 args_get_int( const char *spArg );
+
+/*
+ *    Returns the executable name.
+ *
+ *    @return const char *    The executable name.
+ */
+const char *args_get_executable( void );

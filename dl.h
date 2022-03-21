@@ -12,8 +12,10 @@
 #pragma once
 
 #if __unix__
+#define DL_EXTENSION ".so"
 #include <dlfcn.h>
 #elif _WIN32
+#define DL_EXTENSION ".dll"
 #include <windows.h>
 #else
 #error "Platform does not support dynamic libraries."
@@ -48,4 +50,12 @@ void dl_close( dl_handle_t sHandle );
  *    @return void *         The address of the symbol.
  *                           NULL if the symbol could not be loaded.
  */
-void *dl_load( dl_handle_t sHandle, const s8 *spName );
+void *dl_sym( dl_handle_t sHandle, const s8 *spName );
+
+/*
+ *    Returns the last error that occurred
+ *    while loading a dynamic library.
+ *
+ *    @return s8 *           The last error that occurred.
+ */
+s8 *dl_error( void );

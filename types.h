@@ -26,3 +26,14 @@ typedef double    f64;
 typedef void*     dl_handle_t;
 
 typedef u64       handle_t;
+
+typedef struct {
+    f32 x;
+    f32 y;
+}chik_vec2_t;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+}chik_vec3_t;

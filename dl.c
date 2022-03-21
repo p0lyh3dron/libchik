@@ -11,6 +11,11 @@
  */
 #include "dl.h"
 
+#if __unix__
+#elif _WIN32
+#define MAX_ERROR_LENGTH 256
+#endif /* __unix__  */
+
 /*
  *    Opens a dynamic library.
  *
@@ -50,10 +55,26 @@ void dl_close( dl_handle_t sHandle ) {
  *    @return void *         The address of the symbol.
  *                           NULL if the symbol could not be loaded.
  */
-void *dl_load( dl_handle_t sHandle, const s8 *spName ) {
+void *dl_sym( dl_handle_t sHandle, const s8 *spName ) {
 #if __unix__
     return dlsym( sHandle, spName );
 #elif _WIN32
     return GetProcAddress( sHandle, spName );
+#endif /* __unix__  */
+}
+
+/*
+ *    Returns the last error that occurred
+ *    while loading a dynamic library.
+ *
+ *    @return s8 *           The last error that occurred.
+ */
+s8 *dl_error( void ) {
+#if __unix__
+    return dlerror();
+#elif _WIN32
+    static s8 pError[ MAX_ERROR_LENGTH ];
+    FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, pError, sizeof( pError ), NULL );
+    return pError;
 #endif /* __unix__  */
 }
