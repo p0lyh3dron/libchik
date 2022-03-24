@@ -37,3 +37,10 @@ typedef struct {
     f32 y;
     f32 z;
 }chik_vec3_t;
+
+typedef struct {
+    chik_vec3_t aPos;
+    u32         aColor;
+//    chik_vec3_t aNormal;
+    chik_vec2_t aTexCoord;
+}vertex_t;

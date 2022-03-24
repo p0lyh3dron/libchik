@@ -15,3 +15,5 @@
 #include "args.h"
 #include "dl.h"
 #include "log.h"
+#include "mempool.h"
+#include "resource.h"

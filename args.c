@@ -13,8 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-int          gNumArgs;
-const char **gpArgv;
+int          gNumArgs  = 0;
+const char **gpArgv    = 0;
 
 /*
  *    Initializes the argument parser.
