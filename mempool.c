@@ -35,7 +35,7 @@ mempool_t *mempool_new( s64 sSize ) {
 
     pMempool->apFirst = 0;
     pMempool->aSize   = sSize;
-    pMempool->apBuf   = calloc( 0, sSize );
+    pMempool->apBuf   = malloc( sSize );
 
     if( pMempool->apBuf == 0 ) {
         log_error( "Could not allocate memory for memory pool buffer." );
