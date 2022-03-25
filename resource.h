@@ -15,6 +15,7 @@
 
 #define HANDLE_GET_INDEX( handle )  ( handle & 0xFFFFFFFF )
 #define HANDLE_GET_MAGIC( handle )  ( handle >> 32 )
+#define HANDLE_GET_SIZE( handle )   ( handle >> 64 )
 
 typedef struct {
     mempool_t *apPool;

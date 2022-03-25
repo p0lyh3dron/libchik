@@ -85,7 +85,7 @@ handle_t resource_add( resource_t *spResource, void *spData, u64 sSize ) {
     memcpy( pBuf, &magic, sizeof( magic ) );
     memcpy( pBuf + sizeof( magic ), spData, sSize );
 
-    handle_t handle = ( pBuf - spResource->apPool->apBuf ) | ( ( u64 )magic << 32 );
+    handle_t handle = ( pBuf - spResource->apPool->apBuf ) | ( ( u64 )magic << 32 ) | ( ( u128 )sSize << 64 );
 
     return handle;
 }

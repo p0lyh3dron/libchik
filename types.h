@@ -15,6 +15,17 @@ typedef unsigned short     u16;
 typedef unsigned int       u32;
 typedef unsigned long long u64;
 
+#if __unix__
+    typedef __uint128_t u128;
+#elif _WIN32
+    /*
+     *    Probably broken on windows.
+     */
+    typedef unsigned __int128 u128;
+#else
+    #error "Platform does not support 128-bit integers."
+#endif /* __unix__  */
+
 typedef char      s8;
 typedef short     s16;
 typedef int       s32;
@@ -25,7 +36,7 @@ typedef double    f64;
 
 typedef void*     dl_handle_t;
 
-typedef u64       handle_t;
+typedef u128      handle_t;
 
 typedef struct {
     f32 x;
