@@ -10,7 +10,13 @@
  */
 #include "math.h"
 
-#include <xmmintrin.h>
+#include <math.h>
+
+#if __unix__
+    #include <xmmintrin.h>
+#elif _WIN32
+    #include <intrin.h>
+#endif /* __unix__  */
 
 /*
  *    Returns a 4x4 identity matrix.
@@ -38,30 +44,9 @@ mat4_t m4_identity( void ) {
 mat4_t v4_mul_m4( vec4_t sVec, mat4_t sMat ) {
     mat4_t m;
 
-    float  r0[ 4 ] = { sMat.v[ 0 ], sMat.v[ 4 ], sMat.v[ 8  ], sMat.v[ 12 ] };
-    float  r1[ 4 ] = { sMat.v[ 1 ], sMat.v[ 5 ], sMat.v[ 9  ], sMat.v[ 13 ] };
-    float  r2[ 4 ] = { sMat.v[ 2 ], sMat.v[ 6 ], sMat.v[ 10 ], sMat.v[ 14 ] };
-    float  r3[ 4 ] = { sMat.v[ 3 ], sMat.v[ 7 ], sMat.v[ 11 ], sMat.v[ 15 ] };
-
-    float  v0[ 4 ] = { sVec.x, sVec.y, sVec.z, sVec.w };
-    __m128 v = _mm_load_ps( &v0 );
-    __m128 r = _mm_load_ps( &r0 );
-
-    __m128 r0_ = _mm_mul_ps( r, v );
-    r          = _mm_load_ps( &r1 );
-
-    __m128 r1_ = _mm_mul_ps( r, v );
-    r          = _mm_load_ps( &r2 );
-
-    __m128 r2_ = _mm_mul_ps( r, v );
-    r          = _mm_load_ps( &r3 );
-
-    __m128 r3_ = _mm_mul_ps( r, v );
-
-    _mm_store_ps( &m.v[ 0 ], r0_ );
-    _mm_store_ps( &m.v[ 4 ], r1_ );
-    _mm_store_ps( &m.v[ 8 ], r2_ );
-    _mm_store_ps( &m.v[ 12 ], r3_ );
+    /*
+     *    Extend the vector to a 4x1 matrix.
+     */
 
     return m;
 }
@@ -75,35 +60,15 @@ mat4_t v4_mul_m4( vec4_t sVec, mat4_t sMat ) {
  *    @return mat4_t    The resulting matrix.
  */
 mat4_t m4_mul_v4( mat4_t sMat, vec4_t sVec ) {
-    mat4_t m;
 
-    float  r0[ 4 ] = { sMat.v[ 0  ], sMat.v[ 1  ], sMat.v[ 2  ], sMat.v[ 3  ] };
-    float  r1[ 4 ] = { sMat.v[ 4  ], sMat.v[ 5  ], sMat.v[ 6  ], sMat.v[ 7  ] };
-    float  r2[ 4 ] = { sMat.v[ 8  ], sMat.v[ 9  ], sMat.v[ 10 ], sMat.v[ 11 ] };
-    float  r3[ 4 ] = { sMat.v[ 12 ], sMat.v[ 13 ], sMat.v[ 14 ], sMat.v[ 15 ] };
+    mat4_t m =  {
+        sVec.x, 0, 0, 0,
+        sVec.y, 0, 0, 0,
+        sVec.z, 0, 0, 0,
+        sVec.w, 0, 0, 0
+    };
 
-    float  v0[ 4 ] = { sVec.x, sVec.y, sVec.z, sVec.w };
-
-    __m128 v = _mm_load_ps( &v0 );
-    __m128 r = _mm_load_ps( &r0 );
-
-    __m128 r0_ = _mm_mul_ps( r, v );
-    r          = _mm_load_ps( &r1 );
-
-    __m128 r1_ = _mm_mul_ps( r, v );
-    r          = _mm_load_ps( &r2 );
-
-    __m128 r2_ = _mm_mul_ps( r, v );
-    r          = _mm_load_ps( &r3 );
-
-    __m128 r3_ = _mm_mul_ps( r, v );
-
-    _mm_store_ps( &m.v[ 0 ], r0_ );
-    _mm_store_ps( &m.v[ 4 ], r1_ );
-    _mm_store_ps( &m.v[ 8 ], r2_ );
-    _mm_store_ps( &m.v[ 12 ], r3_ );
-
-    return m;
+    return m4_mul_m4( sMat, m );
 }
 
 /*
