@@ -10,6 +10,8 @@
  */
 #pragma once
 
+#include "math_type.h"
+
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
@@ -41,17 +43,28 @@ typedef u128      handle_t;
 typedef struct {
     f32 x;
     f32 y;
-}chik_vec2_t;
+} vec2_t;
 
 typedef struct {
     f32 x;
     f32 y;
     f32 z;
-}chik_vec3_t;
+} vec3_t;
 
 typedef struct {
-    chik_vec3_t aPos;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 w;
+} vec4_t;
+
+typedef struct {
+    f32 v[ 16 ];
+} mat4_t;
+
+typedef struct {
+    vec3_t aPos;
     u32         aColor;
-//    chik_vec3_t aNormal;
-    chik_vec2_t aTexCoord;
-}vertex_t;
+//    vec3_t aNormal;
+    vec2_t aTexCoord;
+}chik_vertex_t;
