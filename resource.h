@@ -17,6 +17,8 @@
 #define HANDLE_GET_MAGIC( handle )  ( handle >> 32 )
 #define HANDLE_GET_SIZE( handle )   ( handle >> 64 )
 
+#define INVALID_HANDLE ( handle_t )( 0x0 )
+
 typedef struct {
     mempool_t *apPool;
 }resource_t;
