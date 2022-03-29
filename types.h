@@ -46,6 +46,11 @@ typedef struct {
 } vec2_t;
 
 typedef struct {
+    s32 x;
+    s32 y;
+} vec2u_t;
+
+typedef struct {
     f32 x;
     f32 y;
     f32 z;
@@ -59,12 +64,22 @@ typedef struct {
 } vec4_t;
 
 typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} color32_t;
+
+typedef struct {
     f32 v[ 16 ];
 } mat4_t;
 
 typedef struct {
-    vec3_t aPos;
-    u32         aColor;
+    union {
+        vec3_t  aPos;
+        vec2u_t aRastPos;
+    };
+    color32_t aColor;
 //    vec3_t aNormal;
-    vec2_t aTexCoord;
+    vec2_t    aTexCoord;
 }chik_vertex_t;
