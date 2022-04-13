@@ -74,6 +74,7 @@ typedef struct {
 
 typedef union {
     vec2_t    v2;
+    vec2u_t   v2u;
     vec3_t    v3;
     vec4_t    v4;
     color32_t c32;
@@ -86,6 +87,11 @@ typedef struct {
 typedef enum {
     V_R8G8B8A8_U,
     V_R8G8B8A8_S,
+
+    V_R32_U,
+    V_R32G32_U,
+    V_R32G32B32_U,
+    V_R32G32B32A32_U,
 
     V_R32_F,
     V_R32G32_F,
@@ -131,5 +137,5 @@ typedef struct {
     };
     vec4_t aColor;
 //    vec3_t aNormal;
-    vec2_t    aTexCoord;
+    vec2u_t    aTexCoord;
 }chik_vertex_t;

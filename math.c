@@ -227,6 +227,22 @@ vec2_t vec2_interp( vec2_t a, vec2_t b, f32 sStep ) {
 }
 
 /*
+ *    Interpolates a vec2u.
+ *
+ *    @param vec2u_t    The first vector.
+ *    @param vec2u_t    The second vector.
+ *    @param f32        The normalized step.
+ * 
+ *    @return vec2u_t   The interpolated vector.
+ */
+vec2u_t vec2u_interp( vec2u_t a, vec2u_t b, f32 sStep ) {
+    vec2u_t v;
+    v.x = a.x * ( 1 - sStep ) + b.x * sStep;
+    v.y = a.y * ( 1 - sStep ) + b.y * sStep;
+    return v;
+}
+
+/*
  *    Returns a vec3 differential.
  *
  *    @param vec3_t    The first vector.
@@ -376,14 +392,21 @@ vec_t vec_diff( void *a, void *b, f32 sDivisor, v_format_e sFmt ) {
  *    @return vec_t        The interpolated vector.
  */
 vec_t vec_interp( void *a, void *b, f32 sStep, v_format_e sFmt ) {
+    /*
+     *    Some vectors are to be implemented.
+     */
     switch ( sFmt ) {
         case V_R8G8B8A8_U:
         case V_R8G8B8A8_S:
             return ( vec_t ){ .c32 = color32_interp( *( color32_t * )a, *( color32_t * )b, sStep ) };
 
-        /*
-         *    To be implemented.
-         */
+        case V_R32_U: break;
+        case V_R32G32_U:
+            return ( vec_t ){ .v2u = vec2u_interp( *( vec2u_t * )a, *( vec2u_t * )b, sStep ) };
+        case V_R32G32B32_U: break;
+        case V_R32G32B32A32_U: break;
+
+        
         case V_R32_F: break;
         case V_R32G32_F:
             return ( vec_t ){ .v2 = vec2_interp( *( vec2_t * )a, *( vec2_t * )b, sStep ) };

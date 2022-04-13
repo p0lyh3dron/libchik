@@ -94,6 +94,17 @@ vec2_t vec2_diff( vec2_t a, vec2_t b, f32 sDivisor );
 vec2_t vec2_interp( vec2_t a, vec2_t b, f32 sStep );
 
 /*
+ *    Interpolates a vec2u.
+ *
+ *    @param vec2u_t    The first vector.
+ *    @param vec2u_t    The second vector.
+ *    @param f32        The normalized step.
+ * 
+ *    @return vec2u_t   The interpolated vector.
+ */
+vec2u_t vec2u_interp( vec2u_t a, vec2u_t b, f32 sStep );
+
+/*
  *    Returns a vec3 differential.
  *
  *    @param vec3_t    The first vector.
