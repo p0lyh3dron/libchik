@@ -171,3 +171,227 @@ mat4_t m4_translate( vec3_t sVec ) {
     };
     return m;
 }
+
+/*
+ *    Returns a vec2 differential.
+ *
+ *    @param vec2_t    The first vector.
+ *    @param vec2_t    The second vector.
+ *    @param f32       The divisor.
+ *  
+ *    @return vec2_t   The differential.
+ */
+vec2_t vec2_diff( vec2_t a, vec2_t b, f32 sDivisor ) {
+    vec2_t v;
+    v.x = ( b.x - a.x ) / sDivisor;
+    v.y = ( b.y - a.y ) / sDivisor;
+    return v;
+}
+
+/*
+ *    Interpolates a vec2.
+ *
+ *    @param vec2_t    The first vector.
+ *    @param vec2_t    The differential.
+ *    @param f32       The step.
+ * 
+ *    @return vec2_t   The interpolated vector.
+ */
+vec2_t vec2_interp( vec2_t a, vec2_t b, f32 sStep ) {
+    vec2_t v;
+    v.x = a.x + b.x * sStep;
+    v.y = a.y + b.y * sStep;
+    return v;
+}
+
+/*
+ *    Returns a vec3 differential.
+ *
+ *    @param vec3_t    The first vector.
+ *    @param vec3_t    The second vector.
+ *    @param f32       The divisor.
+ *
+ *    @return vec3_t   The differential.
+ */
+vec3_t vec3_diff( vec3_t a, vec3_t b, f32 sDivisor ) {
+    vec3_t v;
+    v.x = ( b.x - a.x ) / sDivisor;
+    v.y = ( b.y - a.y ) / sDivisor;
+    v.z = ( b.z - a.z ) / sDivisor;
+    return v;
+}
+
+/*
+ *    Interpolates a vec3.
+ *
+ *    @param vec3_t    The first vector.
+ *    @param vec3_t    The differential.
+ *    @param f32       The step.
+ *
+ *    @return vec3_t   The interpolated vector.
+ */
+vec3_t vec3_interp( vec3_t a, vec3_t b, f32 sStep ) {
+    vec3_t v;
+    v.x = a.x + b.x * sStep;
+    v.y = a.y + b.y * sStep;
+    v.z = a.z + b.z * sStep;
+    return v;
+}
+
+/*
+ *    Returns a vec4 differential.
+ *
+ *    @param vec4_t    The first vector.
+ *    @param vec4_t    The second vector.
+ *    @param f32       The divisor.
+ *
+ *    @return vec4_t   The differential.
+ */
+vec4_t vec4_diff( vec4_t a, vec4_t b, f32 sDivisor ) {
+    vec4_t v;
+    v.x = ( b.x - a.x ) / sDivisor;
+    v.y = ( b.y - a.y ) / sDivisor;
+    v.z = ( b.z - a.z ) / sDivisor;
+    v.w = ( b.w - a.w ) / sDivisor;
+    return v;
+}
+
+/*
+ *    Interpolates a vec4.
+ *
+ *    @param vec4_t    The first vector.
+ *    @param vec4_t    The second vector.
+ *    @param f32       The normalised step.
+ * 
+ *    @return vec4_t   The interpolated vector.
+ */
+vec4_t vec4_interp( vec4_t a, vec4_t b, f32 sStep ) {
+    vec4_t v;
+    v.x = a.x * ( 1 - sStep ) + b.x * sStep;
+    v.y = a.y * ( 1 - sStep ) + b.y * sStep;
+    v.z = a.z * ( 1 - sStep ) + b.z * sStep;
+    v.w = a.w * ( 1 - sStep ) + b.w * sStep;
+    return v;
+}
+
+/*
+ *    Returns a color32 differential.
+ *
+ *    @param color32_t    The first color.
+ *    @param color32_t    The second color.
+ *    @param f32          The divisor.
+ * 
+ *    @return color32_t   The differential.
+ */
+color32_t color32_diff( color32_t a, color32_t b, f32 sDivisor ) {
+    color32_t c;
+    c.r = ( b.r - a.r ) / sDivisor;
+    c.g = ( b.g - a.g ) / sDivisor;
+    c.b = ( b.b - a.b ) / sDivisor;
+    c.a = ( b.a - a.a ) / sDivisor;
+    return c;
+}
+
+/*
+ *    Interpolates a color32.
+ *
+ *    @param color32_t    The first color.
+ *    @param color32_t    The differential.
+ *    @param f32          The step.
+ * 
+ *    @return color32_t   The interpolated color.
+ */
+color32_t color32_interp( color32_t a, color32_t b, f32 sStep ) {
+    color32_t c;
+    c.r = a.r + b.r * sStep;
+    c.g = a.g + b.g * sStep;
+    c.b = a.b + b.b * sStep;
+    c.a = a.a + b.a * sStep;
+    return c;
+}
+
+/*
+ *    Returns a vec differential.
+ *
+ *    @param void *        The first vector.
+ *    @param void *        The second vector.
+ *    @param f32           The divisor.
+ *    @param v_format_e    The vector format.
+ * 
+ *    @return vec_t        The differential.
+ */
+vec_t vec_diff( void *a, void *b, f32 sDivisor, v_format_e sFmt ) {
+    if ( a == 0 || b == 0 ) {
+        log_warn( "vec_diff( void *, void *, f32, v_format_e ): a or b is null\n" );
+        return ( vec_t ){ 0.0f };
+    }
+    switch ( sFmt ) {
+        case V_R8G8B8A8_U:
+        case V_R8G8B8A8_S:
+            return ( vec_t ){ .c32 = color32_diff( *( color32_t * )a, *( color32_t * )b, sDivisor ) };
+
+        /*
+         *    To be implemented.
+         */
+        case V_R32_F: break;
+        case V_R32G32_F:
+            return ( vec_t ){ .v2 = vec2_diff( *( vec2_t * )a, *( vec2_t * )b, sDivisor ) };
+        case V_R32G32B32_F:
+            return ( vec_t ){ .v3 = vec3_diff( *( vec3_t * )a, *( vec3_t * )b, sDivisor ) };
+        case V_R32G32B32A32_F:
+            return ( vec_t ){ .v4 = vec4_diff( *( vec4_t * )a, *( vec4_t * )b, sDivisor ) };
+    }
+}
+
+/*
+ *    Interpolates a vec.
+ *
+ *    @param void *        The first vector.
+ *    @param void *        The differential.
+ *    @param f32           The step.
+ *    @param v_format_e    The vector format.
+ * 
+ *    @return vec_t        The interpolated vector.
+ */
+vec_t vec_interp( void *a, void *b, f32 sStep, v_format_e sFmt ) {
+    switch ( sFmt ) {
+        case V_R8G8B8A8_U:
+        case V_R8G8B8A8_S:
+            return ( vec_t ){ .c32 = color32_interp( *( color32_t * )a, *( color32_t * )b, sStep ) };
+
+        /*
+         *    To be implemented.
+         */
+        case V_R32_F: break;
+        case V_R32G32_F:
+            return ( vec_t ){ .v2 = vec2_interp( *( vec2_t * )a, *( vec2_t * )b, sStep ) };
+        case V_R32G32B32_F:
+            return ( vec_t ){ .v3 = vec3_interp( *( vec3_t * )a, *( vec3_t * )b, sStep ) };
+        case V_R32G32B32A32_F:
+            return ( vec_t ){ .v4 = vec4_interp( *( vec4_t * )a, *( vec4_t * )b, sStep ) };
+    }
+}
+
+/*
+ *    Returns the size of a vertex component in bytes.
+ *
+ *    @param v_format_e     The vertex format.
+ * 
+ *    @return u32           The size of the vertex component in bytes.
+ */
+u32 get_vertex_component_size( v_format_e sFmt ) {
+    switch ( sFmt ) {
+        case V_R8G8B8A8_S:
+        case V_R8G8B8A8_U:
+            return 4;
+
+        case V_R32_F:
+            return 4;
+        case V_R32G32_F:
+            return 8;
+        case V_R32G32B32_F:
+            return 12;
+        case V_R32G32B32A32_F:
+            return 16;
+    }
+}

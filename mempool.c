@@ -185,11 +185,12 @@ s8 *mempool_alloc( mempool_t *spPool, s64 sSize ) {
      *    Allocate a new chunk.
      */
     memchunk_t *pChunk = ( memchunk_t* )malloc( sizeof( memchunk_t ) );
-    pChunk->aFlags  = MEMFLAG_USED;
-    pChunk->aSize   = sSize;
-    pChunk->apData  = spPool->apCur;
-    pChunk->apNext  = 0;
-    spPool->apCur  += sSize;
+    s8         *pBuf   = spPool->apCur;
+    pChunk->aFlags     = MEMFLAG_USED;
+    pChunk->aSize      = sSize;
+    pChunk->apData     = spPool->apCur;
+    pChunk->apNext     = 0;
+    spPool->apCur     += sSize;
 
     /*
      *    Add the chunk to the list.
@@ -204,8 +205,6 @@ s8 *mempool_alloc( mempool_t *spPool, s64 sSize ) {
         pLast->apNext = pChunk;
     }
 
-    s8 *pBuf       = spPool->apCur;
-    spPool->apCur += sSize;
     return pBuf;
 }
 

@@ -10,6 +10,8 @@
  */
 #pragma once
 
+#define MAX_VECTOR_ATTRIBUTES 16
+
 #include "math_type.h"
 
 typedef unsigned char      u8;
@@ -70,16 +72,64 @@ typedef struct {
     u8 a;
 } color32_t;
 
+typedef union {
+    vec2_t    v2;
+    vec3_t    v3;
+    vec4_t    v4;
+    color32_t c32;
+} vec_t;
+
 typedef struct {
     f32 v[ 16 ];
 } mat4_t;
+
+typedef enum {
+    V_R8G8B8A8_U,
+    V_R8G8B8A8_S,
+
+    V_R32_F,
+    V_R32G32_F,
+    V_R32G32B32_F,
+    V_R32G32B32A32_F,
+} v_format_e;
+
+/*
+ *    Returns the size of a vertex component in bytes.
+ *
+ *    @param v_format_e     The vertex format.
+ * 
+ *    @return u32           The size of the vertex component in bytes.
+ */
+u32 get_vertex_component_size( v_format_e sFmt );
+
+typedef struct {
+    color32_t aColor;
+    vec2u_t   aPos;
+} fragment_t;
+
+typedef enum {
+    V_POS = 1 << 0,
+} v_usage_e;
+
+typedef struct {
+    v_usage_e    aUsage;
+    v_format_e   aFormat;
+    u32          aStride;
+    u32          aOffset;
+    void ( *apFunc )( fragment_t *, vec_t * );
+} v_attrib_t;
+
+typedef struct {
+    v_attrib_t aAttribs[ MAX_VECTOR_ATTRIBUTES ];
+    u32        aCount;
+} v_layout_t;
 
 typedef struct {
     union {
         vec3_t  aPos;
         vec2u_t aRastPos;
     };
-    color32_t aColor;
+    vec4_t aColor;
 //    vec3_t aNormal;
     vec2_t    aTexCoord;
 }chik_vertex_t;

@@ -70,3 +70,115 @@ mat4_t m4_rotate( f32 fAngle, vec3_t sAxis );
  *    @return mat4_t The resulting matrix.
  */
 mat4_t m4_translate( vec3_t sVec );
+
+/*
+ *    Returns a vec2 differential.
+ *
+ *    @param vec2_t    The first vector.
+ *    @param vec2_t    The second vector.
+ *    @param f32       The divisor.
+ *  
+ *    @return vec2_t   The differential.
+ */
+vec2_t vec2_diff( vec2_t a, vec2_t b, f32 sDivisor );
+
+/*
+ *    Interpolates a vec2.
+ *
+ *    @param vec2_t    The first vector.
+ *    @param vec2_t    The differential.
+ *    @param f32       The step.
+ * 
+ *    @return vec2_t   The interpolated vector.
+ */
+vec2_t vec2_interp( vec2_t a, vec2_t b, f32 sStep );
+
+/*
+ *    Returns a vec3 differential.
+ *
+ *    @param vec3_t    The first vector.
+ *    @param vec3_t    The second vector.
+ *    @param f32       The divisor.
+ *
+ *    @return vec3_t   The differential.
+ */
+vec3_t vec3_diff( vec3_t a, vec3_t b, f32 sDivisor );
+
+/*
+ *    Interpolates a vec3.
+ *
+ *    @param vec3_t    The first vector.
+ *    @param vec3_t    The differential.
+ *    @param f32       The step.
+ *
+ *    @return vec3_t   The interpolated vector.
+ */
+vec3_t vec3_interp( vec3_t a, vec3_t b, f32 sStep );
+
+/*
+ *    Returns a vec4 differential.
+ *
+ *    @param vec4_t    The first vector.
+ *    @param vec4_t    The second vector.
+ *    @param f32       The divisor.
+ *
+ *    @return vec4_t   The differential.
+ */
+vec4_t vec4_diff( vec4_t a, vec4_t b, f32 sDivisor );
+
+/*
+ *    Interpolates a vec4.
+ *
+ *    @param vec4_t    The first vector.
+ *    @param vec4_t    The differential.
+ *    @param f32       The step.
+ * 
+ *    @return vec4_t   The interpolated vector.
+ */
+vec4_t vec4_interp( vec4_t a, vec4_t b, f32 sStep );
+
+/*
+ *    Returns a color32 differential.
+ *
+ *    @param color32_t    The first color.
+ *    @param color32_t    The second color.
+ *    @param f32          The divisor.
+ * 
+ *    @return color32_t   The differential.
+ */
+color32_t color32_diff( color32_t a, color32_t b, f32 sDivisor );
+
+/*
+ *    Interpolates a color32.
+ *
+ *    @param color32_t    The first color.
+ *    @param color32_t    The differential.
+ *    @param f32          The step.
+ * 
+ *    @return color32_t   The interpolated color.
+ */
+color32_t color32_interp( color32_t a, color32_t b, f32 sStep );
+
+/*
+ *    Returns a vec differential.
+ *
+ *    @param void *        The first vector.
+ *    @param void *        The second vector.
+ *    @param f32           The divisor.
+ *    @param v_format_e    The vector format.
+ * 
+ *    @return vec_t        The differential.
+ */
+vec_t vec_diff( void *a, void *b, f32 sDivisor, v_format_e sFmt );
+
+/*
+ *    Interpolates a vec.
+ *
+ *    @param void *        The first vector.
+ *    @param void *        The differential.
+ *    @param f32           The step.
+ *    @param v_format_e    The vector format.
+ * 
+ *    @return vec_t        The interpolated vector.
+ */
+vec_t vec_interp( void *a, void *b, f32 sStep, v_format_e sFmt );
