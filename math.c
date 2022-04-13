@@ -12,9 +12,9 @@
 
 #include <math.h>
 
-#if __unix__
+#if defined( __unix__ ) && ( __i386__ )
     #include <xmmintrin.h>
-#elif _WIN32
+#elif defined( _WIN32 ) && ( _M_X86 )
     #include <intrin.h>
 #endif /* __unix__  */
 
@@ -81,7 +81,7 @@ mat4_t m4_mul_v4( mat4_t sMat, vec4_t sVec ) {
  */
 mat4_t m4_mul_m4( mat4_t sMat1, mat4_t sMat2 ) {
     mat4_t m;
-
+#if defined( __unix__ ) && defined( __i386__ ) || defined( _WIN32 ) && ( _M_X86 )
     __m128 r0 = _mm_load_ps( &sMat2.v[ 0 ] );
     __m128 r1 = _mm_load_ps( &sMat2.v[ 4 ] );
     __m128 r2 = _mm_load_ps( &sMat2.v[ 8 ] );
@@ -106,7 +106,29 @@ mat4_t m4_mul_m4( mat4_t sMat1, mat4_t sMat2 ) {
 
         _mm_store_ps( &m.v[ i * 4 + 0 ], r );
     }
+#else 
+    m = ( mat4_t ) {
+        sMat1.v[ 0 ] * sMat2.v[ 0 ] + sMat1.v[ 1 ] * sMat2.v[ 4 ] + sMat1.v[ 2 ] * sMat2.v[ 8  ] + sMat1.v[ 3 ] * sMat2.v[ 12 ],
+        sMat1.v[ 0 ] * sMat2.v[ 1 ] + sMat1.v[ 1 ] * sMat2.v[ 5 ] + sMat1.v[ 2 ] * sMat2.v[ 9  ] + sMat1.v[ 3 ] * sMat2.v[ 13 ],
+        sMat1.v[ 0 ] * sMat2.v[ 2 ] + sMat1.v[ 1 ] * sMat2.v[ 6 ] + sMat1.v[ 2 ] * sMat2.v[ 10 ] + sMat1.v[ 3 ] * sMat2.v[ 14 ],
+        sMat1.v[ 0 ] * sMat2.v[ 3 ] + sMat1.v[ 1 ] * sMat2.v[ 7 ] + sMat1.v[ 2 ] * sMat2.v[ 11 ] + sMat1.v[ 3 ] * sMat2.v[ 15 ],
 
+        sMat1.v[ 4 ] * sMat2.v[ 0 ] + sMat1.v[ 5 ] * sMat2.v[ 4 ] + sMat1.v[ 6 ] * sMat2.v[ 8  ] + sMat1.v[ 7 ] * sMat2.v[ 12 ],
+        sMat1.v[ 4 ] * sMat2.v[ 1 ] + sMat1.v[ 5 ] * sMat2.v[ 5 ] + sMat1.v[ 6 ] * sMat2.v[ 9  ] + sMat1.v[ 7 ] * sMat2.v[ 13 ],
+        sMat1.v[ 4 ] * sMat2.v[ 2 ] + sMat1.v[ 5 ] * sMat2.v[ 6 ] + sMat1.v[ 6 ] * sMat2.v[ 10 ] + sMat1.v[ 7 ] * sMat2.v[ 14 ],
+        sMat1.v[ 4 ] * sMat2.v[ 3 ] + sMat1.v[ 5 ] * sMat2.v[ 7 ] + sMat1.v[ 6 ] * sMat2.v[ 11 ] + sMat1.v[ 7 ] * sMat2.v[ 15 ],
+
+        sMat1.v[ 8 ] * sMat2.v[ 0 ] + sMat1.v[ 9 ] * sMat2.v[ 4 ] + sMat1.v[ 10 ] * sMat2.v[ 8  ] + sMat1.v[ 11 ] * sMat2.v[ 12 ],
+        sMat1.v[ 8 ] * sMat2.v[ 1 ] + sMat1.v[ 9 ] * sMat2.v[ 5 ] + sMat1.v[ 10 ] * sMat2.v[ 9  ] + sMat1.v[ 11 ] * sMat2.v[ 13 ],
+        sMat1.v[ 8 ] * sMat2.v[ 2 ] + sMat1.v[ 9 ] * sMat2.v[ 6 ] + sMat1.v[ 10 ] * sMat2.v[ 10 ] + sMat1.v[ 11 ] * sMat2.v[ 14 ],
+        sMat1.v[ 8 ] * sMat2.v[ 3 ] + sMat1.v[ 9 ] * sMat2.v[ 7 ] + sMat1.v[ 10 ] * sMat2.v[ 11 ] + sMat1.v[ 11 ] * sMat2.v[ 15 ],
+
+        sMat1.v[ 12 ] * sMat2.v[ 0 ] + sMat1.v[ 13 ] * sMat2.v[ 4 ] + sMat1.v[ 14 ] * sMat2.v[ 8  ] + sMat1.v[ 15 ] * sMat2.v[ 12 ],
+        sMat1.v[ 12 ] * sMat2.v[ 1 ] + sMat1.v[ 13 ] * sMat2.v[ 5 ] + sMat1.v[ 14 ] * sMat2.v[ 9  ] + sMat1.v[ 15 ] * sMat2.v[ 13 ],
+        sMat1.v[ 12 ] * sMat2.v[ 2 ] + sMat1.v[ 13 ] * sMat2.v[ 6 ] + sMat1.v[ 14 ] * sMat2.v[ 10 ] + sMat1.v[ 15 ] * sMat2.v[ 14 ],
+        sMat1.v[ 12 ] * sMat2.v[ 3 ] + sMat1.v[ 13 ] * sMat2.v[ 7 ] + sMat1.v[ 14 ] * sMat2.v[ 11 ] + sMat1.v[ 15 ] * sMat2.v[ 15 ],
+    };
+#endif /* __unix__ && __i386__ || _WIN32 && _M_X86  */
     return m;
 }
 
