@@ -59,6 +59,12 @@ typedef struct {
 } vec3_t;
 
 typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+} vec3s_t;
+
+typedef struct {
     f32 x;
     f32 y;
     f32 z;

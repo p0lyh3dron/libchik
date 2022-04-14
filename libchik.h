@@ -12,6 +12,7 @@
 
 #include "types.h"
 
+#include "app.h"
 #include "args.h"
 #include "dl.h"
 #include "log.h"
