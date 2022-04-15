@@ -72,124 +72,108 @@ mat4_t m4_rotate( f32 fAngle, vec3_t sAxis );
 mat4_t m4_translate( vec3_t sVec );
 
 /*
- *    Returns a vec2 differential.
- *
- *    @param vec2_t    The first vector.
- *    @param vec2_t    The second vector.
- *    @param f32       The divisor.
- *  
- *    @return vec2_t   The differential.
- */
-vec2_t vec2_diff( vec2_t a, vec2_t b, f32 sDivisor );
-
-/*
  *    Interpolates a vec2.
  *
- *    @param vec2_t    The first vector.
- *    @param vec2_t    The differential.
- *    @param f32       The step.
+ *    @param vec2_t *    The return vector.
+ *    @param vec2_t *    The first vector.
+ *    @param vec2_t *    The differential.
+ *    @param f32         The step.
  * 
- *    @return vec2_t   The interpolated vector.
+ *    @return u32        The return code.
  */
-vec2_t vec2_interp( vec2_t a, vec2_t b, f32 sStep );
+u32 vec2_interp( vec2_t *a, vec2_t *b, vec2_t *c, f32 sStep );
+
+/*
+ *    Scales a vec2.
+ *
+ *    @param vec2_t *    The return vector.
+ *    @param vec2_t *    The vector to scale.
+ *    @param f32         The scale.
+ * 
+ *    @return u32        The return code.
+ */
+u32 vec2_scale( vec2_t *a, vec2_t *b, f32 sScale );
 
 /*
  *    Interpolates a vec2u.
  *
- *    @param vec2u_t    The first vector.
- *    @param vec2u_t    The second vector.
- *    @param f32        The normalized step.
+ *    @param vec2u_t *    The return vector.
+ *    @param vec2u_t *    The first vector.
+ *    @param vec2u_t *    The second vector.
+ *    @param f32          The normalized step.
  * 
- *    @return vec2u_t   The interpolated vector.
+ *    @return u32         The return code.
  */
-vec2u_t vec2u_interp( vec2u_t a, vec2u_t b, f32 sStep );
+u32 vec2u_interp( vec2u_t *a, vec2u_t *b, vec2u_t *c, f32 sStep );
 
 /*
- *    Returns a vec3 differential.
- *
- *    @param vec3_t    The first vector.
- *    @param vec3_t    The second vector.
- *    @param f32       The divisor.
- *
- *    @return vec3_t   The differential.
+ *    Scales a vec2u.
+ *    
+ *    @param vec2u_t *    The return vector.
+ *    @param vec2u_t *    The vector to scale.
+ *    @param f32          The scale.
+ * 
+ *    @return u32         The return code.
  */
-vec3_t vec3_diff( vec3_t a, vec3_t b, f32 sDivisor );
+u32 vec2u_scale( vec2u_t *a, vec2u_t *b, f32 sScale );
 
 /*
  *    Interpolates a vec3.
  *
- *    @param vec3_t    The first vector.
- *    @param vec3_t    The differential.
- *    @param f32       The step.
+ *    @param vec3_t *    The return vector.
+ *    @param vec3_t *    The first vector.
+ *    @param vec3_t *    The differential.
+ *    @param f32         The step.
  *
- *    @return vec3_t   The interpolated vector.
+ *    @return u32        The return code.
  */
-vec3_t vec3_interp( vec3_t a, vec3_t b, f32 sStep );
-
-/*
- *    Returns a vec4 differential.
- *
- *    @param vec4_t    The first vector.
- *    @param vec4_t    The second vector.
- *    @param f32       The divisor.
- *
- *    @return vec4_t   The differential.
- */
-vec4_t vec4_diff( vec4_t a, vec4_t b, f32 sDivisor );
+u32 vec3_interp( vec3_t *a, vec3_t *b, vec3_t *c, f32 sStep );
 
 /*
  *    Interpolates a vec4.
  *
- *    @param vec4_t    The first vector.
- *    @param vec4_t    The differential.
- *    @param f32       The step.
+ *    @param vec4_t *    The return vector.
+ *    @param vec4_t *    The first vector.
+ *    @param vec4_t *    The differential.
+ *    @param f32         The step.
  * 
- *    @return vec4_t   The interpolated vector.
+ *    @return u32        The return code.
  */
-vec4_t vec4_interp( vec4_t a, vec4_t b, f32 sStep );
-
-/*
- *    Returns a color32 differential.
- *
- *    @param color32_t    The first color.
- *    @param color32_t    The second color.
- *    @param f32          The divisor.
- * 
- *    @return color32_t   The differential.
- */
-color32_t color32_diff( color32_t a, color32_t b, f32 sDivisor );
+u32 vec4_interp( vec4_t *a, vec4_t *b, vec4_t *c, f32 sStep );
 
 /*
  *    Interpolates a color32.
  *
- *    @param color32_t    The first color.
- *    @param color32_t    The differential.
- *    @param f32          The step.
+ *    @param color32_t *    The return color.
+ *    @param color32_t *    The first color.
+ *    @param color32_t *    The differential.
+ *    @param f32            The step.
  * 
- *    @return color32_t   The interpolated color.
+ *    @return u32           The return code.
  */
-color32_t color32_interp( color32_t a, color32_t b, f32 sStep );
-
-/*
- *    Returns a vec differential.
- *
- *    @param void *        The first vector.
- *    @param void *        The second vector.
- *    @param f32           The divisor.
- *    @param v_format_e    The vector format.
- * 
- *    @return vec_t        The differential.
- */
-vec_t vec_diff( void *a, void *b, f32 sDivisor, v_format_e sFmt );
+u32 color32_interp( color32_t *a, color32_t *b, color32_t *c, f32 sStep );
 
 /*
  *    Interpolates a vec.
  *
+ *    @param vec_t *       The return vector.
  *    @param void *        The first vector.
  *    @param void *        The differential.
  *    @param f32           The step.
  *    @param v_format_e    The vector format.
  * 
- *    @return vec_t        The interpolated vector.
+ *    @return u32          The return code.
  */
-vec_t vec_interp( void *a, void *b, f32 sStep, v_format_e sFmt );
+u32 vec_interp( vec_t *spRet, void *a, void *b, f32 sStep, v_format_e sFmt );
+
+/*
+ *    Scales a vec.
+ *
+ *    @param vec_t *       The return vector.
+ *    @param void *        The vector.
+ *    @param f32           The scalar.
+ *    @param v_format_e    The vector format.
+ * 
+ *    @return u32          The return code.
+ */
+u32 vec_scale( vec_t *spRet, void *a, f32 sScale, v_format_e sFmt );

@@ -16,8 +16,13 @@
 #include "types.h"
 
 typedef struct {
-    s8     *apAppName;
-    vec3s_t aVersion;
+    const s8 *apEngineName;
+    vec3s_t   aVersion;
+} engineinfo_t;
+
+typedef struct {
+    const s8     *apAppName;
+    vec3s_t       aVersion;
 } appinfo_t;
 
 /*
@@ -31,9 +36,9 @@ void app_init( const s8 *spAppName, const vec3s_t sVersion );
 /*
  *    Returns the app name.
  *
- *    @return s8 *    The application name.
+ *    @return const s8 *    The application name.
  */
-s8 *app_get_name( void );
+const s8 *app_get_name( void );
 
 /*
  *    Returns the app version.

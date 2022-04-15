@@ -13,11 +13,16 @@
 
 appinfo_t gAppInfo = { 0 };
 
+const engineinfo_t gEngineInfo = {
+    "Chik",
+    { 0, 0, 0 }
+};
+
 /*
  *    Initializes the app info.
  *
  *    @param const s8 *       The application name.
- *    @param vec3s_t          The application version.
+ *    @param const vec3s_t    The application version.
  */
 void app_init( const s8 *spAppName, const vec3s_t sVersion ) {
     gAppInfo.apAppName = spAppName;
@@ -27,9 +32,9 @@ void app_init( const s8 *spAppName, const vec3s_t sVersion ) {
 /*
  *    Returns the app name.
  *
- *    @return s8 *    The application name.
+ *    @return const s8 *    The application name.
  */
-s8 *app_get_name( void ) {
+const s8 *app_get_name( void ) {
     return gAppInfo.apAppName;
 }
 
