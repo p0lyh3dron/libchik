@@ -10,6 +10,11 @@
  */
 #pragma once
 
+#define nullptr ( void* )0
+
+#define true    1
+#define false   0
+
 #define MAX_VECTOR_ATTRIBUTES 16
 
 #include "math_type.h"

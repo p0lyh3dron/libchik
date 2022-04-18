@@ -18,4 +18,5 @@
 #include "log.h"
 #include "math.h"
 #include "mempool.h"
+#include "module.h"
 #include "resource.h"
