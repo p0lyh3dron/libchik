@@ -12,7 +12,8 @@
 
 #include <math.h>
 
-#if defined( __unix__ ) && ( __i386__ )
+//#if defined( __unix__ ) && ( __i386__ )
+#if 1
     #include <xmmintrin.h>
 #elif defined( _WIN32 ) && ( _M_X86 )
     #include <intrin.h>
@@ -81,7 +82,8 @@ mat4_t m4_mul_v4( mat4_t sMat, vec4_t sVec ) {
  */
 mat4_t m4_mul_m4( mat4_t sMat1, mat4_t sMat2 ) {
     mat4_t m;
-#if defined( __unix__ ) && defined( __i386__ ) || defined( _WIN32 ) && ( _M_X86 )
+//#if defined( __unix__ ) && defined( __i386__ ) || defined( _WIN32 ) && ( _M_X86 )
+#if 1
     __m128 r0 = _mm_load_ps( &sMat2.v[ 0 ] );
     __m128 r1 = _mm_load_ps( &sMat2.v[ 4 ] );
     __m128 r2 = _mm_load_ps( &sMat2.v[ 8 ] );
@@ -205,8 +207,24 @@ mat4_t m4_translate( vec3_t sVec ) {
  *    @return u32        The return code.
  */
 u32 vec2_interp( vec2_t *a, vec2_t *b, vec2_t *c, f32 sStep ) {
-    a->x = b->x + c->x * sStep;
-    a->y = b->y + c->y * sStep;
+    a->x = b->x * ( 1 - sStep ) + c->x * sStep;
+    a->y = b->y * ( 1 - sStep ) + c->y * sStep;
+
+    return 1;
+}
+
+/*
+ *    Scales a vec2.
+ *
+ *    @param vec2_t *    The return vector.
+ *    @param vec2_t *    The vector to scale.
+ *    @param f32         The scale.
+ * 
+ *    @return u32        The return code.
+ */
+u32 vec2_scale( vec2_t *a, vec2_t *b, f32 sScale ) {
+    a->x = b->x * sScale;
+    a->y = b->y * sScale;
 
     return 1;
 }
@@ -245,6 +263,23 @@ u32 vec2u_scale( vec2u_t *a, vec2u_t *b, f32 sScale ) {
 }
 
 /*
+ *    Subtracts two vec3s.
+ *
+ *    @param vec3_t *    The return vector.
+ *    @param vec3_t *    The first vector.
+ *    @param vec3_t *    The second vector.
+ * 
+ *    @return u32        The return code.
+ */
+u32 vec3_sub( vec3_t *a, vec3_t *b, vec3_t *c ) {
+    a->x = b->x - c->x;
+    a->y = b->y - c->y;
+    a->z = b->z - c->z;
+
+    return 1;
+}
+
+/*
  *    Interpolates a vec3.
  *
  *    @param vec3_t *    The return vector.
@@ -255,10 +290,72 @@ u32 vec2u_scale( vec2u_t *a, vec2u_t *b, f32 sScale ) {
  *    @return u32        The return code.
  */
 u32 vec3_interp( vec3_t *a, vec3_t *b, vec3_t *c, f32 sStep ) {
-    a->x = b->x + c->x * sStep;
-    a->y = b->y + c->y * sStep;
-    a->z = b->z + c->z * sStep;
+    a->x = b->x * ( 1 - sStep ) + c->x * sStep;
+    a->y = b->y * ( 1 - sStep ) + c->y * sStep;
+    a->z = b->z * ( 1 - sStep ) + c->z * sStep;
   
+    return 1;
+}
+
+/*
+ *    Returns the dot product of two vec3s.
+ *
+ *    @param vec3_t *    The first vector.
+ *    @param vec3_t *    The second vector.
+ * 
+ *    @return f32        The dot product.
+ */
+f32 vec3_dot( vec3_t *a, vec3_t *b ) {
+    return a->x * b->x + a->y * b->y + a->z * b->z;
+}
+
+/*
+ *    Returns the legnth of a vec3.
+ *
+ *    @param vec3_t *    The vector.
+ *
+ *    @return f32        The length.
+ */
+f32 vec3_length( vec3_t *a ) {
+    return sqrtf( a->x * a->x + a->y * a->y + a->z * a->z );
+}
+
+/*
+ *    Normalizes a vec3.
+ *
+ *    @param vec3_t *    The return vector.
+ *    @param vec3_t *    The vector to normalize.
+ * 
+ *    @return u32        The return code.
+ */
+u32 vec3_normalize( vec3_t *a, vec3_t *b ) {
+    f32 len = vec3_length( b );
+
+    if ( len == 0.0f ) {
+        return 0;
+    }
+
+    a->x = b->x / len;
+    a->y = b->y / len;
+    a->z = b->z / len;
+
+    return 1;
+}
+
+/*
+ *    Crosses two vec3s.
+ *
+ *    @param vec3_t *    The return vector.
+ *    @param vec3_t *    The first vector.
+ *    @param vec3_t *    The second vector.
+ * 
+ *    @return u32        The return code.
+ */
+u32 vec3_cross( vec3_t *a, vec3_t *b, vec3_t *c ) {
+    a->x = b->y * c->z - b->z * c->y;
+    a->y = b->z * c->x - b->x * c->z;
+    a->z = b->x * c->y - b->y * c->x;
+
     return 1;
 }
 
@@ -353,8 +450,29 @@ u32 vec_scale( vec_t *spRet, void *a, f32 sScale, v_format_e sFmt ) {
      *    Some vectors are to be implemented.
      */
     switch ( sFmt ) {
+        case V_R32G32_F:
+            return vec2_scale( &spRet->v2, ( vec2_t * )a, sScale );
         case V_R32G32_U:
             return vec2u_scale( &spRet->v2u, ( vec2u_t * )a, sScale );
+    }
+}
+
+/*
+ *    Returns a vec's dot product.
+ *
+ *    @param void *        The first vector.
+ *    @param void *        The second vector.
+ *    @param v_format_e    The vector format.
+ * 
+ *    @return f32          The dot product.
+ */
+f32 vec_dot( void *a, void *b, v_format_e sFmt ) {
+    /*
+     *    Some vectors are to be implemented.
+     */
+    switch ( sFmt ) {
+        case V_R32G32B32_F:
+            return vec3_dot( ( vec3_t * )a, ( vec3_t * )b );
     }
 }
 
@@ -380,4 +498,92 @@ u32 get_vertex_component_size( v_format_e sFmt ) {
         case V_R32G32B32A32_F:
             return 16;
     }
+}
+
+/*
+ *    Returns a vec's length.
+ *
+ *    @param void *        The vector.
+ *    @param v_format_e    The vector format.
+ * 
+ *    @return f32          The length.
+ */
+f32 vec_length( void *a, v_format_e sFmt ) {
+    /*
+     *    Some vectors are to be implemented.
+     */
+    switch ( sFmt ) {
+        case V_R32G32B32_F:
+            return vec3_length( ( vec3_t * )a );
+    }
+}
+
+/*
+ *    Normalizes a vec.
+ *
+ *    @param void *        The return vector.
+ *    @param void *        The vector to normalize.
+ *    @param v_format_e    The vector format.
+ *
+ *    @return u32          The return code.
+ */
+u32 vec_normalize( void *a, void *b, v_format_e sFmt ) {
+    /*
+     *    Some vectors are to be implemented.
+     */
+    switch ( sFmt ) {
+        case V_R32G32B32_F:
+            return vec3_normalize( ( vec3_t * )a, ( vec3_t * )b );
+    }
+}
+
+/*
+ *    Contstructs a plane from three points.
+ *
+ *    @param plane_t *    The return plane.
+ *    @param vec3_t *     The first point.
+ *    @param vec3_t *     The second point.
+ *    @param vec3_t *     The third point.
+ * 
+ *    @return u32         The return code.
+ */
+u32 plane_from_points( plane_t *a, vec3_t *b, vec3_t *c, vec3_t *d ) {
+    vec3_t v1 = ( vec3_t ){ c->x - b->x, c->y - b->y, c->z - b->z };
+    vec3_t v2 = ( vec3_t ){ d->x - b->x, d->y - b->y, d->z - b->z };
+
+    vec3_cross( &a->aNormal, &v1, &v2 );
+
+    a->aDistance = vec3_dot( &a->aNormal, b );
+
+    return 1;
+}
+
+/*
+ *   Returns the distance to a point within a plane.
+ *
+ *   @param plane_t *        The plane.
+ *   @param vec3_t *         The point.
+ *
+ *   @return f32             The distance.
+ */
+f32 plane_distance( plane_t *a, vec3_t *b ) {
+    return vec3_dot( &a->aNormal, b ) - a->aDistance;
+}
+
+/*
+ *    Swaps the endianness of a 2-byte integer.
+ *
+ *    @param u16 *    The integer.
+ */
+void swap_endian16( u16 *a ) {
+    *a = ( *a >> 8 ) | ( *a << 8 );
+}
+
+/*
+ *    Swaps the endianness of a 4-byte integer.
+ *
+ *    @param u32 *    The integer.
+ */
+void swap_endian32( u32 *a ) {
+    *a = ( ( *a >> 24 ) & 0x000000FF ) | ( ( *a >> 8 ) & 0x0000FF00 ) | ( ( *a << 8 ) & 0x00FF0000 ) | ( ( *a << 24 ) & 0xFF000000 );
 }
