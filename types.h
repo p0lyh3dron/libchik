@@ -24,6 +24,8 @@ typedef unsigned short     u16;
 typedef unsigned int       u32;
 typedef unsigned long long u64;
 
+#define ARR_LEN( x ) ( ( sizeof( x ) / sizeof( 0[ x ] ) ) / ( ( u64 )( !( sizeof( x ) % sizeof( 0[ x ] ) ) ) ) )
+
 #if __unix__
     typedef __uint128_t u128;
 #elif _WIN32
@@ -133,7 +135,7 @@ typedef struct {
     v_format_e   aFormat;
     u32          aStride;
     u32          aOffset;
-    void ( *apFunc )( fragment_t *, vec_t * );
+    void ( *apFunc )( fragment_t *, vec_t *, void * );
 } v_attrib_t;
 
 typedef struct {
@@ -142,11 +144,17 @@ typedef struct {
 } v_layout_t;
 
 typedef struct {
-    union {
-        vec3_t  aPos;
-        vec2u_t aRastPos;
-    };
+    vec4_t  aPos;
     vec4_t aColor;
 //    vec3_t aNormal;
-    vec2u_t    aTexCoord;
+    vec2_t    aTexCoord;
 }chik_vertex_t;
+
+typedef struct {
+    vec3_t aNormal;
+    f32    aDistance;
+} plane_t;
+
+typedef struct {
+    plane_t aPlanes[ 6 ];
+} frustum_t;
