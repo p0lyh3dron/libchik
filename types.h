@@ -141,6 +141,7 @@ typedef struct {
 typedef struct {
     v_attrib_t aAttribs[ MAX_VECTOR_ATTRIBUTES ];
     u32        aCount;
+    u32        aStride;
 } v_layout_t;
 
 typedef struct {
