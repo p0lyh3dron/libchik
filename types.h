@@ -97,6 +97,18 @@ typedef struct {
     f32 v[ 16 ];
 } mat4_t;
 
+typedef struct {
+    u32          aWidth;
+    u32          aHeight;
+    u32          aFormat;
+    u32          aDataLen;
+    u32         *apData;
+} image_t;
+
+typedef struct {
+    image_t *apImage;
+} texture_t;
+
 typedef enum {
     V_R8G8B8A8_U,
     V_R8G8B8A8_S,
@@ -146,9 +158,7 @@ typedef struct {
 
 typedef struct {
     vec4_t  aPos;
-    vec4_t aColor;
-//    vec3_t aNormal;
-    vec2_t    aTexCoord;
+    vec2_t  aTexCoord;
 }chik_vertex_t;
 
 typedef struct {
