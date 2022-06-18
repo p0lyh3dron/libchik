@@ -147,13 +147,13 @@ typedef struct {
     v_format_e   aFormat;
     u32          aStride;
     u32          aOffset;
-    void ( *apFunc )( fragment_t *, vec_t *, void * );
 } v_attrib_t;
 
 typedef struct {
     v_attrib_t aAttribs[ MAX_VECTOR_ATTRIBUTES ];
     u32        aCount;
     u32        aStride;
+    void    ( *apFunc )( fragment_t *, void *, void * );
 } v_layout_t;
 
 typedef struct {
