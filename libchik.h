@@ -20,3 +20,4 @@
 #include "mempool.h"
 #include "module.h"
 #include "resource.h"
+#include "thread.h"

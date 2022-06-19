@@ -7,7 +7,7 @@ file( GLOB SRC_FILES *.c )
 get_property( CHIK_GAMES GLOBAL PROPERTY CHIK_GAMES )
 get_property( LIBCHIK GLOBAL PROPERTY LIBCHIK )
 
-link_libraries( dl m )
+link_libraries( dl m pthread )
 
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 add_library( LibChik SHARED ${SRC_FILES} )
