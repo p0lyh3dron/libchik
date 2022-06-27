@@ -15,6 +15,7 @@
 #include "app.h"
 #include "args.h"
 #include "dl.h"
+#include "file.h"
 #include "log.h"
 #include "math.h"
 #include "mempool.h"

@@ -45,9 +45,15 @@ void *thread_routine( void *spArg ) {
             pThread->aTasks[ i ].aFlags &= ~LIBCHIK_TASK_FLAG_PENDING;
             pThread->aTasks[ i ].aFlags |= LIBCHIK_TASK_FLAG_RUNNING;
             pThread->aTasks[ i ].apFunc( pThread->aTasks[ i ].apArgs );
+
+            /*
+             *    Mark the task as finished.
+             */
+            pthread_mutex_lock( &gMutex );
             pThread->aTasks[ i ].aFlags &= ~LIBCHIK_TASK_FLAG_RUNNING;
             pThread->aTasks[ i ].aFlags |= LIBCHIK_TASK_FLAG_NONE;
             pThread->aNumTasks--;
+            pthread_mutex_unlock( &gMutex );
         }
         /*
          *    If there are no tasks to run, sleep.
@@ -59,7 +65,6 @@ void *thread_routine( void *spArg ) {
             Sleep( 1 );
 #endif /* __unix__  */
         }
-
     }
 }
 
@@ -81,6 +86,8 @@ thread_t thread_create( thread_t *spThread ) {
  */
 void threadpool_init( void ) {
     gThreadpool.aNumThreads = LIBCHIK_THREAD_MAX_THREADS;
+
+    pthread_mutex_init( &gMutex, nullptr );
     
     s64 i;
     for ( i = 0; i < LIBCHIK_THREAD_MAX_THREADS; ++i ) {
@@ -91,12 +98,12 @@ void threadpool_init( void ) {
             gThreadpool.aThreads[ i ].aTasks[ j ].aFlags  = LIBCHIK_TASK_FLAG_NONE;
             gThreadpool.aThreads[ i ].aTasks[ j ].apFunc  = nullptr;
 
-            /* 
-             *    Launch the thread.
-             */
             gThreadpool.aThreads[ i ].aFlags = LIBCHIK_THREAD_FLAG_RUNNING;
-            thread_create( &gThreadpool.aThreads[ i ] );
         }
+        /* 
+         *    Launch the thread.
+         */
+        thread_create( &gThreadpool.aThreads[ i ] );
     }
 }
 
