@@ -10,6 +10,8 @@
  */
 #include "thread.h"
 
+#include <string.h>
+
 #if __unix__
     #include <unistd.h>
 #elif _WIN32

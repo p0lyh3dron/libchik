@@ -13,6 +13,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "log.h"
 
@@ -78,7 +79,7 @@ s8 *file_read( const s8 *spFile, u32 *spSize ) {
     }
 
     if( pF == nullptr ) {
-        log_error( "Could not open file '%s'", spFile );
+        log_error( "s8 *file_read( const s8 *, u32 * ): Could not open file '%s'", spFile );
         return nullptr;
     }
 
@@ -86,7 +87,11 @@ s8 *file_read( const s8 *spFile, u32 *spSize ) {
     *spSize = ftell( pF );
     fseek( pF, 0, SEEK_SET );
     s8 *spData = ( s8 * )malloc( *spSize );
-    fread( spData, 1, *spSize, pF );
+    if ( fread( spData, 1, *spSize, pF ) != *spSize ) {
+        log_error( "s8 *file_read( const s8 *, u32 * ): Could not read file '%s'", spFile );
+        free( spData );
+        return nullptr;
+    }
     fclose( pF );
     return spData;
 }

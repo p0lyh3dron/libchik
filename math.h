@@ -10,6 +10,8 @@
  */
 #pragma once
 
+#include <math.h>
+
 #include "types.h"
 
 #define MAX( a, b ) ( ( a ) > ( b ) ? ( a ) : ( b ) )

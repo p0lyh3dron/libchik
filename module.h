@@ -22,7 +22,7 @@
  *    @return u32      The module's return code.
  */
 
-#define CHIK_MODULE( initFunc )                                  \
+#define CHIK_MODULE( initFunc, updateFunc, exitFunc )            \
 void *( *engine_load_function )( const s8 * ) = 0;               \
                                                                  \
 u32 chik_module_entry( void *spTable ) {                         \
@@ -33,8 +33,18 @@ u32 chik_module_entry( void *spTable ) {                         \
                                                                  \
     engine_load_function = ( void *( * )( const s8 * ) )spTable; \
                                                                  \
-    initFunc();                                                  \                                                               
-    return 1;                                                    \
+    u32 ( *pFunc )( void ) = &initFunc;                          \
+    return pFunc();                                              \
+}                                                                \
+                                                                 \
+u32 chik_module_update( f32 sDT ) {                              \
+    u32 ( *pFunc )( f32 ) = &updateFunc;                         \
+    return pFunc( sDT );                                         \
+}                                                                \
+                                                                 \
+u32 chik_module_exit( void ) {                                   \
+    u32 ( *pFunc )( void ) = &exitFunc;                          \
+    return pFunc();                                              \
 }                                                                \
 
 /*

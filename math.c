@@ -10,8 +10,6 @@
  */
 #include "math.h"
 
-#include <math.h>
-
 //#if defined( __unix__ ) && ( __i386__ )
 #if 1
     #include <xmmintrin.h>

@@ -19,6 +19,33 @@
 
 #include "types.h"
 
+typedef enum {
+    LOG_COLOR_CLEAR,
+    LOG_COLOR_BLACK,
+    LOG_COLOR_RED,
+    LOG_COLOR_GREEN,
+    LOG_COLOR_YELLOW,
+    LOG_COLOR_BLUE,
+    LOG_COLOR_MAGENTA,
+    LOG_COLOR_CYAN,
+    LOG_COLOR_LIGHT_GREY,
+    LOG_COLOR_DARK_GREY,
+    LOG_COLOR_LIGHT_RED,
+    LOG_COLOR_LIGHT_GREEN,
+    LOG_COLOR_LIGHT_YELLOW,
+    LOG_COLOR_LIGHT_BLUE,
+    LOG_COLOR_LIGHT_MAGENTA,
+    LOG_COLOR_LIGHT_CYAN,
+    LOG_COLOR_WHITE,
+} log_color_e;
+
+/*
+ *    Sets the color of the log messages.
+ *
+ *    @param log_color_e    The color to set.
+ */
+void log_set_color( log_color_e sColor );
+
 /*
  *    Logs a message to the console.
  *
@@ -50,6 +77,7 @@ void log_warn( const s8 *spWarning, ... );
  *    @param ...             The arguments to the error.
  */
 void log_error( const s8 *spError, ... );
+
 /*
  *    Logs a fatal error to the console.
  *
@@ -57,3 +85,15 @@ void log_error( const s8 *spError, ... );
  *    @param ...             The arguments to the fatal error.
  */
 void log_fatal( const s8 *spFatal, ... );
+
+/*
+ *    Opens a file for logging.
+ *
+ *    @param s8 *            The file to open.
+ */
+void log_open_file( const s8 *spFile );
+
+/*
+ *    Closes the file opened for logging.
+ */
+void log_close_file( void );
