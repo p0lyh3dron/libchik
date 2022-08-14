@@ -57,6 +57,14 @@ handle_t resource_add( resource_t *spResource, void *spData, u64 sSize );
 void *resource_get( resource_t *spResource, handle_t sHandle );
 
 /*
+ *    Remove a resource from the resource manager.
+ *
+ *    @param  resource_t *        The resource manager to remove the resource from.
+ *    @param  handle_t            The handle of the resource to remove.
+ */
+void resource_remove( resource_t *spResource, handle_t sHandle );
+
+/*
  *    Destroy a resource manager.
  *
  *    @param  apResource    The resource manager to destroy.
