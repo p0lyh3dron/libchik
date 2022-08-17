@@ -7,7 +7,15 @@ file( GLOB SRC_FILES *.c )
 get_property( CHIK_GAMES GLOBAL PROPERTY CHIK_GAMES )
 get_property( LIBCHIK GLOBAL PROPERTY LIBCHIK )
 
-link_libraries( dl m pthread )
+link_libraries( m )
+
+if ( ${PLATFORM} MATCHES "Win64" )
+    set( LIBCHIK_OUT ${CHIK_GAMES} )
+endif()
+if ( ${PLATFORM} MATCHES "Linux64" )
+    set( LIBCHIK_OUT ${CHIK_GAMES}/bin )
+    link_libraries( dl pthread )
+endif()
 
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 add_library( LibChik SHARED ${SRC_FILES} )
@@ -19,6 +27,6 @@ set_target_properties(
     RUNTIME_OUTPUT_NAME chik
     LIBRARY_OUTPUT_NAME chik
 
-    RUNTIME_OUTPUT_DIRECTORY ${CHIK_GAMES}/bin
-    LIBRARY_OUTPUT_DIRECTORY ${CHIK_GAMES}/bin
+    RUNTIME_OUTPUT_DIRECTORY ${LIBCHIK_OUT}
+    LIBRARY_OUTPUT_DIRECTORY ${LIBCHIK_OUT}
 )

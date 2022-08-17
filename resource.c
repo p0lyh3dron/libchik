@@ -51,32 +51,32 @@ resource_t *resource_new( s64 sSize ) {
  *    @param  void *              The resource to add.
  *    @param  u64                 The size of the resource to add.
  * 
- *    @return handle_t                 The handle of the resource.
+ *    @return trap_t                 The handle of the resource.
  *                                     If the resource manager is full,
  *                                     this will be 0.
  */
-handle_t resource_add( resource_t *spResource, void *spData, u64 sSize ) {
+trap_t resource_add( resource_t *spResource, void *spData, u64 sSize ) {
     if( spResource == 0 ) {
-        log_error( "handle_t resource_add( resource_t *, void *, u64 ): Invalid resource manager.\n" );
-        return 0;
+        log_error( "trap_t resource_add( resource_t *, void *, u64 ): Invalid resource manager.\n" );
+        return INVALID_TRAP;
     }
 
     if( spData == 0 ) {
-        log_error( "handle_t resource_add( resource_t *, void *, u64 ): Invalid resource data.\n" );
-        return 0;
+        log_error( "trap_t resource_add( resource_t *, void *, u64 ): Invalid resource data.\n" );
+        return INVALID_TRAP;
     }
 
     if( sSize <= 0 ) {
-        log_error( "handle_t resource_add( resource_t *, void *, u64 ): Invalid resource size.\n" );
-        return 0;
+        log_error( "trap_t resource_add( resource_t *, void *, u64 ): Invalid resource size.\n" );
+        return INVALID_TRAP;
     }
 
     u32 magic = rand();
 
     s8 *pBuf = mempool_alloc( spResource->apPool, sSize + sizeof( magic ) );
-    if ( pBuf == 0 ) {
-        log_error( "handle_t resource_add( resource_t *, void *, u64 ): Could not allocate memory for resource.\n" );
-        return 0;
+    if ( pBuf == nullptr ) {
+        log_error( "trap_t resource_add( resource_t *, void *, u64 ): Could not allocate memory for resource.\n" );
+        return INVALID_TRAP;
     }
 
     /*
@@ -85,7 +85,11 @@ handle_t resource_add( resource_t *spResource, void *spData, u64 sSize ) {
     memcpy( pBuf, &magic, sizeof( magic ) );
     memcpy( pBuf + sizeof( magic ), spData, sSize );
 
-    handle_t handle = ( pBuf - spResource->apPool->apBuf ) | ( ( u64 )magic << 32 ) | ( ( u128 )sSize << 64 );
+    trap_t handle = { 
+        .aIndex = pBuf - spResource->apPool->apBuf,
+        .aMagic = magic,
+        .aSize  = sSize
+    };
 
     return handle;
 }
@@ -94,27 +98,27 @@ handle_t resource_add( resource_t *spResource, void *spData, u64 sSize ) {
  *    Get a resource from the resource manager.
  *
  *    @param  resource_t *        The resource manager to get the resource from.
- *    @param  handle_t            The handle of the resource to get.
+ *    @param  trap_t            The handle of the resource to get.
  * 
  *    @return void *              The resource.
  *                                Returns NULL if the handle is invalid.
  */
-void *resource_get( resource_t *spResource, handle_t sHandle ) {
+void *resource_get( resource_t *spResource, trap_t sHandle ) {
     if( spResource == 0 ) {
-        log_error( "void *resource_get( resource_t *, handle_t ): Invalid resource manager.\n" );
+        log_error( "void *resource_get( resource_t *, trap_t ): Invalid resource manager.\n" );
         return 0;
     }
 
-    if( sHandle == 0 ) {
-        log_error( "void *resource_get( resource_t *, handle_t ): Invalid resource handle.\n" );
+    if( BAD_TRAP( sHandle ) ) {
+        log_error( "void *resource_get( resource_t *, trap_t ): Invalid resource handle.\n" );
         return 0;
     }
 
-    u32 sIndex = HANDLE_GET_INDEX( sHandle );
-    u32 sMagic = HANDLE_GET_MAGIC( sHandle );
+    u32 sIndex = sHandle.aIndex;
+    u32 sMagic = sHandle.aMagic;
 
     if( sIndex >= spResource->apPool->aSize ) {
-        log_error( "void *resource_get( resource_t *, handle_t ): Invalid resource index.\n" );
+        log_error( "void *resource_get( resource_t *, trap_t ): Invalid resource index.\n" );
         return 0;
     }
 
@@ -122,7 +126,7 @@ void *resource_get( resource_t *spResource, handle_t sHandle ) {
     u32 magic = *( u32 * )pBuf;
 
     if( magic != sMagic ) {
-        log_error( "void *resource_get( resource_t *, handle_t ): Invalid resource magic.\n" );
+        log_error( "void *resource_get( resource_t *, trap_t ): Invalid resource magic.\n" );
         return 0;
     }
 
@@ -133,31 +137,31 @@ void *resource_get( resource_t *spResource, handle_t sHandle ) {
  *    Remove a resource from the resource manager.
  *
  *    @param  resource_t *        The resource manager to remove the resource from.
- *    @param  handle_t            The handle of the resource to remove.
+ *    @param  trap_t            The handle of the resource to remove.
  */
-void resource_remove( resource_t *spResource, handle_t sHandle ) {
+void resource_remove( resource_t *spResource, trap_t sHandle ) {
     if( spResource == 0 ) {
-        log_error( "void resource_remove( resource_t *, handle_t ): Invalid resource manager.\n" );
+        log_error( "void resource_remove( resource_t *, trap_t ): Invalid resource manager.\n" );
         return;
     }
 
-    if( sHandle == 0 ) {
-        log_error( "void resource_remove( resource_t *, handle_t ): Invalid resource handle.\n" );
+    if( BAD_TRAP( sHandle ) ) {
+        log_error( "void resource_remove( resource_t *, trap_t ): Invalid resource handle.\n" );
         return;
     }
 
-    u32 sIndex = HANDLE_GET_INDEX( sHandle );
-    u32 sMagic = HANDLE_GET_MAGIC( sHandle );
+    u32 sIndex = sHandle.aIndex;
+    u32 sMagic = sHandle.aMagic;
 
     if( sIndex >= spResource->apPool->aSize ) {
-        log_error( "void resource_remove( resource_t *, handle_t ): Invalid resource index.\n" );
+        log_error( "void resource_remove( resource_t *, trap_t ): Invalid resource index.\n" );
         return;
     }
 
     s8 *pBuf  = spResource->apPool->apBuf + sIndex;
 
     if( *( u32 * )pBuf != sMagic ) {
-        log_error( "void resource_remove( resource_t *, handle_t ): Invalid resource magic.\n" );
+        log_error( "void resource_remove( resource_t *, trap_t ): Invalid resource magic.\n" );
         return;
     }
 

@@ -47,7 +47,11 @@ typedef double    f64;
 
 typedef void*     dl_handle_t;
 
-typedef u128      handle_t;
+typedef struct {
+    u32 aIndex;
+    u32 aMagic;
+    u64 aSize;
+} trap_t;
 
 typedef struct {
     f32 x;

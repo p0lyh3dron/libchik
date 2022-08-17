@@ -44,6 +44,12 @@
     #error "Platform does not support threads."
 #endif /* __unix__  */
 
+#if __unix__
+    typedef pthread_mutex_t  mutex_t;
+#elif _WIN32
+    typedef CRITICAL_SECTION mutex_t;
+#endif /* __unix__  */
+
 typedef struct {
     u32     aFlags;
     void ( *apFunc )( void * );
@@ -65,6 +71,27 @@ typedef struct {
     thread_t aThreads[ LIBCHIK_THREAD_MAX_THREADS ];
     u32      aNumThreads;
 } threadpool_t;
+
+/*
+ *    Initializes a mutex.
+ *
+ *    @param mutex_t * The mutex to initialize.
+ */
+void thread_mutex_init( mutex_t *spMutex );
+
+/*
+ *    Unlocks a mutex.
+ *
+ *    @param mutex_t *    The mutex to unlock.
+ */
+void thread_mutex_unlock( mutex_t *spMutex );
+
+/*
+ *    Locks a mutex.
+ *
+ *    @param mutex_t *    The mutex to lock.
+ */
+void thread_mutex_lock( mutex_t *spMutex );
 
 /*
  *    Thread subrountine.

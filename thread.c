@@ -20,7 +20,46 @@
 
 threadpool_t gThreadpool;
 
-pthread_mutex_t gMutex;
+mutex_t gMutex;
+
+/*
+ *    Initializes a mutex.
+ *
+ *    @param mutex_t * The mutex to initialize.
+ */
+void thread_mutex_init( mutex_t *spMutex ) {
+    #if __unix__
+        pthread_mutex_init( spMutex, 0 );
+    #elif _WIN32
+        InitializeCriticalSection( spMutex );
+    #endif /* __unix__  */
+}
+
+/*
+ *    Unlocks a mutex.
+ *
+ *    @param mutex_t *    The mutex to unlock.
+ */
+void thread_mutex_unlock( mutex_t *spMutex ) {
+    #if __unix__
+        pthread_mutex_unlock( spMutex );
+    #elif _WIN32
+        ReleaseMutex( spMutex );
+    #endif /* __unix__  */
+}
+
+/*
+ *    Locks a mutex.
+ *
+ *    @param mutex_t *    The mutex to lock.
+ */
+void thread_mutex_lock( mutex_t *spMutex ) {
+    #if __unix__
+        pthread_mutex_lock( spMutex );
+    #elif _WIN32
+        WaitForSingleObject( spMutex, INFINITE );
+    #endif /* __unix__  */
+}
 
 /*
  *    Thread subrountine.
@@ -31,14 +70,14 @@ void *thread_routine( void *spArg ) {
         /*
          *    Look for a task to run.
          */
-        pthread_mutex_lock( &gMutex );
+        thread_mutex_lock( &gMutex );
         s64 i;
         for ( i = 0; i < LIBCHIK_THREAD_MAX_TASKS; ++i ) {
             if ( pThread->aTasks[ i ].aFlags & LIBCHIK_TASK_FLAG_PENDING ) {
                 break;
             }
         }
-        pthread_mutex_unlock( &gMutex );
+        thread_mutex_unlock( &gMutex );
 
         if ( i != LIBCHIK_THREAD_MAX_TASKS ) {
             /*
@@ -51,11 +90,11 @@ void *thread_routine( void *spArg ) {
             /*
              *    Mark the task as finished.
              */
-            pthread_mutex_lock( &gMutex );
+            thread_mutex_lock( &gMutex );
             pThread->aTasks[ i ].aFlags &= ~LIBCHIK_TASK_FLAG_RUNNING;
             pThread->aTasks[ i ].aFlags |= LIBCHIK_TASK_FLAG_NONE;
             pThread->aNumTasks--;
-            pthread_mutex_unlock( &gMutex );
+            thread_mutex_unlock( &gMutex );
         }
         /*
          *    If there are no tasks to run, sleep.
@@ -89,7 +128,7 @@ thread_t thread_create( thread_t *spThread ) {
 void threadpool_init( void ) {
     gThreadpool.aNumThreads = LIBCHIK_THREAD_MAX_THREADS;
 
-    pthread_mutex_init( &gMutex, nullptr );
+    thread_mutex_init( &gMutex );
     
     s64 i;
     for ( i = 0; i < LIBCHIK_THREAD_MAX_THREADS; ++i ) {
@@ -113,7 +152,7 @@ void threadpool_init( void ) {
  *    Adds a task to the global task pool.
  */
 void threadpool_add_task( void ( *spFunc )( void * ), void *spArg, u32 sArgsLen ) {
-    pthread_mutex_lock( &gMutex );
+    thread_mutex_lock( &gMutex );
     s64 i;
     u32 freeTasks     = 0;
     u32 threadId      = 0;
@@ -135,7 +174,7 @@ void threadpool_add_task( void ( *spFunc )( void * ), void *spArg, u32 sArgsLen 
             break;
         }
     }
-    pthread_mutex_unlock( &gMutex );
+    thread_mutex_unlock( &gMutex );
 }
 
 /*
