@@ -21,4 +21,5 @@
 #include "mempool.h"
 #include "module.h"
 #include "resource.h"
+#include "shell.h"
 #include "thread.h"
