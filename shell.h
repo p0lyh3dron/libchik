@@ -22,7 +22,10 @@
 #define LIBCHIK_SHELL_ARGV_MAX  32
 #define LIBCHIK_SHELL_ARGV_SIZE 256
 
+#define LIBCHIK_SHELL_VAR_VALUE_SIZE 256
+
 typedef enum {
+    SHELL_VAR_NONE,
     SHELL_VAR_INT,
     SHELL_VAR_FLOAT,
     SHELL_VAR_STRING,
@@ -38,7 +41,7 @@ typedef struct {
 typedef struct {
     s8              *apName;
     s8              *apDesc;
-    s8              *apValue;
+    s8               apValue[ LIBCHIK_SHELL_VAR_VALUE_SIZE ];
 
     shell_var_type_t aType;
 } shell_variable_t;
@@ -56,20 +59,23 @@ typedef struct {
     shell_variable_t name = ( shell_variable_t ){ .apName = #name, .apDesc = desc, .apValue = value, .aType = type }
 
 /*
+ *    Initializes the shell.
+ */
+void shell_init( void );
+
+/*
  *    Registers shell commands.
  *
- *    @param shell_command_t    A shell command.
- *    @param ...                A list of shell commands.
+ *    @param shell_command_t *   A shell command.
  */
-void shell_register_commands( shell_command_t sCommand, ... );
+void shell_register_commands( shell_command_t *spCommand );
 
 /*
  *    Registers shell variables.
  *
- *    @param shell_variable_t    A shell variable.
- *    @param ...                 A list of shell variables.
+ *    @param shell_variable_t *   A shell variable.
  */
-void shell_register_variables( shell_variable_t sVariable, ... );
+void shell_register_variables( shell_variable_t *spVariable );
 
 /*
  *    Executes a shell command.
@@ -77,5 +83,14 @@ void shell_register_variables( shell_variable_t sVariable, ... );
  *    @param s8*    The command to execute.
  */
 void shell_execute( s8 *spCommand );
+
+/*
+ *    Gets a shell variable value.
+ *
+ *    @param s8*    The name of the variable.
+ * 
+ *    @return s8*   The value of the variable.
+ */
+s8 *shell_get_variable( s8 *spName );
 
 #endif /* LIBCHIK_SHELL_H  */
