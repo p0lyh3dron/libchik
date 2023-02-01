@@ -2,55 +2,60 @@
  *    shell.c    --    source for interacting with the engine via a shell
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on September 15, 2022
- * 
+ *
  *    This file is part of the Chik library, a general purpose
  *    library for the Chik engine and her games.
- * 
+ *
  *    This file defines the functions for interacting with the
  *    engine via a shell.
  */
 #include "shell.h"
 
-#include <string.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include "log.h"
 
-shell_command_t  gCommands [ LIBCHIK_SHELL_MAX_COMMANDS  ];
-shell_variable_t gVariables[ LIBCHIK_SHELL_MAX_VARIABLES ];
+shell_command_t _coms[LIBCHIK_SHELL_MAX_COMMANDS];
+shell_variable_t _vars[LIBCHIK_SHELL_MAX_VARIABLES];
 
 /*
  *    Displays the help text.
  */
 void shell_help() {
-    log_msg( "\n\t- Welcome to Chishi, the shell for the Chik Engine!\n\n" );
-    log_msg( "\t- To get started, you can type the name of a variable,\n");
-    log_msg( "\t  followed by a space, followed by a value,\n" );
-    log_msg( "\t  to set the variable to that value. For example,\n" );
-    log_msg( "\t 'fov 90' will set 'fov' to 90, if that variable name is registered.\n\n" );
-    log_msg( "\t- You can also type the name of a command, followed by a space,\n");
-    log_msg( "\t  followed by arguments, to run that command.\n" );
-    log_msg( "\t  For example, 'load_map test' will run the 'load_map' command,\n");
-    log_msg( "\t  if that command is registered.\n\n" );
-    log_msg( "\t- To get a list of all registered commands, type 'commands'.\n" );
-    log_msg( "\t- To get a list of all registered variables, type 'variables'.\n" );
-    log_msg( "\t- To get a list of all registered commands and variables, type 'all'.\n" );
-    log_msg( "\t- To see this message again, type 'help'.\n" );
+    log_msg("\n\t- Welcome to Chishi, the shell for the Chik Engine!\n\n");
+    log_msg("\t- To get started, you can type the name of a variable,\n");
+    log_msg("\t  followed by a space, followed by a value,\n");
+    log_msg("\t  to set the variable to that value. For example,\n");
+    log_msg("\t 'fov 90' will set 'fov' to 90, if that variable name is "
+            "registered.\n\n");
+    log_msg(
+        "\t- You can also type the name of a command, followed by a space,\n");
+    log_msg("\t  followed by arguments, to run that command.\n");
+    log_msg(
+        "\t  For example, 'load_map test' will run the 'load_map' command,\n");
+    log_msg("\t  if that command is registered.\n\n");
+    log_msg("\t- To get a list of all registered commands, type 'commands'.\n");
+    log_msg(
+        "\t- To get a list of all registered variables, type 'variables'.\n");
+    log_msg("\t- To get a list of all registered commands and variables, type "
+            "'all'.\n");
+    log_msg("\t- To see this message again, type 'help'.\n");
 }
 
 /*
  *    Displays a list of all registered commands.
  */
 void shell_list_commands() {
-    log_msg( "\n\t* Registered commands:\n\n" );
+    unsigned long i;
 
-    s64 i;
-    for( i = 0; i < LIBCHIK_SHELL_MAX_COMMANDS; i++ ) {
-        if( gCommands[ i ].apName == nullptr ) {
+    log_msg("\n\t* Registered commands:\n\n");
+    for (i = 0; i < LIBCHIK_SHELL_MAX_COMMANDS; i++) {
+        if (_coms[i].name == nullptr) {
             break;
         }
 
-        log_msg( "\t\t- %s: '%s'\n", gCommands[ i ].apName, gCommands[ i ].apDesc );
+        log_msg("\t\t- %s: '%s'\n", _coms[i].name, _coms[i].desc);
     }
 }
 
@@ -58,15 +63,16 @@ void shell_list_commands() {
  *    Displays a list of all registered variables.
  */
 void shell_list_variables() {
-    log_msg( "\n\t* Registered variables:\n\n" );
+    unsigned long i;
 
-    s64 i;
-    for( i = 0; i < LIBCHIK_SHELL_MAX_VARIABLES; i++ ) {
-        if( gVariables[ i ].apName == nullptr ) {
+    log_msg("\n\t* Registered variables:\n\n");
+    for (i = 0; i < LIBCHIK_SHELL_MAX_VARIABLES; i++) {
+        if (_vars[i].name == nullptr) {
             break;
         }
 
-        log_msg( "\t\t- %s: (set to %s) '%s'\n", gVariables[ i ].apName, gVariables[ i ].apValue, gVariables[ i ].apDesc );
+        log_msg("\t\t- %s: (set to %s) '%s'\n", _vars[i].name,
+                _vars[i].val, _vars[i].desc);
     }
 }
 
@@ -81,34 +87,35 @@ void shell_list_all() {
 /*
  *    Initializes the shell.
  */
-void shell_init( void ) {
-    memset( gCommands,  0, sizeof( shell_command_t  ) * LIBCHIK_SHELL_MAX_COMMANDS  );
-    memset( gVariables, 0, sizeof( shell_variable_t ) * LIBCHIK_SHELL_MAX_VARIABLES );
-
+void shell_init(void) {
     shell_command_t commands[] = {
-        { "help", "Print the help message for the shell usage.", shell_help },
-        { "commands", "List all registered commands.", shell_list_commands },
-        { "variables", "List all registered variables.", shell_list_variables },
-        { "all", "List all registered commands and variables.", shell_list_all },
-        { nullptr, nullptr, nullptr }
-    };
+        {"help", "Print the help message for the shell usage.", shell_help},
+        {"commands", "List all registered commands.", shell_list_commands},
+        {"variables", "List all registered variables.", shell_list_variables},
+        {"all", "List all registered commands and variables.", shell_list_all},
+        {nullptr, nullptr, nullptr}};
 
-    shell_register_commands( commands );
+    memset(_coms, 0, sizeof(shell_command_t) * LIBCHIK_SHELL_MAX_COMMANDS);
+    memset(_vars, 0,
+           sizeof(shell_variable_t) * LIBCHIK_SHELL_MAX_VARIABLES);
+
+    shell_register_commands(commands);
 }
 
 /*
  *    Registers shell commands.
  *
- *    @param shell_command_t *   A shell command.
+ *    @param shell_command_t *com   A shell command.
  */
-void shell_register_commands( shell_command_t *spCommand ) {
-    s64 i = 0;
-    while ( gCommands[ i ].apName != nullptr ) {
+void shell_register_commands(shell_command_t *com) {
+    unsigned long i = 0;
+    unsigned long j = 0;
+
+    while (_coms[i].name != nullptr) {
         i++;
     }
-    s64 j = 0;
-    while ( spCommand[ j ].apName != nullptr ) {
-        gCommands[ i++ ] = spCommand[ j ];
+    while (com[j].name != nullptr) {
+        _coms[i++] = com[j];
         j++;
     }
 }
@@ -116,16 +123,17 @@ void shell_register_commands( shell_command_t *spCommand ) {
 /*
  *    Registers shell variables.
  *
- *    @param shell_variable_t *   A shell variable.
+ *    @param shell_variable_t *var   A shell variable.
  */
-void shell_register_variables( shell_variable_t *spVariable ) {
-    s64 i = 0;
-    while ( gVariables[ i ].apName != nullptr ) {
+void shell_register_variables(shell_variable_t *var) {
+    unsigned long i = 0;
+    unsigned long j = 0;
+    
+    while (_vars[i].name != nullptr) {
         i++;
     }
-    s64 j = 0;
-    while ( spVariable[ j ].apName != nullptr ) {
-        gVariables[ i++ ] = spVariable[ j ];
+    while (var[j].name != nullptr) {
+        _vars[i++] = var[j];
         j++;
     }
 }
@@ -133,47 +141,52 @@ void shell_register_variables( shell_variable_t *spVariable ) {
 /*
  *    Executes a shell command.
  *
- *    @param s8*    The command to execute.
+ *    @param s8 *com    The command to execute.
  */
-void shell_execute( s8 *spCommand ) {
-    s8  pArgv[ LIBCHIK_SHELL_ARGV_MAX ][ LIBCHIK_SHELL_ARGV_SIZE ] = { { 0 } };
+void shell_execute(s8 *com) {
+    unsigned long i;
+    s8 argv[LIBCHIK_SHELL_ARGV_MAX][LIBCHIK_SHELL_ARGV_SIZE] = {{0}};
     s64 argc = 0;
+    char *arg;
 
     /*
      *    Parse the command into arguments.
      */
-    s8 *pArg = strtok( spCommand, " " );
-    while ( pArg != nullptr ) {
-        strcpy( pArgv[ argc ], pArg );
+    arg = strtok(com, " ");
+    while (arg != nullptr) {
+        strcpy(argv[argc], arg);
         argc++;
-        pArg = strtok( nullptr, " " );
+        arg = strtok(nullptr, " ");
     }
 
     /*
      *    Execute the command.
      */
-    s64 i;
-    for ( i = 0; i < LIBCHIK_SHELL_MAX_COMMANDS; i++ ) {
-        if ( gCommands[ i ].apName != nullptr ) {
-            if ( strcmp( gCommands[ i ].apName, pArgv[ 0 ] ) == 0 ) {
-                log_msg( "> %s\n", spCommand );
-                gCommands[ i ].apFunc( argc, pArgv );
+    for (i = 0; i < LIBCHIK_SHELL_MAX_COMMANDS; i++) {
+        if (_coms[i].name != nullptr) {
+            if (strcmp(_coms[i].name, argv[0]) == 0) {
+                log_msg("> %s\n", com);
+                _coms[i].fun(argc, (s8**)argv);
                 return;
             }
         }
-        if ( gVariables[ i ].apName != nullptr ) {
-            if ( strcmp( gVariables[ i ].apName, pArgv[ 0 ] ) == 0 ) {
-                log_msg( "> %s\n", spCommand );
-                if ( argc > 1 ) {
-                    strcpy( gVariables[ i ].apValue, pArgv[ 1 ] );
+        if (_vars[i].name != nullptr) {
+            if (strcmp(_vars[i].name, argv[0]) == 0) {
+                log_msg("> %s\n", com);
+                if (argc > 1) {
+                    strcpy(_vars[i].val, argv[1]);
+                    if (_vars[i].fun != nullptr) {
+                        _vars[i].fun(argv[1]);
+                    }
                 }
-                log_msg( "\t- %s = %s\n", gVariables[ i ].apName, gVariables[ i ].apValue );
+                log_msg("\t- %s = %s\n", _vars[i].name,
+                        _vars[i].val);
                 return;
             }
         }
     }
-    
-    log_warn( "Unknown command or variable: %s\n", pArgv[ 0 ] );
+
+    log_warn("Unknown command or variable: %s\n", argv[0]);
 
     return;
 }
@@ -181,18 +194,29 @@ void shell_execute( s8 *spCommand ) {
 /*
  *    Gets a shell variable value.
  *
- *    @param s8*    The name of the variable.
- * 
- *    @return s8*   The value of the variable.
+ *    @param s8 name    The name of the variable.
+ *
+ *    @return shell_val_u   The value of the variable.
  */
-s8 *shell_get_variable( s8 *spName ) {
-    s64 i;
-    for ( i = 0; i < LIBCHIK_SHELL_MAX_VARIABLES; i++ ) {
-        if ( gVariables[ i ].apName != nullptr ) {
-            if ( strcmp( gVariables[ i ].apName, spName ) == 0 ) {
-                return gVariables[ i ].apValue;
+shell_val_u shell_get_variable(s8 *name) {
+    unsigned long i;
+
+    for (i = 0; i < LIBCHIK_SHELL_MAX_VARIABLES; i++) {
+        if (_vars[i].name != nullptr) {
+            if (strcmp(_vars[i].name, name) == 0) {
+                switch (_vars[i].type) {
+                case SHELL_VAR_INT:
+                    return (shell_val_u){.i = atoi(_vars[i].val)};
+                case SHELL_VAR_FLOAT:
+                    return (shell_val_u){.f = atof(_vars[i].val)};
+                case SHELL_VAR_STRING:
+                    return (shell_val_u){.s = _vars[i].val};
+                case SHELL_VAR_BOOL:
+                    return (shell_val_u){
+                        .b = (strcmp(_vars[i].val, "true") == 0)};
+                }
             }
         }
     }
-    return nullptr;
+    return (shell_val_u){.i = 0};
 }

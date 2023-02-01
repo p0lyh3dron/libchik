@@ -2,10 +2,10 @@
  *    shell.h    --    header for interacting with the engine via a shell
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on September 15, 2022
- * 
+ *
  *    This file is part of the Chik library, a general purpose
  *    library for the Chik engine and her games.
- * 
+ *
  *    This file declares the shell interface functions. Engine modules
  *    as well as game code can create shell commands and variables.
  *    This allows the user to interact with the engine and game
@@ -16,10 +16,10 @@
 
 #include "types.h"
 
-#define LIBCHIK_SHELL_MAX_COMMANDS  256
+#define LIBCHIK_SHELL_MAX_COMMANDS 256
 #define LIBCHIK_SHELL_MAX_VARIABLES 256
 
-#define LIBCHIK_SHELL_ARGV_MAX  32
+#define LIBCHIK_SHELL_ARGV_MAX 32
 #define LIBCHIK_SHELL_ARGV_SIZE 256
 
 #define LIBCHIK_SHELL_VAR_VALUE_SIZE 256
@@ -32,65 +32,95 @@ typedef enum {
     SHELL_VAR_BOOL
 } shell_var_type_t;
 
+typedef union {
+    s32 i;
+    f32 f;
+    char s[LIBCHIK_SHELL_VAR_VALUE_SIZE];
+    bool b;
+} shell_val_u;
+
 typedef struct {
-    s8     *apName;
-    s8     *apDesc;
-    void ( *apFunc )( s32 sArgc, s8 **spArgv );
+    s8 *name;
+    s8 *desc;
+    void (*fun)(s32, s8 **);
 } shell_command_t;
 
 typedef struct {
-    s8              *apName;
-    s8              *apDesc;
-    s8               apValue[ LIBCHIK_SHELL_VAR_VALUE_SIZE ];
+    s8 *name;
+    s8 *desc;
+    s8 val[LIBCHIK_SHELL_VAR_VALUE_SIZE];
+    void (*fun)(s8 *);
 
-    shell_var_type_t aType;
+    shell_var_type_t type;
 } shell_variable_t;
 
-#define EXTERN_SHELL_COMMAND( name ) \
-    extern shell_command_t name
+#define EXTERN_SHELL_COMMAND(name) extern shell_command_t name
 
-#define EXTERN_SHELL_VARIABLE( name ) \
-    extern shell_variable_t name
+#define EXTERN_SHELL_VARIABLE(name) extern shell_variable_t name
 
-#define SHELL_COMMAND( name, desc, func ) \
-    shell_command_t name = ( shell_command_t ){ .apName = #name, .apDesc = desc, .apFunc = func }
+#define SHELL_COMMAND(name, desc, func)                                        \
+    shell_command_t name = (shell_command_t) {                                 \
+        .name = #name, .desc = desc, .fun = func                               \
+    }
 
-#define SHELL_VARIABLE( name, desc, value, type ) \
-    shell_variable_t name = ( shell_variable_t ){ .apName = #name, .apDesc = desc, .apValue = value, .aType = type }
+#define SHELL_VARIABLE(name, desc, value, type)                                \
+    shell_variable_t name = (shell_variable_t) {                               \
+        .name = #name, .desc = desc, .value = value, .type = type              \
+    }
+
+/*
+ *    Displays the help text.
+ */
+void shell_help();
+
+/*
+ *    Displays a list of all registered commands.
+ */
+void shell_list_commands();
+
+/*
+ *    Displays a list of all registered variables.
+ */
+void shell_list_variables();
+
+/*
+ *    Displays a list of all registered commands and variables.
+ */
+void shell_list_all();
 
 /*
  *    Initializes the shell.
  */
-void shell_init( void );
+void shell_init(void);
 
 /*
  *    Registers shell commands.
  *
- *    @param shell_command_t *   A shell command.
+ *    @param shell_command_t *com   A shell command.
  */
-void shell_register_commands( shell_command_t *spCommand );
+void shell_register_commands(shell_command_t *com);
 
 /*
  *    Registers shell variables.
  *
- *    @param shell_variable_t *   A shell variable.
+ *    @param shell_variable_t *var   A shell variable.
  */
-void shell_register_variables( shell_variable_t *spVariable );
+void shell_register_variables(shell_variable_t *var);
 
 /*
  *    Executes a shell command.
  *
- *    @param s8*    The command to execute.
+ *    @param s8 *com    The command to execute.
  */
-void shell_execute( s8 *spCommand );
+void shell_execute(s8 *com);
 
 /*
  *    Gets a shell variable value.
  *
- *    @param s8*    The name of the variable.
- * 
- *    @return s8*   The value of the variable.
+ *    @param s8 name    The name of the variable.
+ *
+ *    @return shell_val_u   The value of the variable.
  */
-s8 *shell_get_variable( s8 *spName );
+shell_val_u shell_get_variable(s8 *name);
 
 #endif /* LIBCHIK_SHELL_H  */

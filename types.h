@@ -2,55 +2,56 @@
  *    types.h    --    header for general types
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
- * 
+ *
  *    This file is part of the Chik library, a general purpose
  *    library for the Chik engine and her games.
- * 
+ *
  *    Included here are the basic types used by the Chik engine.
  */
 #pragma once
 
-#define nullptr ( void* )0
+#define nullptr (void *)0
 
-#define true    1
-#define false   0
+#define true 1
+#define false 0
 
 #define MAX_VECTOR_ATTRIBUTES 16
 
-#include "math_type.h"
-
-typedef unsigned char      u8;
-typedef unsigned short     u16;
-typedef unsigned int       u32;
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef unsigned int u32;
 typedef unsigned long long u64;
 
-#define ARR_LEN( x ) ( ( sizeof( x ) / sizeof( 0[ x ] ) ) / ( ( u64 )( !( sizeof( x ) % sizeof( 0[ x ] ) ) ) ) )
+#define ARR_LEN(x)                                                             \
+    ((sizeof(x) / sizeof(0 [x])) / ((u64)(!(sizeof(x) % sizeof(0 [x])))))
 
 #if __unix__
-    typedef __uint128_t u128;
+typedef __uint128_t u128;
 #elif _WIN32
-    /*
-     *    Probably broken on windows.
-     */
-    typedef unsigned __int128 u128;
+/*
+ *    Probably broken on windows.
+ */
+typedef unsigned __int128 u128;
 #else
-    #error "Platform does not support 128-bit integers."
+#error "Platform does not support 128-bit integers."
 #endif /* __unix__  */
 
-typedef char      s8;
-typedef short     s16;
-typedef int       s32;
+typedef char s8;
+typedef short s16;
+typedef int s32;
 typedef long long s64;
 
-typedef float     f32;
-typedef double    f64;
+typedef float f32;
+typedef double f64;
 
-typedef void*     dl_handle_t;
+typedef void *dl_handle_t;
+
+typedef s8 bool;
 
 typedef struct {
-    u32 aIndex;
-    u32 aMagic;
-    u64 aSize;
+    u32 index;
+    u32 magic;
+    u64 size;
 } trap_t;
 
 typedef struct {
@@ -90,27 +91,27 @@ typedef struct {
 } color32_t;
 
 typedef union {
-    vec2_t    v2;
-    vec2u_t   v2u;
-    vec3_t    v3;
-    vec4_t    v4;
+    vec2_t v2;
+    vec2u_t v2u;
+    vec3_t v3;
+    vec4_t v4;
     color32_t c32;
 } vec_t;
 
 typedef struct {
-    f32 v[ 16 ];
+    f32 v[16];
 } mat4_t;
 
 typedef struct {
-    u32          aWidth;
-    u32          aHeight;
-    u32          aFormat;
-    u32          aDataLen;
-    u32         *apData;
+    u32 width;
+    u32 height;
+    u32 fmt;
+    u32 size;
+    u32 *buf;
 } image_t;
 
 typedef struct {
-    image_t *apImage;
+    image_t *image;
 } texture_t;
 
 typedef enum {
@@ -132,14 +133,14 @@ typedef enum {
  *    Returns the size of a vertex component in bytes.
  *
  *    @param v_format_e     The vertex format.
- * 
+ *
  *    @return u32           The size of the vertex component in bytes.
  */
-u32 get_vertex_component_size( v_format_e sFmt );
+u32 get_vertex_component_size(v_format_e sFmt);
 
 typedef struct {
-    color32_t aColor;
-    vec2u_t   aPos;
+    color32_t color;
+    vec2u_t pos;
 } fragment_t;
 
 typedef enum {
@@ -147,29 +148,24 @@ typedef enum {
 } v_usage_e;
 
 typedef struct {
-    v_usage_e    aUsage;
-    v_format_e   aFormat;
-    u32          aStride;
-    u32          aOffset;
+    v_usage_e usage;
+    v_format_e fmt;
+    u32 stride;
+    u32 offset;
 } v_attrib_t;
 
 typedef struct {
-    v_attrib_t aAttribs[ MAX_VECTOR_ATTRIBUTES ];
-    u32        aCount;
-    u32        aStride;
-    void    ( *apFunc )( fragment_t *, void *, void * );
+    v_attrib_t attributes[MAX_VECTOR_ATTRIBUTES];
+    u32 count;
+    u32 stride;
+    void (*fun)(fragment_t *, void *, void *);
 } v_layout_t;
 
 typedef struct {
-    vec4_t  aPos;
-    vec2_t  aTexCoord;
-}chik_vertex_t;
-
-typedef struct {
-    vec3_t aNormal;
-    f32    aDistance;
+    vec3_t normal;
+    f32 dist;
 } plane_t;
 
 typedef struct {
-    plane_t aPlanes[ 6 ];
+    plane_t planes[6];
 } frustum_t;

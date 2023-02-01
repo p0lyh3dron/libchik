@@ -2,10 +2,10 @@
  *    args.h    --    header for argument parsing
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
- * 
+ *
  *    This file is part of the Chik library, a general purpose
  *    library for the Chik engine and her games.
- * 
+ *
  *    Included here is a simple interface for parsing command line
  *    arguments.
  */
@@ -16,41 +16,43 @@
 /*
  *    Initializes the argument parser.
  *
- *    @param const int        The number of arguments passed to the program.
- *    @param const char **    The array of arguments passed to the program.
+ *    @param const int argc       The number of arguments passed to the program.
+ *    @param const char **argv    The array of arguments passed to the program.
  */
-void args_init( const int sArgc, const char **spArgv );
+void args_init(const int argc, const char **argv);
 
 /*
  *    Returns if the argument is present.
  *
- *    @param  const char *     The argument to check for.
+ *    @param  const char *arg     The argument to check for.
  *
  *    @return u32              1 if the argument is present, 0 otherwise.
  */
-u32 args_has( const char *spArg );
+u32 args_has(const char *arg);
 
 /*
  *    Returns the string value of the argument.
  *
- *    @param  const char *     The argument to check for.
+ *    @param  const char *arg     The argument to check for.
  *
- *    @return const char *     The value of the argument, or NULL if it is not present.
+ *    @return const char *     The value of the argument, or NULL if it is not
+ * present.
  */
-const char *args_get_str( const char *spArg );
+const char *args_get_str(const char *arg);
 
 /*
  *    Returns the integer value of the argument.
  *
- *    @param const char *     The argument to check for.
+ *    @param const char *arg     The argument to check for.
  *
- *    @return s32             The value of the argument, or -1 if it is not present.
+ *    @return s32             The value of the argument, or -1 if it is not
+ * present.
  */
-s32 args_get_int( const char *spArg );
+s32 args_get_int(const char *arg);
 
 /*
  *    Returns the executable name.
  *
  *    @return const char *    The executable name.
  */
-const char *args_get_executable( void );
+const char *args_get_executable(void);

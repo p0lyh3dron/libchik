@@ -2,191 +2,107 @@
  *    thread.c    --    source for parallel programming
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on June 18, 2022
- * 
+ *
+ *    Refactored by Karl "p0lyh3dron" Kreuze on January 19, 2023
+ *
  *    This file is part of the Chik library, a general purpose
  *    library for the Chik engine and her games.
- * 
- *    This file will defines the functions for creating and manipulating threads.
+ *
+ *    This file will defines the functions for creating and manipulating
+ * threads.
  */
 #include "thread.h"
 
-#include <string.h>
+#include <malloc.h>
+#include <memory.h>
 
-#if __unix__
-    #include <unistd.h>
-#elif _WIN32
-    #include <windows.h>
-#endif /* __unix__  */
+#include "aqueue.h"
 
-threadpool_t gThreadpool;
-
-mutex_t gMutex;
+aqueue_t *_threadpool = 0;
+int _threads = 0;
 
 /*
- *    Initializes a mutex.
+ *   The thread function.
  *
- *    @param mutex_t * The mutex to initialize.
- */
-void thread_mutex_init( mutex_t *spMutex ) {
-    #if __unix__
-        pthread_mutex_init( spMutex, 0 );
-    #elif _WIN32
-        InitializeCriticalSection( spMutex );
-    #endif /* __unix__  */
-}
-
-/*
- *    Unlocks a mutex.
+ *   @param void *arg    The argument to pass to the function.
  *
- *    @param mutex_t *    The mutex to unlock.
+ *   @return void*    The return value of the function.
  */
-void thread_mutex_unlock( mutex_t *spMutex ) {
-    #if __unix__
-        pthread_mutex_unlock( spMutex );
-    #elif _WIN32
-        ReleaseMutex( spMutex );
-    #endif /* __unix__  */
-}
+void *_threadpool_thread(void *arg) {
+    task_t *task;
 
-/*
- *    Locks a mutex.
- *
- *    @param mutex_t *    The mutex to lock.
- */
-void thread_mutex_lock( mutex_t *spMutex ) {
-    #if __unix__
-        pthread_mutex_lock( spMutex );
-    #elif _WIN32
-        WaitForSingleObject( spMutex, INFINITE );
-    #endif /* __unix__  */
-}
+    while (1) {
+        task = aqueue_get(_threadpool);
 
-/*
- *    Thread subrountine.
- */
-void *thread_routine( void *spArg ) {
-    thread_t *pThread = ( thread_t * )spArg;
-    while ( pThread->aFlags & LIBCHIK_THREAD_FLAG_RUNNING ) {
-        /*
-         *    Look for a task to run.
-         */
-        thread_mutex_lock( &gMutex );
-        s64 i;
-        for ( i = 0; i < LIBCHIK_THREAD_MAX_TASKS; ++i ) {
-            if ( pThread->aTasks[ i ].aFlags & LIBCHIK_TASK_FLAG_PENDING ) {
-                break;
-            }
-        }
-        thread_mutex_unlock( &gMutex );
-
-        if ( i != LIBCHIK_THREAD_MAX_TASKS ) {
-            /*
-             *    Run the task.
-             */
-            pThread->aTasks[ i ].aFlags &= ~LIBCHIK_TASK_FLAG_PENDING;
-            pThread->aTasks[ i ].aFlags |= LIBCHIK_TASK_FLAG_RUNNING;
-            pThread->aTasks[ i ].apFunc( pThread->aTasks[ i ].apArgs );
-
-            /*
-             *    Mark the task as finished.
-             */
-            thread_mutex_lock( &gMutex );
-            pThread->aTasks[ i ].aFlags &= ~LIBCHIK_TASK_FLAG_RUNNING;
-            pThread->aTasks[ i ].aFlags |= LIBCHIK_TASK_FLAG_NONE;
-            pThread->aNumTasks--;
-            thread_mutex_unlock( &gMutex );
-        }
-        /*
-         *    If there are no tasks to run, sleep.
-         */
-        else {
-#if __unix__
-            usleep( 1 );
-#elif _WIN32
-            Sleep( 1 );
-#endif /* __unix__  */
-        }
-    }
-}
-
-/*
- *    Creates a thread.
- */
-thread_t thread_create( thread_t *spThread ) {
-#if __unix__
-    pthread_create( &spThread->aThread, NULL, thread_routine, spThread );
-#elif _WIN32
-    /*
-     *    Implement this.
-     */
-#endif /* __unix__  */
-}
-
-/*
- *    Initializes the global task pool.
- */
-void threadpool_init( void ) {
-    gThreadpool.aNumThreads = LIBCHIK_THREAD_MAX_THREADS;
-
-    thread_mutex_init( &gMutex );
-    
-    s64 i;
-    for ( i = 0; i < LIBCHIK_THREAD_MAX_THREADS; ++i ) {
-        
-        gThreadpool.aThreads[ i ].aNumTasks = 0;
-        s64 j;
-        for ( j = 0; j < LIBCHIK_THREAD_MAX_TASKS; ++j ) {
-            gThreadpool.aThreads[ i ].aTasks[ j ].aFlags  = LIBCHIK_TASK_FLAG_NONE;
-            gThreadpool.aThreads[ i ].aTasks[ j ].apFunc  = nullptr;
-
-            gThreadpool.aThreads[ i ].aFlags = LIBCHIK_THREAD_FLAG_RUNNING;
-        }
-        /* 
-         *    Launch the thread.
-         */
-        thread_create( &gThreadpool.aThreads[ i ] );
-    }
-}
-
-/*
- *    Adds a task to the global task pool.
- */
-void threadpool_add_task( void ( *spFunc )( void * ), void *spArg, u32 sArgsLen ) {
-    thread_mutex_lock( &gMutex );
-    s64 i;
-    u32 freeTasks     = 0;
-    u32 threadId      = 0;
-    for ( i = 0; i < LIBCHIK_THREAD_MAX_THREADS; ++i ) {
-        if ( gThreadpool.aThreads[ i ].aNumTasks > freeTasks ) {
-            freeTasks = gThreadpool.aThreads[ i ].aNumTasks;
-            threadId = i;
-        }
-    }
-    /*
-     *    Add the task to the thread.
-     */
-    for ( i = 0; i < LIBCHIK_THREAD_MAX_TASKS; ++i ) {
-        if ( gThreadpool.aThreads[ threadId ].aTasks[ i ].aFlags == LIBCHIK_TASK_FLAG_NONE ) {
-            gThreadpool.aThreads[ threadId ].aNumTasks++;
-            gThreadpool.aThreads[ threadId ].aTasks[ i ].apFunc = spFunc;
-            memcpy( gThreadpool.aThreads[ threadId ].aTasks[ i ].apArgs, spArg, sArgsLen );
-            gThreadpool.aThreads[ threadId ].aTasks[ i ].aFlags = LIBCHIK_TASK_FLAG_PENDING;
+        if (task == 0) {
             break;
         }
+
+        task->fun(task->arg);
     }
-    thread_mutex_unlock( &gMutex );
+
+    return 0;
 }
 
 /*
- *    Waits for all tasks to finish.
+ *   Initializes the global threadpool.
+ *
+ *   @param unsigned long size       The size of the threadpool.
+ *   @param unsigned long threads    The number of threads to spawn.
+ *
+ *   @return int    0 on success, -1 on failure.
  */
-void threadpool_wait( void ) {
-    s64 i;
-    for ( i = 0; i < LIBCHIK_THREAD_MAX_THREADS; ++i ) {
-        while ( gThreadpool.aThreads[ i ].aNumTasks > 0 ) {
-            /*
-             *    Wait for the thread to finish.
-             */
-        }
+int threadpool_init(unsigned long size, unsigned long threads) {
+    unsigned long i;
+#if __unix__
+    pthread_t thread;
+#endif /* __unix__  */
+
+    _threadpool = aqueue_new(size);
+    _threads = threads;
+
+    if (_threadpool == 0) {
+        return -1;
     }
+
+    for (i = 0; i < threads; i++) {
+#if __unix__
+        if (pthread_create(&thread, 0, _threadpool_thread, 0) != 0) {
+            return -1;
+        }
+#else
+#error "Unsupported platform"
+#endif /* __unix__  */
+    }
+
+    return 0;
+}
+
+/*
+ *   Destroys the global threadpool.
+ */
+void threadpool_destroy(void) { aqueue_destroy(_threadpool); }
+
+/*
+ *   Submits a task to the global threadpool.
+ *
+ *   @param void *(*fun)(void *)    The function to execute.
+ *   @param void *arg               The argument to pass to the function.
+ *
+ *   @return int    0 on success, -1 on failure.
+ */
+int threadpool_submit(void *(*fun)(void *), void *arg) {
+    task_t task;
+
+    task.fun = fun;
+    task.arg = arg;
+
+    return aqueue_add(_threadpool, &task);
+}
+
+/*
+ *   Waits for all tasks to complete.
+ */
+void threadpool_wait(void) {
+    while (aqueue_waiting(_threadpool) < _threads);
 }

@@ -1,11 +1,11 @@
 /*
  *    resource.c    --    source file for hot-swapping resources
- * 
+ *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
- * 
+ *
  *    This file is part of the Chik library, a general purpose
  *    library for the Chik engine and her games.
- * 
+ *
  *    This file defines the functions used for loading and unloading
  *    resources.
  */
@@ -16,80 +16,91 @@
 /*
  *    Create a new resource manager.
  *
- *    @param  s64           The size of the memory pool to use.
+ *    @param  s64 size      The size of the memory pool to use.
  *
  *    @return resource_t    A pointer to the new resource manager.
  */
-resource_t *resource_new( s64 sSize ) {
-    if ( sSize <= 0 ) {
-        log_error( "resource_t *resource_new( s64 ): Invalid resource manager size.\n" );
+resource_t *resource_new(s64 size) {
+    resource_t *resource;
+
+    if (size <= 0) {
+        log_error("resource_t *resource_new( s64 ): Invalid resource manager "
+                  "size.\n");
         return 0;
     }
 
-    resource_t *pResource = malloc( sizeof( resource_t ) );
+    resource = malloc(sizeof(resource_t));
 
-    if( pResource == 0 ) {
-        log_error( "resource_t *resource_new( s64 ): Could not allocate memory for resource manager.\n" );
+    if (resource == 0) {
+        log_error("resource_t *resource_new( s64 ): Could not allocate memory "
+                  "for resource manager.\n");
         return 0;
     }
 
-    pResource->apPool = mempool_new( sSize );
+    resource->pool = mempool_new(size);
 
-    if( pResource->apPool == 0 ) {
-        log_error( "resource_t *resource_new( s64 ): Could not allocate memory for resource manager pool.\n" );
-        free( pResource );
+    if (resource->pool == 0) {
+        log_error("resource_t *resource_new( s64 ): Could not allocate memory "
+                  "for resource manager pool.\n");
+        free(resource);
         return 0;
     }
 
-    return pResource;
+    return resource;
 }
 
 /*
  *    Add a resource to the resource manager.
  *
- *    @param  resource_t *        The resource manager to add the resource to.
- *    @param  void *              The resource to add.
- *    @param  u64                 The size of the resource to add.
- * 
+ *    @param  resource_t *resource        The resource manager to add the resource to.
+ *    @param  void *data                  The resource to add.
+ *    @param  u64 size                    The size of the resource to add.
+ *
  *    @return trap_t                 The handle of the resource.
  *                                     If the resource manager is full,
  *                                     this will be 0.
  */
-trap_t resource_add( resource_t *spResource, void *spData, u64 sSize ) {
-    if( spResource == 0 ) {
-        log_error( "trap_t resource_add( resource_t *, void *, u64 ): Invalid resource manager.\n" );
+trap_t resource_add(resource_t *resource, void *data, u64 size) {
+    u32 magic;
+    char *buf;
+    trap_t handle;
+
+    if (resource == 0) {
+        log_error("trap_t resource_add( resource_t *, void *, u64 ): Invalid "
+                  "resource manager.\n");
         return INVALID_TRAP;
     }
 
-    if( spData == 0 ) {
-        log_error( "trap_t resource_add( resource_t *, void *, u64 ): Invalid resource data.\n" );
+    if (data == 0) {
+        log_error("trap_t resource_add( resource_t *, void *, u64 ): Invalid "
+                  "resource data.\n");
         return INVALID_TRAP;
     }
 
-    if( sSize <= 0 ) {
-        log_error( "trap_t resource_add( resource_t *, void *, u64 ): Invalid resource size.\n" );
+    if (size <= 0) {
+        log_error("trap_t resource_add( resource_t *, void *, u64 ): Invalid "
+                  "resource size.\n");
         return INVALID_TRAP;
     }
 
-    u32 magic = rand();
+    magic = rand();
 
-    s8 *pBuf = mempool_alloc( spResource->apPool, sSize + sizeof( magic ) );
-    if ( pBuf == nullptr ) {
-        log_error( "trap_t resource_add( resource_t *, void *, u64 ): Could not allocate memory for resource.\n" );
+    buf = mempool_alloc(resource->pool, size + sizeof(magic));
+    if (buf == nullptr) {
+        log_error("trap_t resource_add( resource_t *, void *, u64 ): Could not "
+                  "allocate memory for resource.\n");
         return INVALID_TRAP;
     }
 
     /*
      *    Copy the magic number followed by the data.
      */
-    memcpy( pBuf, &magic, sizeof( magic ) );
-    memcpy( pBuf + sizeof( magic ), spData, sSize );
+    memcpy(buf, &magic, sizeof(magic));
+    memcpy(buf + sizeof(magic), data, size);
 
-    trap_t handle = { 
-        .aIndex = pBuf - spResource->apPool->apBuf,
-        .aMagic = magic,
-        .aSize  = sSize
-    };
+    handle.index = buf - resource->pool->buf;
+    handle.magic = magic;
+    handle.size = size;
 
     return handle;
 }
@@ -97,88 +108,102 @@ trap_t resource_add( resource_t *spResource, void *spData, u64 sSize ) {
 /*
  *    Get a resource from the resource manager.
  *
- *    @param  resource_t *        The resource manager to get the resource from.
- *    @param  trap_t            The handle of the resource to get.
- * 
+ *    @param  resource_t *resource        The resource manager to get the resource from.
+ *    @param  trap_t handle               The handle of the resource to get.
+ *
  *    @return void *              The resource.
  *                                Returns NULL if the handle is invalid.
  */
-void *resource_get( resource_t *spResource, trap_t sHandle ) {
-    if( spResource == 0 ) {
-        log_error( "void *resource_get( resource_t *, trap_t ): Invalid resource manager.\n" );
+void *resource_get(resource_t *resource, trap_t handle) {
+    u32   magic;
+    char *buf;
+
+    if (resource == 0) {
+        log_error("void *resource_get( resource_t *, trap_t ): Invalid "
+                  "resource manager.\n");
         return 0;
     }
 
-    if( BAD_TRAP( sHandle ) ) {
-        log_error( "void *resource_get( resource_t *, trap_t ): Invalid resource handle.\n" );
+    if (BAD_TRAP(handle)) {
+        log_error("void *resource_get( resource_t *, trap_t ): Invalid "
+                  "resource handle.\n");
         return 0;
     }
 
-    u32 sIndex = sHandle.aIndex;
-    u32 sMagic = sHandle.aMagic;
-
-    if( sIndex >= spResource->apPool->aSize ) {
-        log_error( "void *resource_get( resource_t *, trap_t ): Invalid resource index.\n" );
+    if (handle.index >= resource->pool->len) {
+        log_error("void *resource_get( resource_t *, trap_t ): Invalid "
+                  "resource index.\n");
         return 0;
     }
 
-    s8 *pBuf  = spResource->apPool->apBuf + sIndex;
-    u32 magic = *( u32 * )pBuf;
+    buf = resource->pool->buf + handle.index;
+    magic = *(u32 *)buf;
 
-    if( magic != sMagic ) {
-        log_error( "void *resource_get( resource_t *, trap_t ): Invalid resource magic.\n" );
+    if (handle.magic != magic) {
+        log_error("void *resource_get( resource_t *, trap_t ): Invalid "
+                  "resource magic.\n");
         return 0;
     }
 
-    return pBuf + sizeof( magic );
+    return buf + sizeof(magic);
 }
 
 /*
  *    Remove a resource from the resource manager.
  *
- *    @param  resource_t *        The resource manager to remove the resource from.
- *    @param  trap_t            The handle of the resource to remove.
+ *    @param  resource_t *resource        The resource manager to remove the resource
+ * from.
+ *    @param  trap_t handle               The handle of the resource to remove.
  */
-void resource_remove( resource_t *spResource, trap_t sHandle ) {
-    if( spResource == 0 ) {
-        log_error( "void resource_remove( resource_t *, trap_t ): Invalid resource manager.\n" );
+void resource_remove(resource_t *resource, trap_t handle) {
+    u32 index;
+    u32 magic;
+    char *buf;
+
+    if (resource == 0) {
+        log_error("void resource_remove( resource_t *, trap_t ): Invalid "
+                  "resource manager.\n");
         return;
     }
 
-    if( BAD_TRAP( sHandle ) ) {
-        log_error( "void resource_remove( resource_t *, trap_t ): Invalid resource handle.\n" );
+    if (BAD_TRAP(handle)) {
+        log_error("void resource_remove( resource_t *, trap_t ): Invalid "
+                  "resource handle.\n");
         return;
     }
 
-    u32 sIndex = sHandle.aIndex;
-    u32 sMagic = sHandle.aMagic;
+    index = handle.index;
+    magic = handle.magic;
 
-    if( sIndex >= spResource->apPool->aSize ) {
-        log_error( "void resource_remove( resource_t *, trap_t ): Invalid resource index.\n" );
+    if (index >= resource->pool->len) {
+        log_error("void resource_remove( resource_t *, trap_t ): Invalid "
+                  "resource index.\n");
         return;
     }
 
-    s8 *pBuf  = spResource->apPool->apBuf + sIndex;
+    buf = resource->pool->buf + index;
 
-    if( *( u32 * )pBuf != sMagic ) {
-        log_error( "void resource_remove( resource_t *, trap_t ): Invalid resource magic.\n" );
+    if (*(u32 *)buf != magic) {
+        log_error("void resource_remove( resource_t *, trap_t ): Invalid "
+                  "resource magic.\n");
         return;
     }
 
-    mempool_free( spResource->apPool, pBuf );
+    mempool_free(resource->pool, buf);
 }
 
 /*
  *    Destroy a resource manager.
  *
- *    @param  apResource    The resource manager to destroy.
+ *    @param resource_t *resource    The resource manager to destroy.
  */
-void resource_destroy( resource_t *spResource ) {
-    if( spResource == 0 ) {
-        log_error( "void resource_destroy( resouce_t * ): Invalid resource manager.\n" );
+void resource_destroy(resource_t *resource) {
+    if (resource == 0) {
+        log_error("void resource_destroy( resouce_t * ): Invalid resource "
+                  "manager.\n");
         return;
     }
 
-    mempool_destroy( spResource->apPool );
-    free( spResource );
+    mempool_destroy(resource->pool);
+    free(resource);
 }

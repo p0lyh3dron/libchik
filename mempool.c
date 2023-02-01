@@ -1,11 +1,11 @@
 /*
  *    mempool.c    --    source file for memory pool
- * 
+ *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
- * 
+ *
  *    This file is part of the Chik library, a general purpose
  *    library for the Chik engine and her games.
- * 
+ *
  *    This file defines the functions used for allocating and freeing
  *    memory.
  */
@@ -14,68 +14,73 @@
 /*
  *    Creates a new memory pool.
  *
- *    @param s64             Size of the memory pool in bytes.
- * 
+ *    @param s64 size            Size of the memory pool in bytes.
+ *
  *    @return mempool_t *    Pointer to the new memory pool.
  *                           Returns NULL on failure.
  *                           Should be freed with mempool_free().
  */
-mempool_t *mempool_new( s64 sSize ) {
-    if ( sSize <= 0 ) {
-        log_error( "Invalid memory pool size." );
+mempool_t *mempool_new(s64 size) {
+    if (size <= 0) {
+        log_error("Invalid memory pool size.");
         return 0;
     }
 
-    mempool_t *pMempool = malloc( sizeof( mempool_t ) );
+    mempool_t *mempool = malloc(sizeof(mempool_t));
 
-    if( pMempool == 0 ) {
-        log_error( "Could not allocate memory for memory pool." );
+    if (mempool == 0) {
+        log_error("Could not allocate memory for memory pool.");
         return 0;
     }
 
-    pMempool->apFirst = 0;
-    pMempool->aSize   = sSize;
-    pMempool->apBuf   = malloc( sSize );
+    mempool->next = 0;
+    mempool->len = size;
+    mempool->buf = malloc(size);
 
-    if( pMempool->apBuf == 0 ) {
-        log_error( "Could not allocate memory for memory pool buffer." );
-        free( pMempool );
+    if (mempool->buf == 0) {
+        log_error("Could not allocate memory for memory pool buffer.");
+        free(mempool);
         return 0;
     }
 
-    pMempool->apCur = pMempool->apBuf;
-    pMempool->apEnd = pMempool->apBuf + sSize;
-    return pMempool;
+    mempool->cur = mempool->buf;
+    mempool->end = mempool->buf + size;
+    return mempool;
 }
 
 /*
  *    Consolidates the memory pool.
  *
- *    @param mempool_t *     Pointer to the memory pool.
- * 
+ *    @param mempool_t *pool     Pointer to the memory pool.
+ *
  *    @return memerror_t     Error code.
  */
-memerror_t mempool_consolidate( mempool_t *spPool ) {
-    if( spPool == 0 ) {
-        log_error( "Invalid memory pool." );
+memerror_t mempool_consolidate(mempool_t *pool) {
+    memchunk_t *chunk;
+    memchunk_t *next;
+
+    if (pool == 0) {
+        log_error("Invalid memory pool.");
         return MEMERR_INVALID_ARG;
     }
 
-    if ( spPool->apFirst == 0 ) {
-        log_note( "Memory pool is free." );
+    if (pool->next == 0) {
+        log_note("Memory pool is free.");
         return MEMERR_NONE;
     }
 
-    for ( memchunk_t *pChunk = spPool->apFirst; pChunk != 0; pChunk = pChunk->apNext ) {
+    for (chunk = pool->next; chunk != 0;
+         chunk = chunk->next) {
         /*
          *    If the current and next chunk are adjacent, merge them.
          */
-        if ( pChunk->aFlags & MEMFLAG_FREE && pChunk->apNext != 0 && pChunk->apNext->aFlags & MEMFLAG_FREE ) {
-            memchunk_t *pNext = pChunk->apNext;
-            pChunk->aSize    += pNext->aSize;
-            pChunk->apNext    = pNext->apNext;
+        if (chunk->flags & MEMFLAG_FREE && chunk->next != 0 &&
+            chunk->next->flags & MEMFLAG_FREE) {
+            next = chunk->next;
+            chunk->len += next->len;
+            chunk->next = next->next;
 
-            free( pNext );
+            free(next);
         }
     }
 }
@@ -83,50 +88,53 @@ memerror_t mempool_consolidate( mempool_t *spPool ) {
 /*
  *    Reallocates a memory pool.
  *
- *    @param mempool_t *     Pointer to the memory pool.
- *    @param s64             Size of the memory pool in bytes.
- * 
+ *    @param mempool_t *pool     Pointer to the memory pool.
+ *    @param s64 size            Size of the memory pool in bytes.
+ *
  *    @return memerror_t     Error code.
  *                           MEMERR_NONE on success.
  *                           MEMERR_INVALID_ARG if the memory pool is NULL.
  *                           MEMERR_INVALID_SIZE if the size is <= 0.
- *                           MEMERR_NO_MEMORY if the memory pool could not be allocated.
+ *                           MEMERR_NO_MEMORY if the memory pool could not be
+ * allocated.
  */
-memerror_t mempool_realloc( mempool_t *spPool, s64 sSize ) {
-    if ( spPool == 0 ) {
-        log_error( "Invalid memory pool." );
+memerror_t mempool_realloc(mempool_t *pool, s64 size) {
+    s8 *buf;
+
+    if (pool == 0) {
+        log_error("Invalid memory pool.");
         return MEMERR_INVALID_ARG;
     }
 
-    if ( sSize <= 0 ) {
-        log_error( "Invalid memory pool size." );
+    if (size <= 0) {
+        log_error("Invalid memory pool size.");
         return MEMERR_INVALID_SIZE;
     }
 
-    if ( spPool->apBuf == 0 ) {
-        spPool->apBuf = calloc( 0, sSize );
+    if (pool->buf == 0) {
+        pool->buf = calloc(0, size);
 
-        if ( spPool->apBuf == 0 ) {
-            log_error( "Could not allocate memory for memory pool buffer." );
+        if (pool->buf == 0) {
+            log_error("Could not allocate memory for memory pool buffer.");
             return MEMERR_NO_MEMORY;
         }
 
-        spPool->apCur = spPool->apBuf;
-        spPool->apEnd = spPool->apBuf + sSize;
+        pool->cur = pool->buf;
+        pool->end = pool->buf + size;
         return MEMERR_NONE;
     }
 
-    s8 *pBuf = realloc( spPool->apBuf, sSize );
-    
-    if ( pBuf == 0 ) {
-        log_error( "Could not reallocate memory for memory pool buffer." );
+    buf = realloc(pool->buf, size);
+
+    if (buf == 0) {
+        log_error("Could not reallocate memory for memory pool buffer.");
         return MEMERR_NO_MEMORY;
     }
 
-    spPool->apCur = pBuf + ( spPool->apCur - spPool->apBuf );
-    spPool->apBuf = pBuf;
-    spPool->apEnd = spPool->apBuf + sSize;
-    spPool->aSize = sSize;
+    pool->cur = buf + (pool->cur - pool->buf);
+    pool->buf = buf;
+    pool->end = pool->buf + size;
+    pool->len = size;
 
     return MEMERR_NONE;
 }
@@ -134,142 +142,153 @@ memerror_t mempool_realloc( mempool_t *spPool, s64 sSize ) {
 /*
  *    Allocates a new memory chunk from the memory pool.
  *
- *    @param mempool_t *     Pointer to the memory pool.
- *    @param s64             Size of the memory chunk in bytes.
- * 
+ *    @param mempool_t *pool      Pointer to the memory pool.
+ *    @param s64 size             Size of the memory chunk in bytes.
+ *
  *    @return s8 *           Pointer to the new memory chunk.
  *                           Returns NULL on failure.
  *                           Should be freed with mempool_free().
  *                           The memory chunk is not initialized.
  */
-s8 *mempool_alloc( mempool_t *spPool, s64 sSize ) {
-    if ( spPool == 0 ) {
-        log_error( "Invalid memory pool." );
+s8 *mempool_alloc(mempool_t *pool, s64 size) {
+    memchunk_t *chunk;
+    memchunk_t *new;
+    memchunk_t *last;
+    char *buf;
+
+    if (pool == 0) {
+        log_error("Invalid memory pool.");
         return 0;
     }
 
-    if ( sSize <= 0 ) {
-        log_error( "Invalid memory chunk size." );
+    if (size <= 0) {
+        log_error("Invalid memory chunk size.");
         return 0;
     }
 
     /*
      *    Check for free chunks.
      */
-    for ( memchunk_t *pChunk = spPool->apFirst; pChunk != 0; pChunk = pChunk->apNext ) {
-        if ( pChunk->aFlags & MEMFLAG_FREE && pChunk->aSize >= sSize ) {
+    for (memchunk_t *chunk = pool->next; chunk != 0;
+        chunk = chunk->next) {
+        if (chunk->flags & MEMFLAG_FREE && chunk->len >= size) {
             /*
              *    Split the chunk if it's too big.
              */
-            if ( pChunk->aSize > sSize ) {
-                memchunk_t *pNew = ( memchunk_t* )calloc( 0, sizeof( memchunk_t ) );
-                pNew->aFlags   = MEMFLAG_USED;
-                pNew->aSize    = pChunk->aSize - sSize;
-                pNew->apNext   = pChunk->apNext;
-                pChunk->apNext = pNew;
+            if (chunk->len > size) {
+                new = (memchunk_t *)calloc(0, sizeof(memchunk_t));
+                new->flags = MEMFLAG_USED;
+                new->len = chunk->len - size;
+                new->next = chunk->next;
+                chunk->next = new;
             }
-            pChunk->aFlags = MEMFLAG_USED;
-            pChunk->aSize = sSize;
-            return pChunk->apData;
+            chunk->flags = MEMFLAG_USED;
+            chunk->len = size;
+            return chunk->data;
         }
     }
     /*
      *    No free chunks, check if there's enough space.
      */
-    if ( spPool->apCur + sSize > spPool->apEnd ) {
-        log_error( "Not enough memory in memory pool." );
+    if (pool->cur + size > pool->end) {
+        log_error("Not enough memory in memory pool.");
         return 0;
     }
 
     /*
      *    Allocate a new chunk.
      */
-    memchunk_t *pChunk = ( memchunk_t* )malloc( sizeof( memchunk_t ) );
-    s8         *pBuf   = spPool->apCur;
-    pChunk->aFlags     = MEMFLAG_USED;
-    pChunk->aSize      = sSize;
-    pChunk->apData     = spPool->apCur;
-    pChunk->apNext     = 0;
-    spPool->apCur     += sSize;
+    new = (memchunk_t *)malloc(sizeof(memchunk_t));
+    buf = pool->cur;
+    new->flags = MEMFLAG_USED;
+    new->len = size;
+    new->data = pool->cur;
+    new->next = 0;
+    pool->cur += size;
 
     /*
      *    Add the chunk to the list.
      */
-    if ( spPool->apFirst == 0 ) {
-        spPool->apFirst = pChunk;
+    if (pool->next == 0) {
+        pool->next = new;
     } else {
-        memchunk_t *pLast = spPool->apFirst;
-        while ( pLast->apNext != 0 ) {
-            pLast = pLast->apNext;
+        last = pool->next;
+        while (last->next != 0) {
+            last = last->next;
         }
-        pLast->apNext = pChunk;
+        last->next = new;
     }
 
-    return pBuf;
+    return buf;
 }
 
 /*
  *    Frees a memory chunk from the memory pool.
  *
- *    @param mempool_t *     Pointer to the memory pool.
- *    @param s8 *            Pointer to the memory chunk.
+ *    @param mempool_t *pool      Pointer to the memory pool.
+ *    @param s8 *data             Pointer to the memory chunk.
  */
-void mempool_free( mempool_t *spPool, s8 *spChunk ) {
-    if ( spPool == 0 ) {
-        log_error( "Invalid memory pool." );
+void mempool_free(mempool_t *pool, s8 *data) {
+    memchunk_t *chunk;
+
+    if (pool == 0) {
+        LOGF_ERR("Invalid memory pool.\n");
         return;
     }
 
-    if ( spChunk == 0 ) {
-        log_error( "Invalid memory chunk." );
+    if (chunk == 0) {
+        LOGF_ERR("Invalid memory chunk.\n");
         return;
     }
 
     /*
      *    Find the chunk.
      */
-    memchunk_t *pChunk = spPool->apFirst;
-    while ( pChunk != 0 ) {
-        if ( pChunk->apData == spChunk ) {
+    chunk = pool->next;
+    while (chunk != 0) {
+        if (chunk->data == data) {
             break;
         }
-        pChunk = pChunk->apNext;
+        chunk = chunk->next;
     }
 
-    if ( pChunk->apData != spChunk ) {
-        log_error( "Could not find memory chunk." );
+    if (chunk->data != data) {
+        LOGF_ERR("Could not find memory chunk.\n");
         return;
     }
 
     /*
      *    Free the chunk.
      */
-    pChunk->aFlags = MEMFLAG_FREE;
+    chunk->flags = MEMFLAG_FREE;
 }
 
 /*
  *    Destroys a memory pool.
  *
- *    @param mempool_t *     Pointer to the memory pool to destroy.
- * 
+ *    @param mempool_t *pool     Pointer to the memory pool to destroy.
+ *
  *    @return void
  */
-void mempool_destroy( mempool_t *spPool ) {
-    if ( spPool == 0 ) {
-        log_error( "Invalid memory pool." );
+void mempool_destroy(mempool_t *pool) {
+    memchunk_t *chunk;
+    memchunk_t *next;
+
+    if (pool == 0) {
+        log_error("Invalid memory pool.");
         return;
     }
 
-    if ( spPool->apBuf != 0 ) {
-        free( spPool->apBuf );
+    if (pool->buf != 0) {
+        free(pool->buf);
     }
 
-    memchunk_t *pChunk = spPool->apFirst;
-    while ( pChunk != 0 ) {
-        memchunk_t *pNext = pChunk->apNext;
-        free( pChunk );
-        pChunk = pNext;
+    chunk = pool->next;
+    while (chunk != 0) {
+        next = chunk->next;
+        free(chunk);
+        chunk = next;
     }
-    
-    free( spPool );
+
+    free(pool);
 }
