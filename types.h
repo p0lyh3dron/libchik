@@ -158,7 +158,8 @@ typedef struct {
     v_attrib_t attributes[MAX_VECTOR_ATTRIBUTES];
     u32        count;
     u32        stride;
-    void (*fun)(fragment_t *, void *, void *);
+    void (*f_fun)(fragment_t *, void *, void *);
+    void (*v_fun)(void *, void *, void *);
 } v_layout_t;
 
 typedef struct {
