@@ -22,23 +22,23 @@
  */
 mempool_t *mempool_new(s64 size) {
     if (size <= 0) {
-        log_error("Invalid memory pool size.");
+        LOGF_ERR("Invalid memory pool size.");
         return 0;
     }
 
     mempool_t *mempool = malloc(sizeof(mempool_t));
 
     if (mempool == 0) {
-        log_error("Could not allocate memory for memory pool.");
+        LOGF_ERR("Could not allocate memory for memory pool.");
         return 0;
     }
 
     mempool->next = 0;
-    mempool->len = size;
-    mempool->buf = malloc(size);
+    mempool->len  = size;
+    mempool->buf  = malloc(size);
 
     if (mempool->buf == 0) {
-        log_error("Could not allocate memory for memory pool buffer.");
+        LOGF_ERR("Could not allocate memory for memory pool buffer.");
         free(mempool);
         return 0;
     }
@@ -60,17 +60,16 @@ memerror_t mempool_consolidate(mempool_t *pool) {
     memchunk_t *next;
 
     if (pool == 0) {
-        log_error("Invalid memory pool.");
+        LOGF_ERR("Invalid memory pool.");
         return MEMERR_INVALID_ARG;
     }
 
     if (pool->next == 0) {
-        log_note("Memory pool is free.");
+        LOGF_NOTE("Memory pool is free.");
         return MEMERR_NONE;
     }
 
-    for (chunk = pool->next; chunk != 0;
-         chunk = chunk->next) {
+    for (chunk = pool->next; chunk != 0; chunk = chunk->next) {
         /*
          *    If the current and next chunk are adjacent, merge them.
          */
@@ -102,12 +101,12 @@ memerror_t mempool_realloc(mempool_t *pool, s64 size) {
     s8 *buf;
 
     if (pool == 0) {
-        log_error("Invalid memory pool.");
+        LOGF_ERR("Invalid memory pool.");
         return MEMERR_INVALID_ARG;
     }
 
     if (size <= 0) {
-        log_error("Invalid memory pool size.");
+        LOGF_ERR("Invalid memory pool size.");
         return MEMERR_INVALID_SIZE;
     }
 
@@ -115,7 +114,7 @@ memerror_t mempool_realloc(mempool_t *pool, s64 size) {
         pool->buf = calloc(0, size);
 
         if (pool->buf == 0) {
-            log_error("Could not allocate memory for memory pool buffer.");
+            LOGF_ERR("Could not allocate memory for memory pool buffer.");
             return MEMERR_NO_MEMORY;
         }
 
@@ -127,7 +126,7 @@ memerror_t mempool_realloc(mempool_t *pool, s64 size) {
     buf = realloc(pool->buf, size);
 
     if (buf == 0) {
-        log_error("Could not reallocate memory for memory pool buffer.");
+        LOGF_ERR("Could not reallocate memory for memory pool buffer.");
         return MEMERR_NO_MEMORY;
     }
 
@@ -154,36 +153,35 @@ s8 *mempool_alloc(mempool_t *pool, s64 size) {
     memchunk_t *chunk;
     memchunk_t *new;
     memchunk_t *last;
-    char *buf;
+    char       *buf;
 
     if (pool == 0) {
-        log_error("Invalid memory pool.");
+        LOGF_ERR("Invalid memory pool.");
         return 0;
     }
 
     if (size <= 0) {
-        log_error("Invalid memory chunk size.");
+        LOGF_ERR("Invalid memory chunk size.");
         return 0;
     }
 
     /*
      *    Check for free chunks.
      */
-    for (memchunk_t *chunk = pool->next; chunk != 0;
-        chunk = chunk->next) {
+    for (memchunk_t *chunk = pool->next; chunk != 0; chunk = chunk->next) {
         if (chunk->flags & MEMFLAG_FREE && chunk->len >= size) {
             /*
              *    Split the chunk if it's too big.
              */
             if (chunk->len > size) {
-                new = (memchunk_t *)calloc(0, sizeof(memchunk_t));
-                new->flags = MEMFLAG_USED;
-                new->len = chunk->len - size;
-                new->next = chunk->next;
+                new         = (memchunk_t *)calloc(0, sizeof(memchunk_t));
+                new->flags  = MEMFLAG_USED;
+                new->len    = chunk->len - size;
+                new->next   = chunk->next;
                 chunk->next = new;
             }
             chunk->flags = MEMFLAG_USED;
-            chunk->len = size;
+            chunk->len   = size;
             return chunk->data;
         }
     }
@@ -191,19 +189,19 @@ s8 *mempool_alloc(mempool_t *pool, s64 size) {
      *    No free chunks, check if there's enough space.
      */
     if (pool->cur + size > pool->end) {
-        log_error("Not enough memory in memory pool.");
+        LOGF_ERR("Not enough memory in memory pool.");
         return 0;
     }
 
     /*
      *    Allocate a new chunk.
      */
-    new = (memchunk_t *)malloc(sizeof(memchunk_t));
-    buf = pool->cur;
+    new        = (memchunk_t *)malloc(sizeof(memchunk_t));
+    buf        = pool->cur;
     new->flags = MEMFLAG_USED;
-    new->len = size;
-    new->data = pool->cur;
-    new->next = 0;
+    new->len   = size;
+    new->data  = pool->cur;
+    new->next  = 0;
     pool->cur += size;
 
     /*
@@ -275,7 +273,7 @@ void mempool_destroy(mempool_t *pool) {
     memchunk_t *next;
 
     if (pool == 0) {
-        log_error("Invalid memory pool.");
+        LOGF_ERR("Invalid memory pool.");
         return;
     }
 

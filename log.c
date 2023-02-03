@@ -83,7 +83,7 @@ void log_set_color(log_color_e color) {
  */
 void log_msg(const s8 *message, ...) {
     va_list args_va;
-    s8 buf[MAX_LOG_MESSAGE_LENGTH];
+    s8      buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, message);
     vsnprintf(buf, MAX_LOG_MESSAGE_LENGTH, message, args_va);
@@ -103,7 +103,7 @@ void log_msg(const s8 *message, ...) {
  */
 void log_note(const s8 *note, ...) {
     va_list args_va;
-    s8 buf[MAX_LOG_MESSAGE_LENGTH];
+    s8      buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, note);
     log_set_color(LOG_COLOR_LIGHT_CYAN);
@@ -125,7 +125,7 @@ void log_note(const s8 *note, ...) {
  */
 void log_warn(const s8 *warning, ...) {
     va_list args_va;
-    s8 buf[MAX_LOG_MESSAGE_LENGTH];
+    s8      buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, warning);
     log_set_color(LOG_COLOR_MAGENTA);
@@ -147,7 +147,7 @@ void log_warn(const s8 *warning, ...) {
  */
 void log_error(const s8 *error, ...) {
     va_list args_va;
-    s8 buf[MAX_LOG_MESSAGE_LENGTH];
+    s8      buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, error);
     log_set_color(LOG_COLOR_LIGHT_RED);
@@ -169,7 +169,7 @@ void log_error(const s8 *error, ...) {
  */
 void log_fatal(const s8 *fatal, ...) {
     va_list args_va;
-    s8 buf[MAX_LOG_MESSAGE_LENGTH];
+    s8      buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, fatal);
     log_set_color(LOG_COLOR_LIGHT_RED);
@@ -194,9 +194,7 @@ void log_open_file(const s8 *file) {
     _log_file = fopen(file, "w");
 
     if (_log_file == nullptr)
-        VLOGF_WARN(
-            "Failed to open log file: %s",
-            file);
+        VLOGF_WARN("Failed to open log file: %s", file);
 }
 
 /*

@@ -27,7 +27,7 @@ s8 _paths[LIBCHIK_FILE_MAX_PATHS][LIBCHIK_FILE_MAX_PATH_LENGTH] = {{0}};
  */
 void filesystem_init(const s8 *paths, ...) {
     unsigned long i;
-    va_list paths_va;
+    va_list       paths_va;
 
     va_start(paths_va, paths);
     for (i = 0; i < LIBCHIK_FILE_MAX_PATHS; i++) {
@@ -66,10 +66,10 @@ void filesystem_add_search_path(const s8 *path) {
  */
 s8 *file_read(const s8 *file, u32 *size) {
     unsigned long i;
-    FILE *pF;
-    char buf[LIBCHIK_FILE_MAX_PATH_LENGTH];
-    char *data;
-    
+    FILE         *pF;
+    char          buf[LIBCHIK_FILE_MAX_PATH_LENGTH];
+    char         *data;
+
     for (i = 0; i < LIBCHIK_FILE_MAX_PATHS; i++) {
         if (_paths[i][0] == 0) {
             break;
@@ -82,9 +82,7 @@ s8 *file_read(const s8 *file, u32 *size) {
     }
 
     if (pF == nullptr) {
-        log_error(
-            "s8 *file_read( const s8 *, u32 * ): Could not open file '%s'",
-            file);
+        VLOGF_ERR("Could not open file '%s'", file);
         return nullptr;
     }
 
@@ -93,9 +91,7 @@ s8 *file_read(const s8 *file, u32 *size) {
     fseek(pF, 0, SEEK_SET);
     data = (s8 *)malloc(*size);
     if (fread(data, 1, *size, pF) != *size) {
-        log_error(
-            "s8 *file_read( const s8 *, u32 * ): Could not read file '%s'",
-            file);
+        VLOGF_ERR("Could not read file '%s'", file);
         free(data);
         return nullptr;
     }

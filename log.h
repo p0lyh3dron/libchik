@@ -96,16 +96,16 @@ void log_open_file(const s8 *file);
 void log_close_file(void);
 
 #define VLOGF_MSG(msg, ...) log_msg("%s: " msg, __func__, __VA_ARGS__)
-#define LOGF_MSG(msg) log_msg("%s: " msg, __func__)
+#define LOGF_MSG(msg)       log_msg("%s: " msg, __func__)
 
 #define VLOGF_NOTE(note, ...) log_note("%s: " note, __func__, __VA_ARGS__)
-#define LOGF_NOTE(note) log_note("%s: " note, __func__)
+#define LOGF_NOTE(note)       log_note("%s: " note, __func__)
 
 #define VLOGF_WARN(warn, ...) log_warn("%s: " warn, __func__, __VA_ARGS__)
-#define LOGF_WARN(warn) log_warn("%s: " warn, __func__)
+#define LOGF_WARN(warn)       log_warn("%s: " warn, __func__)
 
 #define VLOGF_ERR(err, ...) log_error("%s: " err, __func__, __VA_ARGS__)
-#define LOGF_ERR(err) log_error("%s: " err, __func__)
+#define LOGF_ERR(err)       log_error("%s: " err, __func__)
 
 #define VLOGF_FAT(fat, ...) log_msg("%s: " fat, __func__, __VA_ARGS__)
-#define LOGF_FAT(fat) log_msg("%s: " fat, __func__)
+#define LOGF_FAT(fat)       log_msg("%s: " fat, __func__)

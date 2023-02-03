@@ -15,12 +15,12 @@
 
 typedef struct {
     const s8 *engine_name;
-    vec3s_t version;
+    vec3s_t   version;
 } engineinfo_t;
 
 typedef struct {
     const s8 *app_name;
-    vec3s_t version;
+    vec3s_t   version;
 } appinfo_t;
 
 /*

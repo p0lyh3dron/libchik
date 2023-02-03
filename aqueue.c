@@ -23,38 +23,34 @@ aqueue_t *aqueue_new(unsigned long size) {
     aqueue_t *queue = (aqueue_t *)malloc(sizeof(aqueue_t));
 
     if (queue == nullptr) {
-        log_error("aqueue_t *aqueue_new(unsigned long): Failed to allocate "
-                  "memory for async queue\n");
+        LOGF_ERR("Failed to allocate memory for async queue\n");
         return nullptr;
     }
 
     queue->tasks = (task_t *)malloc(sizeof(task_t) * size);
 
     if (queue->tasks == nullptr) {
-        log_error("aqueue_t *aqueue_new(unsigned long): Failed to allocate "
-                  "memory for async queue tasks\n");
+        LOGF_ERR("Failed to allocate memory for async queue tasks\n");
         free(queue);
         return nullptr;
     }
 
-    queue->size = size;
-    queue->head = 0;
-    queue->tail = 0;
-    queue->count = 0;
+    queue->size    = size;
+    queue->head    = 0;
+    queue->tail    = 0;
+    queue->count   = 0;
     queue->waiting = 0;
 
 #if __unix__
     if (pthread_mutex_init(&queue->lock, nullptr) != 0) {
-        log_error("aqueue_t *aqueue_new(unsigned long): Failed to initialize "
-                  "async queue mutex\n");
+        LOGF_ERR("Failed to initialize async queue mutex\n");
         free(queue->tasks);
         free(queue);
         return nullptr;
     }
 
     if (pthread_cond_init(&queue->cond, nullptr) != 0) {
-        log_error("aqueue_t *aqueue_new(unsigned long): Failed to initialize "
-                  "async queue condition variable\n");
+        LOGF_ERR("Failed to initialize async queue condition variable\n");
         pthread_mutex_destroy(&queue->lock);
         free(queue->tasks);
         free(queue);
@@ -109,7 +105,7 @@ int aqueue_add(aqueue_t *queue, task_t *task) {
         return -1;
     }
 
-    dest = &queue->tasks[queue->tail];
+    dest      = &queue->tasks[queue->tail];
     dest->fun = task->fun;
     dest->arg = task->arg;
 
@@ -151,7 +147,7 @@ task_t *aqueue_get(aqueue_t *queue) {
     queue->waiting--;
 
     task_t *task = &queue->tasks[queue->head];
-    queue->head = (queue->head + 1) % queue->size;
+    queue->head  = (queue->head + 1) % queue->size;
     queue->count--;
 
 #if __unix__

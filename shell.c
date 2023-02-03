@@ -16,7 +16,7 @@
 
 #include "log.h"
 
-shell_command_t _coms[LIBCHIK_SHELL_MAX_COMMANDS];
+shell_command_t  _coms[LIBCHIK_SHELL_MAX_COMMANDS];
 shell_variable_t _vars[LIBCHIK_SHELL_MAX_VARIABLES];
 
 /*
@@ -71,8 +71,8 @@ void shell_list_variables() {
             break;
         }
 
-        log_msg("\t\t- %s: (set to %s) '%s'\n", _vars[i].name,
-                _vars[i].val, _vars[i].desc);
+        log_msg("\t\t- %s: (set to %s) '%s'\n", _vars[i].name, _vars[i].val,
+                _vars[i].desc);
     }
 }
 
@@ -96,8 +96,7 @@ void shell_init(void) {
         {nullptr, nullptr, nullptr}};
 
     memset(_coms, 0, sizeof(shell_command_t) * LIBCHIK_SHELL_MAX_COMMANDS);
-    memset(_vars, 0,
-           sizeof(shell_variable_t) * LIBCHIK_SHELL_MAX_VARIABLES);
+    memset(_vars, 0, sizeof(shell_variable_t) * LIBCHIK_SHELL_MAX_VARIABLES);
 
     shell_register_commands(commands);
 }
@@ -128,7 +127,7 @@ void shell_register_commands(shell_command_t *com) {
 void shell_register_variables(shell_variable_t *var) {
     unsigned long i = 0;
     unsigned long j = 0;
-    
+
     while (_vars[i].name != nullptr) {
         i++;
     }
@@ -145,9 +144,9 @@ void shell_register_variables(shell_variable_t *var) {
  */
 void shell_execute(s8 *com) {
     unsigned long i;
-    s8 argv[LIBCHIK_SHELL_ARGV_MAX][LIBCHIK_SHELL_ARGV_SIZE] = {{0}};
-    s64 argc = 0;
-    char *arg;
+    s8            argv[LIBCHIK_SHELL_ARGV_MAX][LIBCHIK_SHELL_ARGV_SIZE] = {{0}};
+    s64           argc                                                  = 0;
+    char         *arg;
 
     /*
      *    Parse the command into arguments.
@@ -166,7 +165,7 @@ void shell_execute(s8 *com) {
         if (_coms[i].name != nullptr) {
             if (strcmp(_coms[i].name, argv[0]) == 0) {
                 log_msg("> %s\n", com);
-                _coms[i].fun(argc, (s8**)argv);
+                _coms[i].fun(argc, (s8 **)argv);
                 return;
             }
         }
@@ -179,14 +178,13 @@ void shell_execute(s8 *com) {
                         _vars[i].fun(argv[1]);
                     }
                 }
-                log_msg("\t- %s = %s\n", _vars[i].name,
-                        _vars[i].val);
+                log_msg("\t- %s = %s\n", _vars[i].name, _vars[i].val);
                 return;
             }
         }
     }
 
-    log_warn("Unknown command or variable: %s\n", argv[0]);
+    VLOGF_WARN("Unknown command or variable: %s\n", argv[0]);
 
     return;
 }

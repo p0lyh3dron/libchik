@@ -16,10 +16,10 @@
 
 #include "types.h"
 
-#define LIBCHIK_SHELL_MAX_COMMANDS 256
+#define LIBCHIK_SHELL_MAX_COMMANDS  256
 #define LIBCHIK_SHELL_MAX_VARIABLES 256
 
-#define LIBCHIK_SHELL_ARGV_MAX 32
+#define LIBCHIK_SHELL_ARGV_MAX  32
 #define LIBCHIK_SHELL_ARGV_SIZE 256
 
 #define LIBCHIK_SHELL_VAR_VALUE_SIZE 256
@@ -33,8 +33,8 @@ typedef enum {
 } shell_var_type_t;
 
 typedef union {
-    s32 i;
-    f32 f;
+    s32  i;
+    f32  f;
     char s[LIBCHIK_SHELL_VAR_VALUE_SIZE];
     bool b;
 } shell_val_u;
@@ -48,7 +48,7 @@ typedef struct {
 typedef struct {
     s8 *name;
     s8 *desc;
-    s8 val[LIBCHIK_SHELL_VAR_VALUE_SIZE];
+    s8  val[LIBCHIK_SHELL_VAR_VALUE_SIZE];
     void (*fun)(s8 *);
 
     shell_var_type_t type;

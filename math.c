@@ -10,7 +10,7 @@
  */
 #include "math.h"
 
-//#if defined( __unix__ ) && ( __i386__ )
+// #if defined( __unix__ ) && ( __i386__ )
 #if 1
 #include <xmmintrin.h>
 #elif defined(_WIN32) && (_M_X86)
@@ -55,8 +55,7 @@ mat4_t v4_mul_m4(vec4_t vec, mat4_t mat) {
  */
 mat4_t m4_mul_v4(mat4_t mat, vec4_t vec) {
 
-    mat4_t m = {vec.x, 0, 0, 0, vec.y, 0, 0, 0,
-                vec.z, 0, 0, 0, vec.w, 0, 0, 0};
+    mat4_t m = {vec.x, 0, 0, 0, vec.y, 0, 0, 0, vec.z, 0, 0, 0, vec.w, 0, 0, 0};
 
     return m4_mul_m4(mat, m);
 }
@@ -71,8 +70,8 @@ mat4_t m4_mul_v4(mat4_t mat, vec4_t vec) {
  */
 mat4_t m4_mul_m4(mat4_t mat1, mat4_t mat2) {
     unsigned long i;
-    mat4_t m;
-//#if defined( __unix__ ) && defined( __i386__ ) || defined( _WIN32 ) && (
+    mat4_t        m;
+// #if defined( __unix__ ) && defined( __i386__ ) || defined( _WIN32 ) && (
 //_M_X86 )
 #if 1
     __m128 r0 = _mm_load_ps(&mat2.v[0]);
@@ -150,18 +149,18 @@ mat4_t m4_rotate(f32 ang, vec3_t axis) {
      *    TODO: Implement rotation about an arbitrary axis.
      */
     if (axis.x != 0.0f) {
-        mat4_t m = {{1, 0, 0, 0, 0, cosf(ang), -sinf(ang), 0, 0,
-                     sinf(ang), cosf(ang), 0, 0, 0, 0, 1}};
+        mat4_t m = {{1, 0, 0, 0, 0, cosf(ang), -sinf(ang), 0, 0, sinf(ang),
+                     cosf(ang), 0, 0, 0, 0, 1}};
         return m;
     }
     if (axis.y != 0.0f) {
-        mat4_t m = {{cosf(ang), 0, sinf(ang), 0, 0, 1, 0, 0,
-                     -sinf(ang), 0, cosf(ang), 0, 0, 0, 0, 1}};
+        mat4_t m = {{cosf(ang), 0, sinf(ang), 0, 0, 1, 0, 0, -sinf(ang), 0,
+                     cosf(ang), 0, 0, 0, 0, 1}};
         return m;
     }
     if (axis.z != 0.0f) {
-        mat4_t m = {{cosf(ang), -sinf(ang), 0, 0, sinf(ang),
-                     cosf(ang), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}};
+        mat4_t m = {{cosf(ang), -sinf(ang), 0, 0, sinf(ang), cosf(ang), 0, 0, 0,
+                     0, 1, 0, 0, 0, 0, 1}};
         return m;
     }
     return m4_identity();
@@ -175,8 +174,7 @@ mat4_t m4_rotate(f32 ang, vec3_t axis) {
  *    @return mat4_t The resulting matrix.
  */
 mat4_t m4_translate(vec3_t vec) {
-    mat4_t m = {
-        {1, 0, 0, vec.x, 0, 1, 0, vec.y, 0, 0, 1, vec.z, 0, 0, 0, 1}};
+    mat4_t m = {{1, 0, 0, vec.x, 0, 1, 0, vec.y, 0, 0, 1, vec.z, 0, 0, 0, 1}};
     return m;
 }
 
@@ -399,8 +397,7 @@ u32 vec_interp(vec_t *ret, void *a, void *b, f32 step, v_format_e fmt) {
     switch (fmt) {
     case V_R8G8B8A8_U:
     case V_R8G8B8A8_S:
-        return color32_interp(&ret->c32, (color32_t *)a, (color32_t *)b,
-                              step);
+        return color32_interp(&ret->c32, (color32_t *)a, (color32_t *)b, step);
 
     case V_R32_U:
         break;

@@ -12,14 +12,14 @@
 
 #define nullptr (void *)0
 
-#define true 1
+#define true  1
 #define false 0
 
 #define MAX_VECTOR_ATTRIBUTES 16
 
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned int u32;
+typedef unsigned char      u8;
+typedef unsigned short     u16;
+typedef unsigned int       u32;
 typedef unsigned long long u64;
 
 #define ARR_LEN(x)                                                             \
@@ -36,12 +36,12 @@ typedef unsigned __int128 u128;
 #error "Platform does not support 128-bit integers."
 #endif /* __unix__  */
 
-typedef char s8;
-typedef short s16;
-typedef int s32;
+typedef char      s8;
+typedef short     s16;
+typedef int       s32;
 typedef long long s64;
 
-typedef float f32;
+typedef float  f32;
 typedef double f64;
 
 typedef void *dl_handle_t;
@@ -91,10 +91,10 @@ typedef struct {
 } color32_t;
 
 typedef union {
-    vec2_t v2;
-    vec2u_t v2u;
-    vec3_t v3;
-    vec4_t v4;
+    vec2_t    v2;
+    vec2u_t   v2u;
+    vec3_t    v3;
+    vec4_t    v4;
     color32_t c32;
 } vec_t;
 
@@ -103,10 +103,10 @@ typedef struct {
 } mat4_t;
 
 typedef struct {
-    u32 width;
-    u32 height;
-    u32 fmt;
-    u32 size;
+    u32  width;
+    u32  height;
+    u32  fmt;
+    u32  size;
     u32 *buf;
 } image_t;
 
@@ -140,7 +140,7 @@ u32 get_vertex_component_size(v_format_e sFmt);
 
 typedef struct {
     color32_t color;
-    vec2u_t pos;
+    vec2u_t   pos;
 } fragment_t;
 
 typedef enum {
@@ -148,22 +148,22 @@ typedef enum {
 } v_usage_e;
 
 typedef struct {
-    v_usage_e usage;
+    v_usage_e  usage;
     v_format_e fmt;
-    u32 stride;
-    u32 offset;
+    u32        stride;
+    u32        offset;
 } v_attrib_t;
 
 typedef struct {
     v_attrib_t attributes[MAX_VECTOR_ATTRIBUTES];
-    u32 count;
-    u32 stride;
+    u32        count;
+    u32        stride;
     void (*fun)(fragment_t *, void *, void *);
 } v_layout_t;
 
 typedef struct {
     vec3_t normal;
-    f32 dist;
+    f32    dist;
 } plane_t;
 
 typedef struct {

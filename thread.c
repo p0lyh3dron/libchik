@@ -19,7 +19,7 @@
 #include "aqueue.h"
 
 aqueue_t *_threadpool = 0;
-int _threads = 0;
+int       _threads    = 0;
 
 /*
  *   The thread function.
@@ -34,9 +34,8 @@ void *_threadpool_thread(void *arg) {
     while (1) {
         task = aqueue_get(_threadpool);
 
-        if (task == 0) {
+        if (task == 0)
             break;
-        }
 
         task->fun(task->arg);
     }
@@ -59,17 +58,15 @@ int threadpool_init(unsigned long size, unsigned long threads) {
 #endif /* __unix__  */
 
     _threadpool = aqueue_new(size);
-    _threads = threads;
+    _threads    = threads;
 
-    if (_threadpool == 0) {
+    if (_threadpool == 0)
         return -1;
-    }
 
     for (i = 0; i < threads; i++) {
 #if __unix__
-        if (pthread_create(&thread, 0, _threadpool_thread, 0) != 0) {
+        if (pthread_create(&thread, 0, _threadpool_thread, 0) != 0)
             return -1;
-        }
 #else
 #error "Unsupported platform"
 #endif /* __unix__  */
@@ -104,5 +101,6 @@ int threadpool_submit(void *(*fun)(void *), void *arg) {
  *   Waits for all tasks to complete.
  */
 void threadpool_wait(void) {
-    while (aqueue_waiting(_threadpool) < _threads);
+    while (aqueue_waiting(_threadpool) < _threads)
+        ;
 }

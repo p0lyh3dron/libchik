@@ -13,13 +13,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-int _argc = 0;
+int          _argc = 0;
 const char **_argv = 0;
 
 /*
  *    Initializes the argument parser.
  *
- *    @param const int argc        The number of arguments passed to the program.
+ *    @param const int argc        The number of arguments passed to the
+ * program.
  *    @param const char ** argv    The array of arguments passed to the program.
  */
 void args_init(const int argc, const char **argv) {
@@ -51,8 +52,9 @@ u32 args_has(const char *arg) {
  *
  *    @param  const char *arg     The argument to check for.
  *
- *    @return const char *     The value of the argument, or NULL if it is not present.
- * 
+ *    @return const char *     The value of the argument, or NULL if it is not
+ * present.
+ *
  */
 const char *args_get_str(const char *arg) {
     unsigned long i;

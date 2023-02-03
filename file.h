@@ -13,7 +13,7 @@
 #define LIBCHIK_FILE_H
 
 #define LIBCHIK_FILE_MAX_PATH_LENGTH 1024
-#define LIBCHIK_FILE_MAX_PATHS 256
+#define LIBCHIK_FILE_MAX_PATHS       256
 
 #include "types.h"
 

@@ -34,7 +34,8 @@ resource_t *resource_new(s64 size);
 /*
  *    Add a resource to the resource manager.
  *
- *    @param  resource_t *resource        The resource manager to add the resource to.
+ *    @param  resource_t *resource        The resource manager to add the
+ * resource to.
  *    @param  void *data                  The resource to add.
  *    @param  u64 size                    The size of the resource to add.
  *
@@ -47,7 +48,8 @@ trap_t resource_add(resource_t *resource, void *data, u64 size);
 /*
  *    Get a resource from the resource manager.
  *
- *    @param  resource_t *resource        The resource manager to get the resource from.
+ *    @param  resource_t *resource        The resource manager to get the
+ * resource from.
  *    @param  trap_t handle               The handle of the resource to get.
  *
  *    @return void *              The resource.
@@ -58,8 +60,8 @@ void *resource_get(resource_t *resource, trap_t handle);
 /*
  *    Remove a resource from the resource manager.
  *
- *    @param  resource_t *resource        The resource manager to remove the resource
- * from.
+ *    @param  resource_t *resource        The resource manager to remove the
+ * resource from.
  *    @param  trap_t handle               The handle of the resource to remove.
  */
 void resource_remove(resource_t *resource, trap_t handle);

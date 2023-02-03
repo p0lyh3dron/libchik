@@ -23,7 +23,7 @@ const engineinfo_t _engine_info = {"Chik", {0, 0, 0}};
  */
 void app_init(const s8 *app_name, const vec3s_t version) {
     _app_info.app_name = app_name;
-    _app_info.version = version;
+    _app_info.version  = version;
 }
 
 /*

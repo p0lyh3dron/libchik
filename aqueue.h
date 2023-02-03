@@ -23,7 +23,7 @@ typedef struct {
 } task_t;
 
 typedef struct {
-    task_t *tasks;
+    task_t       *tasks;
     unsigned long size;
     unsigned long head;
     unsigned long tail;
@@ -31,7 +31,7 @@ typedef struct {
     unsigned long waiting;
 #if __unix__
     pthread_mutex_t lock;
-    pthread_cond_t cond;
+    pthread_cond_t  cond;
 #else
 #error "Unsupported platform"
 #endif /* __unix__  */
