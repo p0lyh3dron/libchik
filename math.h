@@ -17,7 +17,7 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-#define PI                                                                     \
+#define PI \
     3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
 #define ANGLE_TO_RADIAN(a) ((a)*PI / 180.0f)
@@ -63,12 +63,12 @@ mat4_t m4_mul_m4(mat4_t mat1, mat4_t mat2);
 /*
  *    Generate a rotation matrix.
  *
- *    @param  f32 ang     The angle to rotate by.
+ *    @param  float ang     The angle to rotate by.
  *    @param  vec3_t axis The axis to rotate around.
  *
  *    @return mat4_t The resulting matrix.
  */
-mat4_t m4_rotate(f32 ang, vec3_t axis);
+mat4_t m4_rotate(float ang, vec3_t axis);
 
 /*
  *    Generate a translation matrix.
@@ -85,22 +85,22 @@ mat4_t m4_translate(vec3_t vec);
  *    @param vec2_t *a    The return vector.
  *    @param vec2_t *b    The first vector.
  *    @param vec2_t *c    The differential.
- *    @param f32 step     The step.
+ *    @param float step     The step.
  *
- *    @return u32        The return code.
+ *    @return unsigned int        The return code.
  */
-u32 vec2_interp(vec2_t *a, vec2_t *b, vec2_t *c, f32 step);
+unsigned int vec2_interp(vec2_t *a, vec2_t *b, vec2_t *c, float step);
 
 /*
  *    Scales a vec2.
  *
  *    @param vec2_t *a    The return vector.
  *    @param vec2_t *b    The vector to scale.
- *    @param f32 scale    The scale.
+ *    @param float scale    The scale.
  *
- *    @return u32        The return code.
+ *    @return unsigned int        The return code.
  */
-u32 vec2_scale(vec2_t *a, vec2_t *b, f32 scale);
+unsigned int vec2_scale(vec2_t *a, vec2_t *b, float scale);
 
 /*
  *    Interpolates a vec2u.
@@ -108,22 +108,22 @@ u32 vec2_scale(vec2_t *a, vec2_t *b, f32 scale);
  *    @param vec2u_t *a    The return vector.
  *    @param vec2u_t *b    The first vector.
  *    @param vec2u_t *c    The second vector.
- *    @param f32 step      The normalized step.
+ *    @param float step      The normalized step.
  *
- *    @return u32         The return code.
+ *    @return unsigned int         The return code.
  */
-u32 vec2u_interp(vec2u_t *a, vec2u_t *b, vec2u_t *c, f32 step);
+unsigned int vec2u_interp(vec2u_t *a, vec2u_t *b, vec2u_t *c, float step);
 
 /*
  *    Scales a vec2u.
  *
  *    @param vec2u_t *a    The return vector.
  *    @param vec2u_t *b    The vector to scale.
- *    @param f32 scale     The scale.
+ *    @param float scale     The scale.
  *
- *    @return u32         The return code.
+ *    @return unsigned int         The return code.
  */
-u32 vec2u_scale(vec2u_t *a, vec2u_t *b, f32 scale);
+unsigned int vec2u_scale(vec2u_t *a, vec2u_t *b, float scale);
 
 /*
  *    Subtracts two vec3s.
@@ -132,9 +132,9 @@ u32 vec2u_scale(vec2u_t *a, vec2u_t *b, f32 scale);
  *    @param vec3_t *b    The first vector.
  *    @param vec3_t *c    The second vector.
  *
- *    @return u32        The return code.
+ *    @return unsigned int        The return code.
  */
-u32 vec3_sub(vec3_t *a, vec3_t *b, vec3_t *c);
+unsigned int vec3_sub(vec3_t *a, vec3_t *b, vec3_t *c);
 
 /*
  *    Interpolates a vec3.
@@ -142,11 +142,11 @@ u32 vec3_sub(vec3_t *a, vec3_t *b, vec3_t *c);
  *    @param vec3_t *a    The return vector.
  *    @param vec3_t *b    The first vector.
  *    @param vec3_t *c    The differential.
- *    @param f32 step     The step.
+ *    @param float step     The step.
  *
- *    @return u32        The return code.
+ *    @return unsigned int        The return code.
  */
-u32 vec3_interp(vec3_t *a, vec3_t *b, vec3_t *c, f32 step);
+unsigned int vec3_interp(vec3_t *a, vec3_t *b, vec3_t *c, float step);
 
 /*
  *    Returns the dot product of two vec3s.
@@ -154,18 +154,18 @@ u32 vec3_interp(vec3_t *a, vec3_t *b, vec3_t *c, f32 step);
  *    @param vec3_t *a    The first vector.
  *    @param vec3_t *b    The second vector.
  *
- *    @return f32        The dot product.
+ *    @return float        The dot product.
  */
-f32 vec3_dot(vec3_t *a, vec3_t *b);
+float vec3_dot(vec3_t *a, vec3_t *b);
 
 /*
  *    Returns the legnth of a vec3.
  *
  *    @param vec3_t *a    The vector.
  *
- *    @return f32        The length.
+ *    @return float        The length.
  */
-f32 vec3_length(vec3_t *a);
+float vec3_length(vec3_t *a);
 
 /*
  *    Normalizes a vec3.
@@ -173,9 +173,9 @@ f32 vec3_length(vec3_t *a);
  *    @param vec3_t *a    The return vector.
  *    @param vec3_t *b    The vector to normalize.
  *
- *    @return u32        The return code.
+ *    @return unsigned int        The return code.
  */
-u32 vec3_normalize(vec3_t *a, vec3_t *b);
+unsigned int vec3_normalize(vec3_t *a, vec3_t *b);
 
 /*
  *    Crosses two vec3s.
@@ -184,9 +184,9 @@ u32 vec3_normalize(vec3_t *a, vec3_t *b);
  *    @param vec3_t *b    The first vector.
  *    @param vec3_t *c    The second vector.
  *
- *    @return u32        The return code.
+ *    @return unsigned int        The return code.
  */
-u32 vec3_cross(vec3_t *a, vec3_t *b, vec3_t *c);
+unsigned int vec3_cross(vec3_t *a, vec3_t *b, vec3_t *c);
 
 /*
  *    Interpolates a vec4.
@@ -194,11 +194,11 @@ u32 vec3_cross(vec3_t *a, vec3_t *b, vec3_t *c);
  *    @param vec4_t *a    The return vector.
  *    @param vec4_t *b    The first vector.
  *    @param vec4_t *c    The differential.
- *    @param f32 step     The step.
+ *    @param float step     The step.
  *
- *    @return u32        The return code.
+ *    @return unsigned int        The return code.
  */
-u32 vec4_interp(vec4_t *a, vec4_t *b, vec4_t *c, f32 step);
+unsigned int vec4_interp(vec4_t *a, vec4_t *b, vec4_t *c, float step);
 
 /*
  *    Interpolates a color32.
@@ -206,11 +206,11 @@ u32 vec4_interp(vec4_t *a, vec4_t *b, vec4_t *c, f32 step);
  *    @param color32_t *    The return color.
  *    @param color32_t *    The first color.
  *    @param color32_t *    The differential.
- *    @param f32 step       The step.
+ *    @param float step       The step.
  *
- *    @return u32           The return code.
+ *    @return unsigned int           The return code.
  */
-u32 color32_interp(color32_t *a, color32_t *b, color32_t *c, f32 step);
+unsigned int color32_interp(color32_t *a, color32_t *b, color32_t *c, float step);
 
 /*
  *    Interpolates a vec.
@@ -218,24 +218,24 @@ u32 color32_interp(color32_t *a, color32_t *b, color32_t *c, f32 step);
  *    @param vec_t *ret        The return vector.
  *    @param void *a           The first vector.
  *    @param void *b           The differential.
- *    @param f32 step          The step.
+ *    @param float step          The step.
  *    @param v_format_e fmt    The vector format.
  *
- *    @return u32          The return code.
+ *    @return unsigned int          The return code.
  */
-u32 vec_interp(vec_t *ret, void *a, void *b, f32 step, v_format_e fmt);
+unsigned int vec_interp(vec_t *ret, void *a, void *b, float step, v_format_e fmt);
 
 /*
  *    Scales a vec.
  *
  *    @param vec_t *ret          The return vector.
  *    @param void *a             The vector.
- *    @param f32 scale           The scalar.
+ *    @param float scale           The scalar.
  *    @param v_format_e fmt      The vector format.
  *
- *    @return u32          The return code.
+ *    @return unsigned int          The return code.
  */
-u32 vec_scale(vec_t *ret, void *a, f32 scale, v_format_e fmt);
+unsigned int vec_scale(vec_t *ret, void *a, float scale, v_format_e fmt);
 
 /*
  *    Returns a vec's dot product.
@@ -244,18 +244,18 @@ u32 vec_scale(vec_t *ret, void *a, f32 scale, v_format_e fmt);
  *    @param void *b           The second vector.
  *    @param v_format_e fmt    The vector format.
  *
- *    @return f32          The dot product.
+ *    @return float          The dot product.
  */
-f32 vec_dot(void *a, void *b, v_format_e fmt);
+float vec_dot(void *a, void *b, v_format_e fmt);
 
 /*
  *    Returns the size of a vertex component in bytes.
  *
  *    @param v_format_e fmt     The vertex format.
  *
- *    @return u32           The size of the vertex component in bytes.
+ *    @return unsigned int           The size of the vertex component in bytes.
  */
-u32 get_vertex_component_size(v_format_e fmt);
+unsigned int get_vertex_component_size(v_format_e fmt);
 
 /*
  *    Returns a vec's length.
@@ -263,9 +263,9 @@ u32 get_vertex_component_size(v_format_e fmt);
  *    @param void *a          The vector.
  *    @param v_format_e fmt   The vector format.
  *
- *    @return f32          The length.
+ *    @return float          The length.
  */
-f32 vec_length(void *a, v_format_e fmt);
+float vec_length(void *a, v_format_e fmt);
 
 /*
  *    Normalizes a vec.
@@ -274,9 +274,9 @@ f32 vec_length(void *a, v_format_e fmt);
  *    @param void *b           The vector to normalize.
  *    @param v_format_e fmt    The vector format.
  *
- *    @return u32          The return code.
+ *    @return unsigned int          The return code.
  */
-u32 vec_normalize(void *a, void *b, v_format_e fmt);
+unsigned int vec_normalize(void *a, void *b, v_format_e fmt);
 
 /*
  *    Contstructs a plane from three points.
@@ -286,9 +286,9 @@ u32 vec_normalize(void *a, void *b, v_format_e fmt);
  *    @param vec3_t *c     The second point.
  *    @param vec3_t *d     The third point.
  *
- *    @return u32         The return code.
+ *    @return unsigned int         The return code.
  */
-u32 plane_from_points(plane_t *a, vec3_t *b, vec3_t *c, vec3_t *d);
+unsigned int plane_from_points(plane_t *a, vec3_t *b, vec3_t *c, vec3_t *d);
 
 /*
  *   Returns the distance to a point within a plane.
@@ -296,20 +296,20 @@ u32 plane_from_points(plane_t *a, vec3_t *b, vec3_t *c, vec3_t *d);
  *   @param plane_t *a        The plane.
  *   @param vec3_t *b         The point.
  *
- *   @return f32             The distance.
+ *   @return float             The distance.
  */
-f32 plane_distance(plane_t *a, vec3_t *b);
+float plane_distance(plane_t *a, vec3_t *b);
 
 /*
  *    Swaps the endianness of a 2-byte integer.
  *
- *    @param u16 *a    The integer.
+ *    @param unsigned short *a    The integer.
  */
-void swap_endian16(u16 *a);
+void swap_endian16(unsigned short *a);
 
 /*
  *    Swaps the endianness of a 4-byte integer.
  *
- *    @param u32 *a    The integer.
+ *    @param unsigned int *a    The integer.
  */
-void swap_endian32(u32 *a);
+void swap_endian32(unsigned int *a);

@@ -17,15 +17,15 @@
 
 #include "log.h"
 
-s8 _paths[LIBCHIK_FILE_MAX_PATHS][LIBCHIK_FILE_MAX_PATH_LENGTH] = {{0}};
+char _paths[LIBCHIK_FILE_MAX_PATHS][LIBCHIK_FILE_MAX_PATH_LENGTH] = {{0}};
 
 /*
  *    Initialize the filesystem with the given search paths.
  *
- *    @param const s8 *paths    The search paths to use.
+ *    @param const char *paths    The search paths to use.
  *    @param ...                The search paths to use.
  */
-void filesystem_init(const s8 *paths, ...) {
+void filesystem_init(const char *paths, ...) {
     unsigned long i;
     va_list       paths_va;
 
@@ -35,7 +35,7 @@ void filesystem_init(const s8 *paths, ...) {
             break;
         }
         strcpy(_paths[i], paths);
-        paths = va_arg(paths_va, const s8 *);
+        paths = va_arg(paths_va, const char *);
     }
     va_end(paths_va);
 }
@@ -43,9 +43,9 @@ void filesystem_init(const s8 *paths, ...) {
 /*
  *    Add a search path to the filesystem.
  *
- *    @param const s8 *path    The search path to add.
+ *    @param const char *path    The search path to add.
  */
-void filesystem_add_search_path(const s8 *path) {
+void filesystem_add_search_path(const char *path) {
     unsigned long i;
 
     for (i = 0; i < LIBCHIK_FILE_MAX_PATHS; i++) {
@@ -59,12 +59,12 @@ void filesystem_add_search_path(const s8 *path) {
 /*
  *    Open a file and read it into memory.
  *
- *    @param const s8 *file    The file to open.
- *    @param u32 *size         The size of the file.
+ *    @param const char *file    The file to open.
+ *    @param unsigned int *size         The size of the file.
  *
- *    @return s8 *         The file contents.
+ *    @return char *         The file contents.
  */
-s8 *file_read(const s8 *file, u32 *size) {
+char *file_read(const char *file, unsigned int *size) {
     unsigned long i;
     FILE         *pF;
     char          buf[LIBCHIK_FILE_MAX_PATH_LENGTH];
@@ -89,7 +89,7 @@ s8 *file_read(const s8 *file, u32 *size) {
     fseek(pF, 0, SEEK_END);
     *size = ftell(pF);
     fseek(pF, 0, SEEK_SET);
-    data = (s8 *)malloc(*size);
+    data = (char *)malloc(*size);
     if (fread(data, 1, *size, pF) != *size) {
         VLOGF_ERR("Could not read file '%s'", file);
         free(data);
@@ -103,6 +103,6 @@ s8 *file_read(const s8 *file, u32 *size) {
  *   Free a file that was read into memory.
  *   Alternatively, you can use free() to free the file.
  *
- *   @param s8 *file          The file to free.
+ *   @param char *file          The file to free.
  */
-void file_free(s8 *file) { free(file); }
+void file_free(char *file) { free(file); }

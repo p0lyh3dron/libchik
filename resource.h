@@ -13,8 +13,8 @@
 
 #include "libchik.h"
 
-#define INVALID_INDEX (u32)0xFFFFFFFF
-#define INVALID_TRAP                                                           \
+#define INVALID_INDEX (unsigned int)0xFFFFFFFF
+#define INVALID_TRAP \
     (trap_t) { .index = INVALID_INDEX, .magic = 0, .size = 0 }
 #define BAD_TRAP(handle) (handle.index == INVALID_INDEX)
 
@@ -25,11 +25,11 @@ typedef struct {
 /*
  *    Create a new resource manager.
  *
- *    @param  s64 size      The size of the memory pool to use.
+ *    @param  long size      The size of the memory pool to use.
  *
  *    @return resource_t    A pointer to the new resource manager.
  */
-resource_t *resource_new(s64 size);
+resource_t *resource_new(long size);
 
 /*
  *    Add a resource to the resource manager.
@@ -37,13 +37,13 @@ resource_t *resource_new(s64 size);
  *    @param  resource_t *resource        The resource manager to add the
  * resource to.
  *    @param  void *data                  The resource to add.
- *    @param  u64 size                    The size of the resource to add.
+ *    @param  unsigned long size                    The size of the resource to add.
  *
  *    @return trap_t                 The handle of the resource.
  *                                     If the resource manager is full,
  *                                     this will be 0.
  */
-trap_t resource_add(resource_t *resource, void *data, u64 size);
+trap_t resource_add(resource_t *resource, void *data, unsigned long size);
 
 /*
  *    Get a resource from the resource manager.

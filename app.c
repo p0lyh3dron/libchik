@@ -18,10 +18,10 @@ const engineinfo_t _engine_info = {"Chik", {0, 0, 0}};
 /*
  *    Initializes the app info.
  *
- *    @param const s8 * app_name       The application name.
+ *    @param const char * app_name       The application name.
  *    @param const vec3s_t version     The application version.
  */
-void app_init(const s8 *app_name, const vec3s_t version) {
+void app_init(const char *app_name, const vec3s_t version) {
     _app_info.app_name = app_name;
     _app_info.version  = version;
 }
@@ -29,9 +29,9 @@ void app_init(const s8 *app_name, const vec3s_t version) {
 /*
  *    Returns the app name.
  *
- *    @return const s8 *    The application name.
+ *    @return const char *    The application name.
  */
-const s8 *app_get_name(void) { return _app_info.app_name; }
+const char *app_get_name(void) { return _app_info.app_name; }
 
 /*
  *    Returns the app version.
@@ -43,9 +43,9 @@ vec3s_t app_get_version(void) { return _app_info.version; }
 /*
  *    Returns the engine name.
  *
- *    @return const s8 *    The engine name.
+ *    @return const char *    The engine name.
  */
-const s8 *app_get_engine_name(void) { return _engine_info.engine_name; }
+const char *app_get_engine_name(void) { return _engine_info.engine_name; }
 
 /*
  *    Returns the engine version.

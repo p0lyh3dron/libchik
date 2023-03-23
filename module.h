@@ -19,32 +19,32 @@
  *
  *    @param void *    The engine's function table.
  *
- *    @return u32      The module's return code.
+ *    @return unsigned int      The module's return code.
  */
 
-#define CHIK_MODULE(init_func, update_func, exit_func)                         \
-    void *(*engine_load_function)(const s8 *) = 0;                             \
-                                                                               \
-    u32 chik_module_entry(void *table) {                                       \
-        if (table == nullptr) {                                                \
-            log_error("Failed to load module.\n");                             \
-            return 0;                                                          \
-        }                                                                      \
-                                                                               \
-        engine_load_function = (void *(*)(const s8 *))table;                   \
-                                                                               \
-        u32 (*fun)(void) = &init_func;                                         \
-        return fun();                                                          \
-    }                                                                          \
-                                                                               \
-    u32 chik_module_update(f32 dt) {                                           \
-        u32 (*fun)(f32) = &update_func;                                        \
-        return fun(dt);                                                        \
-    }                                                                          \
-                                                                               \
-    u32 chik_module_exit(void) {                                               \
-        u32 (*fun)(void) = &exit_func;                                         \
-        return fun();                                                          \
+#define CHIK_MODULE(init_func, update_func, exit_func)         \
+    void *(*engine_load_function)(const char *) = 0;           \
+                                                               \
+    unsigned int chik_module_entry(void *table) {              \
+        if (table == nullptr) {                                \
+            log_error("Failed to load module.\n");             \
+            return 0;                                          \
+        }                                                      \
+                                                               \
+        engine_load_function = (void *(*)(const char *))table; \
+                                                               \
+        unsigned int (*fun)(void) = &init_func;                \
+        return fun();                                          \
+    }                                                          \
+                                                               \
+    unsigned int chik_module_update(float dt) {                \
+        unsigned int (*fun)(float) = &update_func;             \
+        return fun(dt);                                        \
+    }                                                          \
+                                                               \
+    unsigned int chik_module_exit(void) {                      \
+        unsigned int (*fun)(void) = &exit_func;                \
+        return fun();                                          \
     }
 
 /*

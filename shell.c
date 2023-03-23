@@ -140,12 +140,12 @@ void shell_register_variables(shell_variable_t *var) {
 /*
  *    Executes a shell command.
  *
- *    @param s8 *com    The command to execute.
+ *    @param char *com    The command to execute.
  */
-void shell_execute(s8 *com) {
+void shell_execute(char *com) {
     unsigned long i;
-    s8            argv[LIBCHIK_SHELL_ARGV_MAX][LIBCHIK_SHELL_ARGV_SIZE] = {{0}};
-    s64           argc                                                  = 0;
+    char          argv[LIBCHIK_SHELL_ARGV_MAX][LIBCHIK_SHELL_ARGV_SIZE] = {{0}};
+    long          argc                                                  = 0;
     char         *arg;
 
     /*
@@ -165,7 +165,7 @@ void shell_execute(s8 *com) {
         if (_coms[i].name != nullptr) {
             if (strcmp(_coms[i].name, argv[0]) == 0) {
                 log_msg("> %s\n", com);
-                _coms[i].fun(argc, (s8 **)argv);
+                _coms[i].fun(argc, (char **)argv);
                 return;
             }
         }
@@ -192,11 +192,11 @@ void shell_execute(s8 *com) {
 /*
  *    Gets a shell variable value.
  *
- *    @param s8 name    The name of the variable.
+ *    @param char name    The name of the variable.
  *
  *    @return shell_val_u   The value of the variable.
  */
-shell_val_u shell_get_variable(s8 *name) {
+shell_val_u shell_get_variable(char *name) {
     unsigned long i;
 
     for (i = 0; i < LIBCHIK_SHELL_MAX_VARIABLES; i++) {

@@ -26,9 +26,9 @@ void args_init(const int argc, const char **argv);
  *
  *    @param  const char *arg     The argument to check for.
  *
- *    @return u32              1 if the argument is present, 0 otherwise.
+ *    @return unsigned int              1 if the argument is present, 0 otherwise.
  */
-u32 args_has(const char *arg);
+unsigned int args_has(const char *arg);
 
 /*
  *    Returns the string value of the argument.
@@ -45,10 +45,10 @@ const char *args_get_str(const char *arg);
  *
  *    @param const char *arg     The argument to check for.
  *
- *    @return s32             The value of the argument, or -1 if it is not
+ *    @return int             The value of the argument, or -1 if it is not
  * present.
  */
-s32 args_get_int(const char *arg);
+int args_get_int(const char *arg);
 
 /*
  *    Returns the executable name.

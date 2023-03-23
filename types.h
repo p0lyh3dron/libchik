@@ -22,8 +22,8 @@ typedef unsigned short     u16;
 typedef unsigned int       u32;
 typedef unsigned long long u64;
 
-#define ARR_LEN(x)                                                             \
-    ((sizeof(x) / sizeof(0 [x])) / ((u64)(!(sizeof(x) % sizeof(0 [x])))))
+#define ARR_LEN(x) \
+    ((sizeof(x) / sizeof(0 [x])) / ((unsigned long)(!(sizeof(x) % sizeof(0 [x])))))
 
 #if __unix__
 typedef __uint128_t u128;
@@ -46,48 +46,48 @@ typedef double f64;
 
 typedef void *dl_handle_t;
 
-typedef s8 bool;
+typedef char bool;
 
 typedef struct {
-    u32 index;
-    u32 magic;
-    u64 size;
+    unsigned int  index;
+    unsigned int  magic;
+    unsigned long size;
 } trap_t;
 
 typedef struct {
-    f32 x;
-    f32 y;
+    float x;
+    float y;
 } vec2_t;
 
 typedef struct {
-    s32 x;
-    s32 y;
+    int x;
+    int y;
 } vec2u_t;
 
 typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
+    float x;
+    float y;
+    float z;
 } vec3_t;
 
 typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
+    int x;
+    int y;
+    int z;
 } vec3s_t;
 
 typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
+    float x;
+    float y;
+    float z;
+    float w;
 } vec4_t;
 
 typedef struct {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+    unsigned char a;
 } color32_t;
 
 typedef union {
@@ -99,15 +99,15 @@ typedef union {
 } vec_t;
 
 typedef struct {
-    f32 v[16];
+    float v[16];
 } mat4_t;
 
 typedef struct {
-    u32  width;
-    u32  height;
-    u32  fmt;
-    u32  size;
-    u32 *buf;
+    unsigned int  width;
+    unsigned int  height;
+    unsigned int  fmt;
+    unsigned int  size;
+    unsigned int *buf;
 } image_t;
 
 typedef struct {
@@ -134,9 +134,9 @@ typedef enum {
  *
  *    @param v_format_e     The vertex format.
  *
- *    @return u32           The size of the vertex component in bytes.
+ *    @return unsigned int           The size of the vertex component in bytes.
  */
-u32 get_vertex_component_size(v_format_e sFmt);
+unsigned int get_vertex_component_size(v_format_e sFmt);
 
 typedef struct {
     color32_t color;
@@ -148,23 +148,23 @@ typedef enum {
 } v_usage_e;
 
 typedef struct {
-    v_usage_e  usage;
-    v_format_e fmt;
-    u32        stride;
-    u32        offset;
+    v_usage_e    usage;
+    v_format_e   fmt;
+    unsigned int stride;
+    unsigned int offset;
 } v_attrib_t;
 
 typedef struct {
-    v_attrib_t attributes[MAX_VECTOR_ATTRIBUTES];
-    u32        count;
-    u32        stride;
+    v_attrib_t   attributes[MAX_VECTOR_ATTRIBUTES];
+    unsigned int count;
+    unsigned int stride;
     void (*f_fun)(fragment_t *, void *, void *);
     void (*v_fun)(void *, void *, void *);
 } v_layout_t;
 
 typedef struct {
     vec3_t normal;
-    f32    dist;
+    float  dist;
 } plane_t;
 
 typedef struct {

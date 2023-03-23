@@ -14,29 +14,29 @@
 #include "types.h"
 
 typedef struct {
-    const s8 *engine_name;
-    vec3s_t   version;
+    const char *engine_name;
+    vec3s_t     version;
 } engineinfo_t;
 
 typedef struct {
-    const s8 *app_name;
-    vec3s_t   version;
+    const char *app_name;
+    vec3s_t     version;
 } appinfo_t;
 
 /*
  *    Initializes the app info.
  *
- *    @param const s8 * app_name       The application name.
+ *    @param const char * app_name       The application name.
  *    @param const vec3s_t version     The application version.
  */
-void app_init(const s8 *app_name, const vec3s_t version);
+void app_init(const char *app_name, const vec3s_t version);
 
 /*
  *    Returns the app name.
  *
- *    @return const s8 *    The application name.
+ *    @return const char *    The application name.
  */
-const s8 *app_get_name(void);
+const char *app_get_name(void);
 
 /*
  *    Returns the app version.
@@ -48,9 +48,9 @@ vec3s_t app_get_version(void);
 /*
  *    Returns the engine name.
  *
- *    @return const s8 *    The engine name.
+ *    @return const char *    The engine name.
  */
-const s8 *app_get_engine_name(void);
+const char *app_get_engine_name(void);
 
 /*
  *    Returns the engine version.

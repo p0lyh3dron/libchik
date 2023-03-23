@@ -20,34 +20,34 @@
 /*
  *    Initialize the filesystem with the given search paths.
  *
- *    @param const s8 *paths    The search paths to use.
+ *    @param const char *paths    The search paths to use.
  *    @param ...                The search paths to use.
  */
-void filesystem_init(const s8 *paths, ...);
+void filesystem_init(const char *paths, ...);
 
 /*
  *    Add a search path to the filesystem.
  *
- *    @param const s8 *path    The search path to add.
+ *    @param const char *path    The search path to add.
  */
-void filesystem_add_search_path(const s8 *path);
+void filesystem_add_search_path(const char *path);
 
 /*
  *    Open a file and read it into memory.
  *
- *    @param const s8 *file    The file to open.
- *    @param u32 *size         The size of the file.
+ *    @param const char *file    The file to open.
+ *    @param unsigned int *size         The size of the file.
  *
- *    @return s8 *         The file contents.
+ *    @return char *         The file contents.
  */
-s8 *file_read(const s8 *file, u32 *size);
+char *file_read(const char *file, unsigned int *size);
 
 /*
  *   Free a file that was read into memory.
  *   Alternatively, you can use free() to free the file.
  *
- *   @param s8 *file          The file to free.
+ *   @param char *file          The file to free.
  */
-void file_free(s8 *file);
+void file_free(char *file);
 
 #endif /* LIBCHIK_FILE_H  */

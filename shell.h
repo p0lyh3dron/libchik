@@ -33,23 +33,23 @@ typedef enum {
 } shell_var_type_t;
 
 typedef union {
-    s32  i;
-    f32  f;
-    char s[LIBCHIK_SHELL_VAR_VALUE_SIZE];
-    bool b;
+    int   i;
+    float f;
+    char  s[LIBCHIK_SHELL_VAR_VALUE_SIZE];
+    bool  b;
 } shell_val_u;
 
 typedef struct {
-    s8 *name;
-    s8 *desc;
-    void (*fun)(s32, s8 **);
+    char *name;
+    char *desc;
+    void (*fun)(int, char **);
 } shell_command_t;
 
 typedef struct {
-    s8 *name;
-    s8 *desc;
-    s8  val[LIBCHIK_SHELL_VAR_VALUE_SIZE];
-    void (*fun)(s8 *);
+    char *name;
+    char *desc;
+    char  val[LIBCHIK_SHELL_VAR_VALUE_SIZE];
+    void (*fun)(char *);
 
     shell_var_type_t type;
 } shell_variable_t;
@@ -58,14 +58,14 @@ typedef struct {
 
 #define EXTERN_SHELL_VARIABLE(name) extern shell_variable_t name
 
-#define SHELL_COMMAND(name, desc, func)                                        \
-    shell_command_t name = (shell_command_t) {                                 \
-        .name = #name, .desc = desc, .fun = func                               \
+#define SHELL_COMMAND(name, desc, func)          \
+    shell_command_t name = (shell_command_t) {   \
+        .name = #name, .desc = desc, .fun = func \
     }
 
-#define SHELL_VARIABLE(name, desc, value, type)                                \
-    shell_variable_t name = (shell_variable_t) {                               \
-        .name = #name, .desc = desc, .value = value, .type = type              \
+#define SHELL_VARIABLE(name, desc, value, type)                   \
+    shell_variable_t name = (shell_variable_t) {                  \
+        .name = #name, .desc = desc, .value = value, .type = type \
     }
 
 /*
@@ -110,17 +110,17 @@ void shell_register_variables(shell_variable_t *var);
 /*
  *    Executes a shell command.
  *
- *    @param s8 *com    The command to execute.
+ *    @param char *com    The command to execute.
  */
-void shell_execute(s8 *com);
+void shell_execute(char *com);
 
 /*
  *    Gets a shell variable value.
  *
- *    @param s8 name    The name of the variable.
+ *    @param char name    The name of the variable.
  *
  *    @return shell_val_u   The value of the variable.
  */
-shell_val_u shell_get_variable(s8 *name);
+shell_val_u shell_get_variable(char *name);
 
 #endif /* LIBCHIK_SHELL_H  */

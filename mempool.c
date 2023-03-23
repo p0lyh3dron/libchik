@@ -14,13 +14,13 @@
 /*
  *    Creates a new memory pool.
  *
- *    @param s64 size            Size of the memory pool in bytes.
+ *    @param long size            Size of the memory pool in bytes.
  *
  *    @return mempool_t *    Pointer to the new memory pool.
  *                           Returns NULL on failure.
  *                           Should be freed with mempool_free().
  */
-mempool_t *mempool_new(s64 size) {
+mempool_t *mempool_new(long size) {
     if (size <= 0) {
         LOGF_ERR("Invalid memory pool size.");
         return 0;
@@ -88,7 +88,7 @@ memerror_t mempool_consolidate(mempool_t *pool) {
  *    Reallocates a memory pool.
  *
  *    @param mempool_t *pool     Pointer to the memory pool.
- *    @param s64 size            Size of the memory pool in bytes.
+ *    @param long size            Size of the memory pool in bytes.
  *
  *    @return memerror_t     Error code.
  *                           MEMERR_NONE on success.
@@ -97,8 +97,8 @@ memerror_t mempool_consolidate(mempool_t *pool) {
  *                           MEMERR_NO_MEMORY if the memory pool could not be
  * allocated.
  */
-memerror_t mempool_realloc(mempool_t *pool, s64 size) {
-    s8 *buf;
+memerror_t mempool_realloc(mempool_t *pool, long size) {
+    char *buf;
 
     if (pool == 0) {
         LOGF_ERR("Invalid memory pool.");
@@ -142,14 +142,14 @@ memerror_t mempool_realloc(mempool_t *pool, s64 size) {
  *    Allocates a new memory chunk from the memory pool.
  *
  *    @param mempool_t *pool      Pointer to the memory pool.
- *    @param s64 size             Size of the memory chunk in bytes.
+ *    @param long size             Size of the memory chunk in bytes.
  *
- *    @return s8 *           Pointer to the new memory chunk.
+ *    @return char *           Pointer to the new memory chunk.
  *                           Returns NULL on failure.
  *                           Should be freed with mempool_free().
  *                           The memory chunk is not initialized.
  */
-s8 *mempool_alloc(mempool_t *pool, s64 size) {
+char *mempool_alloc(mempool_t *pool, long size) {
     memchunk_t *chunk;
     memchunk_t *new;
     memchunk_t *last;
@@ -224,9 +224,9 @@ s8 *mempool_alloc(mempool_t *pool, s64 size) {
  *    Frees a memory chunk from the memory pool.
  *
  *    @param mempool_t *pool      Pointer to the memory pool.
- *    @param s8 *data             Pointer to the memory chunk.
+ *    @param char *data             Pointer to the memory chunk.
  */
-void mempool_free(mempool_t *pool, s8 *data) {
+void mempool_free(mempool_t *pool, char *data) {
     memchunk_t *chunk;
 
     if (pool == 0) {

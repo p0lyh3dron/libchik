@@ -47,49 +47,49 @@ void log_set_color(log_color_e color);
 /*
  *    Logs a message to the console.
  *
- *    @param s8 *message            The message to log.
+ *    @param char *message            The message to log.
  *    @param ...                    The arguments to the message.
  */
-void log_msg(const s8 *message, ...);
+void log_msg(const char *message, ...);
 
 /*
  *    Logs a note to the console.
  *
- *    @param s8 *note            The note to log.
+ *    @param char *note            The note to log.
  *    @param ...                 The arguments to the note.
  */
-void log_note(const s8 *note, ...);
+void log_note(const char *note, ...);
 
 /*
  *    Logs a warning to the console.
  *
- *    @param s8 *warning            The warning to log.
+ *    @param char *warning            The warning to log.
  *    @param ...                    The arguments to the warning.
  */
-void log_warn(const s8 *warning, ...);
+void log_warn(const char *warning, ...);
 
 /*
  *    Logs an error to the console.
  *
- *    @param s8 *error            The error to log.
+ *    @param char *error            The error to log.
  *    @param ...                  The arguments to the error.
  */
-void log_error(const s8 *error, ...);
+void log_error(const char *error, ...);
 
 /*
  *    Logs a fatal error to the console.
  *
- *    @param s8 *fatal            The fatal error to log.
+ *    @param char *fatal            The fatal error to log.
  *    @param ...                  The arguments to the fatal error.
  */
-void log_fatal(const s8 *fatal, ...);
+void log_fatal(const char *fatal, ...);
 
 /*
  *    Opens a file for logging.
  *
- *    @param s8 *file            The file to open.
+ *    @param char *file            The file to open.
  */
-void log_open_file(const s8 *file);
+void log_open_file(const char *file);
 /*
  *    Closes the file opened for logging.
  */

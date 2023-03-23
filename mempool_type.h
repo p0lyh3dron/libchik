@@ -28,17 +28,17 @@ typedef enum {
 
 typedef struct memchunk_s {
     memflag_t flags;
-    s8       *data;
-    s64       len;
+    char     *data;
+    long      len;
 
     struct memchunk_s *next;
 } memchunk_t;
 
 typedef struct {
-    s8 *buf;
-    s8 *end;
-    s8 *cur;
-    s64 len;
+    char *buf;
+    char *end;
+    char *cur;
+    long  len;
 
     memchunk_t *next;
 } mempool_t;

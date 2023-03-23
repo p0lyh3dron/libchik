@@ -16,11 +16,11 @@
 /*
  *    Create a new resource manager.
  *
- *    @param  s64 size      The size of the memory pool to use.
+ *    @param  long size      The size of the memory pool to use.
  *
  *    @return resource_t    A pointer to the new resource manager.
  */
-resource_t *resource_new(s64 size) {
+resource_t *resource_new(long size) {
     resource_t *resource;
 
     if (size <= 0) {
@@ -52,16 +52,16 @@ resource_t *resource_new(s64 size) {
  *    @param  resource_t *resource        The resource manager to add the
  * resource to.
  *    @param  void *data                  The resource to add.
- *    @param  u64 size                    The size of the resource to add.
+ *    @param  unsigned long size                    The size of the resource to add.
  *
  *    @return trap_t                 The handle of the resource.
  *                                     If the resource manager is full,
  *                                     this will be 0.
  */
-trap_t resource_add(resource_t *resource, void *data, u64 size) {
-    u32    magic;
-    char  *buf;
-    trap_t handle;
+trap_t resource_add(resource_t *resource, void *data, unsigned long size) {
+    unsigned int magic;
+    char        *buf;
+    trap_t       handle;
 
     if (resource == 0) {
         LOGF_ERR("Invalid resource manager.\n");
@@ -110,8 +110,8 @@ trap_t resource_add(resource_t *resource, void *data, u64 size) {
  *                                Returns NULL if the handle is invalid.
  */
 void *resource_get(resource_t *resource, trap_t handle) {
-    u32   magic;
-    char *buf;
+    unsigned int magic;
+    char        *buf;
 
     if (resource == 0) {
         LOGF_ERR("Invalid resource manager.\n");
@@ -129,7 +129,7 @@ void *resource_get(resource_t *resource, trap_t handle) {
     }
 
     buf   = resource->pool->buf + handle.index;
-    magic = *(u32 *)buf;
+    magic = *(unsigned int *)buf;
 
     if (handle.magic != magic) {
         LOGF_ERR("Invalid resource magic.\n");
@@ -147,9 +147,9 @@ void *resource_get(resource_t *resource, trap_t handle) {
  *    @param  trap_t handle               The handle of the resource to remove.
  */
 void resource_remove(resource_t *resource, trap_t handle) {
-    u32   index;
-    u32   magic;
-    char *buf;
+    unsigned int index;
+    unsigned int magic;
+    char        *buf;
 
     if (resource == 0) {
         LOGF_ERR("Invalid resource manager.\n");
@@ -171,7 +171,7 @@ void resource_remove(resource_t *resource, trap_t handle) {
 
     buf = resource->pool->buf + index;
 
-    if (*(u32 *)buf != magic) {
+    if (*(unsigned int *)buf != magic) {
         LOGF_ERR("Invalid resource magic.\n");
         return;
     }

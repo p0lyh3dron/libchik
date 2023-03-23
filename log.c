@@ -78,12 +78,12 @@ void log_set_color(log_color_e color) {
 /*
  *    Logs a message to the console.
  *
- *    @param s8 *message            The message to log.
+ *    @param char *message            The message to log.
  *    @param ...                    The arguments to the message.
  */
-void log_msg(const s8 *message, ...) {
+void log_msg(const char *message, ...) {
     va_list args_va;
-    s8      buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, message);
     vsnprintf(buf, MAX_LOG_MESSAGE_LENGTH, message, args_va);
@@ -98,12 +98,12 @@ void log_msg(const s8 *message, ...) {
 /*
  *    Logs a note to the console.
  *
- *    @param s8 *note            The note to log.
+ *    @param char *note            The note to log.
  *    @param ...                 The arguments to the note.
  */
-void log_note(const s8 *note, ...) {
+void log_note(const char *note, ...) {
     va_list args_va;
-    s8      buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, note);
     log_set_color(LOG_COLOR_LIGHT_CYAN);
@@ -120,12 +120,12 @@ void log_note(const s8 *note, ...) {
 /*
  *    Logs a warning to the console.
  *
- *    @param s8 *warning            The warning to log.
+ *    @param char *warning            The warning to log.
  *    @param ...                    The arguments to the warning.
  */
-void log_warn(const s8 *warning, ...) {
+void log_warn(const char *warning, ...) {
     va_list args_va;
-    s8      buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, warning);
     log_set_color(LOG_COLOR_MAGENTA);
@@ -142,12 +142,12 @@ void log_warn(const s8 *warning, ...) {
 /*
  *    Logs an error to the console.
  *
- *    @param s8 *error            The error to log.
+ *    @param char *error            The error to log.
  *    @param ...                  The arguments to the error.
  */
-void log_error(const s8 *error, ...) {
+void log_error(const char *error, ...) {
     va_list args_va;
-    s8      buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, error);
     log_set_color(LOG_COLOR_LIGHT_RED);
@@ -164,12 +164,12 @@ void log_error(const s8 *error, ...) {
 /*
  *    Logs a fatal error to the console.
  *
- *    @param s8 *fatal            The fatal error to log.
+ *    @param char *fatal            The fatal error to log.
  *    @param ...                  The arguments to the fatal error.
  */
-void log_fatal(const s8 *fatal, ...) {
+void log_fatal(const char *fatal, ...) {
     va_list args_va;
-    s8      buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, fatal);
     log_set_color(LOG_COLOR_LIGHT_RED);
@@ -188,9 +188,9 @@ void log_fatal(const s8 *fatal, ...) {
 /*
  *    Opens a file for logging.
  *
- *    @param s8 *file            The file to open.
+ *    @param char *file            The file to open.
  */
-void log_open_file(const s8 *file) {
+void log_open_file(const char *file) {
     _log_file = fopen(file, "w");
 
     if (_log_file == nullptr)
