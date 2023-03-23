@@ -39,3 +39,17 @@ const s8 *app_get_name(void) { return _app_info.app_name; }
  *    @return vec3s_t    The application version.
  */
 vec3s_t app_get_version(void) { return _app_info.version; }
+
+/*
+ *    Returns the engine name.
+ *
+ *    @return const s8 *    The engine name.
+ */
+const s8 *app_get_engine_name(void) { return _engine_info.engine_name; }
+
+/*
+ *    Returns the engine version.
+ *
+ *    @return vec3s_t    The engine version.
+ */
+vec3s_t app_get_engine_version(void) { return _engine_info.version; }
