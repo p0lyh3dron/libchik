@@ -95,8 +95,8 @@ void log_open_file(const char *file);
  */
 void log_close_file(void);
 
-#define VLOGF_MSG(msg, ...) log_msg("%s: " msg, __func__, __VA_ARGS__)
-#define LOGF_MSG(msg)       log_msg("%s: " msg, __func__)
+#define VLOGF_MSG(msg, ...) log_msg("%s | " msg, __func__, __VA_ARGS__)
+#define LOGF_MSG(msg)       log_msg("%s | " msg, __func__)
 
 #define VLOGF_NOTE(note, ...) log_note("%s: " note, __func__, __VA_ARGS__)
 #define LOGF_NOTE(note)       log_note("%s: " note, __func__)
