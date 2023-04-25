@@ -12,7 +12,7 @@
 
 #include <stdarg.h>
 
-FILE *_log_file = nullptr;
+FILE *_log_file;
 
 /*
  *    Sets the color of the log messages.
@@ -21,55 +21,55 @@ FILE *_log_file = nullptr;
  */
 void log_set_color(log_color_e color) {
     switch (color) {
-    case LOG_COLOR_CLEAR:
+    case LIBCHIK_LOG_COLOR_CLEAR:
         fprintf(stderr, "\033[0m");
         break;
-    case LOG_COLOR_BLACK:
+    case LIBCHIK_LOG_COLOR_BLACK:
         fprintf(stderr, "\033[30m");
         break;
-    case LOG_COLOR_RED:
+    case LIBCHIK_LOG_COLOR_RED:
         fprintf(stderr, "\033[31m");
         break;
-    case LOG_COLOR_GREEN:
+    case LIBCHIK_LOG_COLOR_GREEN:
         fprintf(stderr, "\033[32m");
         break;
-    case LOG_COLOR_YELLOW:
+    case LIBCHIK_LOG_COLOR_YELLOW:
         fprintf(stderr, "\033[33m");
         break;
-    case LOG_COLOR_BLUE:
+    case LIBCHIK_LOG_COLOR_BLUE:
         fprintf(stderr, "\033[34m");
         break;
-    case LOG_COLOR_MAGENTA:
+    case LIBCHIK_LOG_COLOR_MAGENTA:
         fprintf(stderr, "\033[35m");
         break;
-    case LOG_COLOR_CYAN:
+    case LIBCHIK_LOG_COLOR_CYAN:
         fprintf(stderr, "\033[36m");
         break;
-    case LOG_COLOR_LIGHT_GREY:
+    case LIBCHIK_LOG_COLOR_LIGHT_GREY:
         fprintf(stderr, "\033[37m");
         break;
-    case LOG_COLOR_DARK_GREY:
+    case LIBCHIK_LOG_COLOR_DARK_GREY:
         fprintf(stderr, "\033[90m");
         break;
-    case LOG_COLOR_LIGHT_RED:
+    case LIBCHIK_LOG_COLOR_LIGHT_RED:
         fprintf(stderr, "\033[91m");
         break;
-    case LOG_COLOR_LIGHT_GREEN:
+    case LIBCHIK_LOG_COLOR_LIGHT_GREEN:
         fprintf(stderr, "\033[92m");
         break;
-    case LOG_COLOR_LIGHT_YELLOW:
+    case LIBCHIK_LOG_COLOR_LIGHT_YELLOW:
         fprintf(stderr, "\033[93m");
         break;
-    case LOG_COLOR_LIGHT_BLUE:
+    case LIBCHIK_LOG_COLOR_LIGHT_BLUE:
         fprintf(stderr, "\033[94m");
         break;
-    case LOG_COLOR_LIGHT_MAGENTA:
+    case LIBCHIK_LOG_COLOR_LIGHT_MAGENTA:
         fprintf(stderr, "\033[95m");
         break;
-    case LOG_COLOR_LIGHT_CYAN:
+    case LIBCHIK_LOG_COLOR_LIGHT_CYAN:
         fprintf(stderr, "\033[96m");
         break;
-    case LOG_COLOR_WHITE:
+    case LIBCHIK_LOG_COLOR_WHITE:
         fprintf(stderr, "\033[97m");
         break;
     }
@@ -83,16 +83,15 @@ void log_set_color(log_color_e color) {
  */
 void log_msg(const char *message, ...) {
     va_list args_va;
-    char    buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[LIBCHIK_MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, message);
-    vsnprintf(buf, MAX_LOG_MESSAGE_LENGTH, message, args_va);
+    vsnprintf(buf, LIBCHIK_MAX_LOG_MESSAGE_LENGTH, message, args_va);
     va_end(args_va);
 
     printf("%s", buf);
-    if (_log_file) {
+    if (_log_file != (FILE *)0x0)
         fprintf(_log_file, "%s", buf);
-    }
 }
 
 /*
@@ -103,18 +102,19 @@ void log_msg(const char *message, ...) {
  */
 void log_note(const char *note, ...) {
     va_list args_va;
-    char    buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[LIBCHIK_MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, note);
-    log_set_color(LOG_COLOR_LIGHT_CYAN);
-    vsnprintf(buf, MAX_LOG_MESSAGE_LENGTH, note, args_va);
+    log_set_color(LIBCHIK_LOG_COLOR_LIGHT_CYAN);
+    vsnprintf(buf, LIBCHIK_MAX_LOG_MESSAGE_LENGTH, note, args_va);
     va_end(args_va);
 
     fprintf(stderr, "note | %s", buf);
-    if (_log_file) {
+
+    if (_log_file != (FILE *)0x0)
         fprintf(_log_file, "note | %s", buf);
-    }
-    log_set_color(LOG_COLOR_CLEAR);
+
+    log_set_color(LIBCHIK_LOG_COLOR_CLEAR);
 }
 
 /*
@@ -125,18 +125,19 @@ void log_note(const char *note, ...) {
  */
 void log_warn(const char *warning, ...) {
     va_list args_va;
-    char    buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[LIBCHIK_MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, warning);
-    log_set_color(LOG_COLOR_MAGENTA);
-    vsnprintf(buf, MAX_LOG_MESSAGE_LENGTH, warning, args_va);
+    log_set_color(LIBCHIK_LOG_COLOR_MAGENTA);
+    vsnprintf(buf, LIBCHIK_MAX_LOG_MESSAGE_LENGTH, warning, args_va);
     va_end(args_va);
 
     fprintf(stderr, "warning | %s", buf);
-    if (_log_file) {
+
+    if (_log_file != (FILE *)0x0)
         fprintf(_log_file, "warning | %s", buf);
-    }
-    log_set_color(LOG_COLOR_CLEAR);
+
+    log_set_color(LIBCHIK_LOG_COLOR_CLEAR);
 }
 
 /*
@@ -147,18 +148,19 @@ void log_warn(const char *warning, ...) {
  */
 void log_error(const char *error, ...) {
     va_list args_va;
-    char    buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[LIBCHIK_MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, error);
-    log_set_color(LOG_COLOR_LIGHT_RED);
-    vsnprintf(buf, MAX_LOG_MESSAGE_LENGTH, error, args_va);
+    log_set_color(LIBCHIK_LOG_COLOR_LIGHT_RED);
+    vsnprintf(buf, LIBCHIK_MAX_LOG_MESSAGE_LENGTH, error, args_va);
     va_end(args_va);
 
     fprintf(stderr, "error | %s", buf);
-    if (_log_file) {
+
+    if (_log_file != (FILE *)0x0)
         fprintf(_log_file, "error | %s", buf);
-    }
-    log_set_color(LOG_COLOR_CLEAR);
+
+    log_set_color(LIBCHIK_LOG_COLOR_CLEAR);
 }
 
 /*
@@ -169,18 +171,19 @@ void log_error(const char *error, ...) {
  */
 void log_fatal(const char *fatal, ...) {
     va_list args_va;
-    char    buf[MAX_LOG_MESSAGE_LENGTH];
+    char    buf[LIBCHIK_MAX_LOG_MESSAGE_LENGTH];
 
     va_start(args_va, fatal);
-    log_set_color(LOG_COLOR_LIGHT_RED);
-    vsnprintf(buf, MAX_LOG_MESSAGE_LENGTH, fatal, args_va);
+    log_set_color(LIBCHIK_LOG_COLOR_LIGHT_RED);
+    vsnprintf(buf, LIBCHIK_MAX_LOG_MESSAGE_LENGTH, fatal, args_va);
     va_end(args_va);
 
     fprintf(stderr, "fatal | %s", buf);
-    if (_log_file) {
+
+    if (_log_file != (FILE *)0x0)
         fprintf(_log_file, "fatal | %s", buf);
-    }
-    log_set_color(LOG_COLOR_CLEAR);
+
+    log_set_color(LIBCHIK_LOG_COLOR_CLEAR);
 
     exit(EXIT_FAILURE);
 }
@@ -193,7 +196,7 @@ void log_fatal(const char *fatal, ...) {
 void log_open_file(const char *file) {
     _log_file = fopen(file, "w");
 
-    if (_log_file == nullptr)
+    if (_log_file == (FILE *)0x0)
         VLOGF_WARN("Failed to open log file: %s", file);
 }
 
@@ -201,7 +204,6 @@ void log_open_file(const char *file) {
  *    Closes the file opened for logging.
  */
 void log_close_file(void) {
-    if (_log_file != nullptr) {
+    if (_log_file != (FILE *)0x0)
         fclose(_log_file);
-    }
 }
