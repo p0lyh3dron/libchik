@@ -126,6 +126,17 @@ unsigned int vec2u_interp(vec2u_t *a, vec2u_t *b, vec2u_t *c, float step);
 unsigned int vec2u_scale(vec2u_t *a, vec2u_t *b, float scale);
 
 /*
+ *    Adds two vec3s.
+ *
+ *    @param vec3_t *a    The return vector.
+ *    @param vec3_t *b    The first vector.
+ *    @param vec3_t *c    The second vector.
+ * 
+ *    @return unsigned int        The return code.
+ */
+unsigned int vec3_add(vec3_t *a, vec3_t *b, vec3_t *c);
+
+/*
  *    Subtracts two vec3s.
  *
  *    @param vec3_t *a    The return vector.
@@ -135,6 +146,17 @@ unsigned int vec2u_scale(vec2u_t *a, vec2u_t *b, float scale);
  *    @return unsigned int        The return code.
  */
 unsigned int vec3_sub(vec3_t *a, vec3_t *b, vec3_t *c);
+
+/*
+ *    Scales a vec3.
+ *
+ *    @param vec3_t *a       The return vector.
+ *    @param vec3_t *b       The vector to scale.
+ *    @param float scale     The scale.
+ * 
+ *    @return unsigned int        The return code.
+ */
+unsigned int vec3_scale(vec3_t *a, vec3_t *b, float scale);
 
 /*
  *    Interpolates a vec3.

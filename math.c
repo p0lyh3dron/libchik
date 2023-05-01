@@ -245,6 +245,23 @@ unsigned int vec2u_scale(vec2u_t *a, vec2u_t *b, float scale) {
 }
 
 /*
+ *    Adds two vec3s.
+ *
+ *    @param vec3_t *a    The return vector.
+ *    @param vec3_t *b    The first vector.
+ *    @param vec3_t *c    The second vector.
+ * 
+ *    @return unsigned int        The return code.
+ */
+unsigned int vec3_add(vec3_t *a, vec3_t *b, vec3_t *c) {
+    a->x = b->x + c->x;
+    a->y = b->y + c->y;
+    a->z = b->z + c->z;
+
+    return 1;
+}
+
+/*
  *    Subtracts two vec3s.
  *
  *    @param vec3_t *a    The return vector.
@@ -257,6 +274,23 @@ unsigned int vec3_sub(vec3_t *a, vec3_t *b, vec3_t *c) {
     a->x = b->x - c->x;
     a->y = b->y - c->y;
     a->z = b->z - c->z;
+
+    return 1;
+}
+
+/*
+ *    Scales a vec3.
+ *
+ *    @param vec3_t *a       The return vector.
+ *    @param vec3_t *b       The vector to scale.
+ *    @param float scale     The scale.
+ * 
+ *    @return unsigned int        The return code.
+ */
+unsigned int vec3_scale(vec3_t *a, vec3_t *b, float scale) {
+    a->x = b->x * scale;
+    a->y = b->y * scale;
+    a->z = b->z * scale;
 
     return 1;
 }
