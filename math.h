@@ -335,3 +335,13 @@ void swap_endian16(unsigned short *a);
  *    @param unsigned int *a    The integer.
  */
 void swap_endian32(unsigned int *a);
+
+/*
+ *    Calculates the crc32 of a buffer.
+ *
+ *    @param void          *buf    The buffer.
+ *    @param unsigned long  len    The length of the buffer.
+ * 
+ *    @return unsigned int         The crc32.
+ */
+unsigned int calc_crc32(void *buf, unsigned long len);
