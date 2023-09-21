@@ -123,4 +123,12 @@ void shell_execute(char *com);
  */
 shell_val_u shell_get_variable(char *name);
 
+/*
+ *    Sets a shell variable value.
+ *
+ *    @param char *name    The name of the variable.
+ *    @param char *value   The value of the variable.
+ */
+void shell_set_variable(char *name, char *value);
+
 #endif /* LIBCHIK_SHELL_H  */

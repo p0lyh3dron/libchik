@@ -218,3 +218,24 @@ shell_val_u shell_get_variable(char *name) {
     }
     return (shell_val_u){.i = 0};
 }
+
+/*
+ *    Sets a shell variable value.
+ *
+ *    @param char *name    The name of the variable.
+ *    @param char *value   The value of the variable.
+ */
+void shell_set_variable(char *name, char *value) {
+    unsigned long i;
+
+    for (i = 0; i < LIBCHIK_SHELL_MAX_VARIABLES; i++) {
+        if (_vars[i].name != nullptr) {
+            if (strcmp(_vars[i].name, name) == 0) {
+                strcpy(_vars[i].val, value);
+                return;
+            }
+        }
+    }
+
+    VLOGF_WARN("Unknown variable: %s\n", name);
+}
