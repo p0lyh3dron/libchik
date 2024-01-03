@@ -144,7 +144,7 @@ void shell_register_variables(shell_variable_t *var) {
  */
 void shell_execute(char *com) {
     unsigned long i;
-    char          argv[LIBCHIK_SHELL_ARGV_MAX][LIBCHIK_SHELL_ARGV_SIZE] = {{0}};
+    char         *argv[LIBCHIK_SHELL_ARGV_SIZE];
     long          argc                                                  = 0;
     char         *arg;
 
@@ -153,10 +153,19 @@ void shell_execute(char *com) {
      */
     arg = strtok(com, " ");
     while (arg != nullptr) {
+        argv[argc] = (char *)malloc(sizeof(char) * strlen(arg));
+
+        if (argv[argc] == nullptr) {
+            LOGF_ERR("Failed to allocate memory for shell argument.\n");
+            return;
+        }
+
         strcpy(argv[argc], arg);
         argc++;
         arg = strtok(nullptr, " ");
     }
+
+    argv[argc] = nullptr;
 
     /*
      *    Execute the command.
@@ -166,6 +175,14 @@ void shell_execute(char *com) {
             if (strcmp(_coms[i].name, argv[0]) == 0) {
                 log_msg("> %s\n", com);
                 _coms[i].fun(argc, (char **)argv);
+
+                argc = 0;
+
+                while (argv[argc] != nullptr) {
+                    free(argv[argc]);
+                    argc++;
+                }
+                
                 return;
             }
         }
