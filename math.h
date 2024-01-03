@@ -80,6 +80,28 @@ mat4_t m4_rotate(float ang, vec3_t axis);
 mat4_t m4_translate(vec3_t vec);
 
 /*
+ *     Adds a vec2.
+ *
+ *     @param vec2_t *a    The return vector.
+ *     @param vec2_t *b    The first vector.
+ *     @param vec2_t *c    The second vector.
+ * 
+ *     @return unsigned int        The return code.
+ */
+unsigned int vec2_add(vec2_t *a, vec2_t *b, vec2_t *c);
+
+/*
+ *    Subtracts a vec2.
+ *
+ *    @param vec2_t *a    The return vector.
+ *    @param vec2_t *b    The first vector.
+ *    @param vec2_t *c    The second vector.
+ *
+ *    @return unsigned int        The return code.
+ */
+unsigned int vec2_sub(vec2_t *a, vec2_t *b, vec2_t *c);
+
+/*
  *    Interpolates a vec2.
  *
  *    @param vec2_t *a    The return vector.
@@ -101,6 +123,15 @@ unsigned int vec2_interp(vec2_t *a, vec2_t *b, vec2_t *c, float step);
  *    @return unsigned int        The return code.
  */
 unsigned int vec2_scale(vec2_t *a, vec2_t *b, float scale);
+
+/*
+ *    Returns the magnitude of a vec2.
+ *
+ *    @param vec2_t *a    The vector.
+ * 
+ *    @return float        The magnitude.
+ */
+float vec2_mag(vec2_t *a);
 
 /*
  *    Interpolates a vec2u.
@@ -211,6 +242,28 @@ unsigned int vec3_normalize(vec3_t *a, vec3_t *b);
 unsigned int vec3_cross(vec3_t *a, vec3_t *b, vec3_t *c);
 
 /*
+ *    Adds a vec4.
+ *
+ *    @param vec4_t *a    The return vector.
+ *    @param vec4_t *b    The first vector.
+ *    @param vec4_t *c    The second vector.
+ * 
+ *    @return unsigned int        The return code.
+ */
+unsigned int vec4_add(vec4_t *a, vec4_t *b, vec4_t *c);
+
+/*
+ *    Subtracts a vec4.
+ *
+ *    @param vec4_t *a    The return vector.
+ *    @param vec4_t *b    The first vector.
+ *    @param vec4_t *c    The second vector.
+ *
+ *    @return unsigned int        The return code.
+ */
+unsigned int vec4_sub(vec4_t *a, vec4_t *b, vec4_t *c);
+
+/*
  *    Interpolates a vec4.
  *
  *    @param vec4_t *a    The return vector.
@@ -233,6 +286,30 @@ unsigned int vec4_interp(vec4_t *a, vec4_t *b, vec4_t *c, float step);
  *    @return unsigned int           The return code.
  */
 unsigned int color32_interp(color32_t *a, color32_t *b, color32_t *c, float step);
+
+/*
+ *    Adds a vec.
+ *
+ *    @param vec_t *ret        The return vector.
+ *    @param void *a           The first vector.
+ *    @param void *b           The second vector.
+ *    @param v_format_e fmt    The vector format.
+ * 
+ *    @return unsigned int          The return code.
+ */
+unsigned int vec_add(vec_t *ret, void *a, void *b, v_format_e fmt);
+
+/*
+ *    Subtracts a vec.
+ *
+ *    @param vec_t *ret        The return vector.
+ *    @param void *a           The first vector.
+ *    @param void *b           The second vector.
+ *    @param v_format_e fmt    The vector format.
+ * 
+ *    @return unsigned int          The return code.
+ */
+unsigned int vec_sub(vec_t *ret, void *a, void *b, v_format_e fmt);
 
 /*
  *    Interpolates a vec.
