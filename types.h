@@ -160,6 +160,8 @@ typedef struct {
     unsigned int stride;
     void (*f_fun)(fragment_t *, void *, void *);
     void (*v_fun)(void *, void *, void *);
+    void (*v_scale)(void *, void *, float);
+    void (*v_add)(void *, void *, void *);
 } v_layout_t;
 
 typedef struct {
