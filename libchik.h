@@ -20,6 +20,7 @@
 #include "math.h"
 #include "mempool.h"
 #include "module.h"
+#include "profiler.h"
 #include "resource.h"
 #include "shell.h"
 #include "thread.h"
