@@ -48,6 +48,13 @@ typedef void *dl_handle_t;
 
 typedef char bool;
 
+extern const unsigned int _pixel_sizes[2];
+
+typedef enum {
+    IMAGE_FMT_RGB8  = 0,
+    IMAGE_FMT_RGBA8 = 1,
+} image_fmt_e;
+
 typedef struct {
     unsigned int  index;
     unsigned int  magic;
@@ -103,11 +110,11 @@ typedef struct {
 } mat4_t;
 
 typedef struct {
-    unsigned int  width;
-    unsigned int  height;
-    unsigned int  fmt;
-    unsigned int  size;
-    unsigned int *buf;
+    unsigned int   width;
+    unsigned int   height;
+    unsigned int   fmt;
+    unsigned int   size;
+    unsigned char *buf;
 } image_t;
 
 typedef struct {
