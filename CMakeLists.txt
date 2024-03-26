@@ -2,23 +2,27 @@ cmake_minimum_required( VERSION 3.10 )
 
 Project( LibChik VERSION 1.0 )
 
-file( GLOB SRC_FILES *.c )
+set( CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON )
+
+file( GLOB SRC_FILES *.c *h )
 
 get_property( CHIK_GAMES GLOBAL PROPERTY CHIK_GAMES )
 get_property( LIBCHIK GLOBAL PROPERTY LIBCHIK )
 
-link_libraries( m )
-
 if ( ${PLATFORM} MATCHES "Win64" )
     set( LIBCHIK_OUT ${CHIK_GAMES} )
-endif()
-if ( ${PLATFORM} MATCHES "Linux64" )
-    set( LIBCHIK_OUT ${CHIK_GAMES}/bin )
-    link_libraries( dl pthread )
 endif()
 
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 add_library( LibChik SHARED ${SRC_FILES} )
+
+message("Plaftfomr: ${PLATFORM}" )
+
+if ( ${PLATFORM} MATCHES "Linux64" )
+    set( LIBCHIK_OUT ${CHIK_GAMES}/bin )
+    link_libraries( dl pthread )
+    target_link_libraries( LibChik m )
+endif()
 
 set_target_properties(
     LibChik PROPERTIES

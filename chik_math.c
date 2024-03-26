@@ -8,7 +8,7 @@
  *
  *    This file defines the functions used for math operations.
  */
-#include "math.h"
+#include "chik_math.h"
 
 // #if defined( __unix__ ) && ( __i386__ )
 #if 1

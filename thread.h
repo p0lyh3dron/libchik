@@ -24,7 +24,7 @@
 #if __unix__
 #include <pthread.h>
 #else
-#error "Unsupported platform"
+//#error "Unsupported platform"
 #endif /* __unix__  */
 
 /*

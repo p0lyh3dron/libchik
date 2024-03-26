@@ -13,6 +13,7 @@
 
 #if __unix__
 #elif _WIN32
+#include <windows.h>
 #define MAX_ERROR_LENGTH 256
 #endif /* __unix__  */
 

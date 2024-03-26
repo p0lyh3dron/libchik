@@ -17,7 +17,7 @@
 #include "dl.h"
 #include "file.h"
 #include "log.h"
-#include "math.h"
+#include "chik_math.h"
 #include "mempool.h"
 #include "module.h"
 #include "profiler.h"

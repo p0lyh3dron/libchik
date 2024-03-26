@@ -20,7 +20,7 @@
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
-typedef unsigned long long u64;
+typedef size_t             u64;
 
 #define ARR_LEN(x) \
     ((sizeof(x) / sizeof(0 [x])) / ((unsigned long)(!(sizeof(x) % sizeof(0 [x])))))
@@ -31,7 +31,7 @@ typedef __uint128_t u128;
 /*
  *    Probably broken on windows.
  */
-typedef unsigned __int128 u128;
+#define DLL_EXPORT  __declspec(dllexport)
 #else
 #error "Platform does not support 128-bit integers."
 #endif /* __unix__  */
@@ -48,7 +48,10 @@ typedef void *dl_handle_t;
 
 typedef char bool;
 
-extern const unsigned int _pixel_sizes[2];
+static unsigned int _pixel_sizes[2] = {
+   3, /* IMAGE_FMT_RGB8   */
+   4, /* IMAGE_FMT_RGBA8  */
+};
 
 typedef enum {
     IMAGE_FMT_RGB8  = 0,

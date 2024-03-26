@@ -9,7 +9,5 @@
  *    This file defines numeric constants used by the Chik engine.
  */
 
-const unsigned int _pixel_sizes[2] = {
-    3, /* IMAGE_FMT_RGB8   */
-    4, /* IMAGE_FMT_RGBA8  */
-};
+#include "dl.h"
+

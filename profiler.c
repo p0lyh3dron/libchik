@@ -22,6 +22,7 @@ _profiled_stack_t *_profiled_stack = (_profiled_stack_t *)0x0;
  *    This function must be called before any other profiler functions.
  */
 void chik_profiler_init() {
+#if 0
     for (unsigned long i = 0; i < _CHIK_PROFILER_MAX_PROFILED; ++i) {
         _profiled[i].name          = (char *)0x0;
         _profiled[i].calls         = 0;
@@ -30,6 +31,7 @@ void chik_profiler_init() {
     }
 
     chik_profiler_begin("Chik Engine");
+#endif
 }
 
 /*
@@ -38,6 +40,7 @@ void chik_profiler_init() {
  *    @param name    The name of the profiled region.
  */
 void chik_profiler_begin(const char *name) {
+#if 0
     if (_profiled_stack == (_profiled_stack_t *)0x0) {
         _profiled_stack = (_profiled_stack_t *)malloc(sizeof(_profiled_stack_t));
 
@@ -72,12 +75,14 @@ void chik_profiler_begin(const char *name) {
     }
 
     VLOGF_ERR("Could not profile %s: too many profiled regions.", name);
+#endif
 }
 
 /*
  *    Ends profiling a function.
  */
 void chik_profiler_end() {
+#if 0
     if (_profiled_stack == (_profiled_stack_t *)0x0) {
         LOGF_ERR("No profiler stack.");
         return;
@@ -104,12 +109,14 @@ void chik_profiler_end() {
             return;
         }
     }
+#endif
 }
 
 /*
  *    Ends the profiler.
  */
 void chik_profiler_exit() {
+#if 0
     chik_profiler_end();
 
     for (unsigned long i = 0; i < _CHIK_PROFILER_MAX_PROFILED; ++i) {
@@ -117,4 +124,5 @@ void chik_profiler_exit() {
             VLOGF_MSG("%s: %lu calls, %lu.%lu seconds.", _profiled[i].name, _profiled[i].calls, _profiled[i].total_time_s, _profiled[i].total_time_ns);
         }
     }
+#endif
 }

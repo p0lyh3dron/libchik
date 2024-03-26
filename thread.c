@@ -68,7 +68,7 @@ int threadpool_init(unsigned long size, unsigned long threads) {
         if (pthread_create(&thread, 0, _threadpool_thread, 0) != 0)
             return -1;
 #else
-#error "Unsupported platform"
+//#error "Unsupported platform"
 #endif /* __unix__  */
     }
 

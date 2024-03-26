@@ -14,7 +14,7 @@
 #if __unix__
 #include <pthread.h>
 #else
-#error "Unsupported platform"
+//#error "Unsupported platform"
 #endif /* __unix__  */
 
 typedef struct {
@@ -33,7 +33,7 @@ typedef struct {
     pthread_mutex_t lock;
     pthread_cond_t  cond;
 #else
-#error "Unsupported platform"
+//#error "Unsupported platform"
 #endif /* __unix__  */
 } aqueue_t;
 

@@ -16,7 +16,7 @@
 #include <dlfcn.h>
 #elif _WIN32
 #define DL_EXTENSION ".dll"
-#include <windows.h>
+#define DLL_EXPORT __declspec(dllexport)
 #else
 #error "Platform does not support dynamic libraries."
 #endif /* __unix__  */
