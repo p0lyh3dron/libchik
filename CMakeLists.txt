@@ -17,6 +17,7 @@ set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 add_library( LibChik SHARED ${SRC_FILES} )
 
 message("Plaftfomr: ${PLATFORM}" )
+message("LIBCHIK_OUT: ${LIBCHIK_OUT}" )
 
 if ( ${PLATFORM} MATCHES "Linux64" )
     set( LIBCHIK_OUT ${CHIK_GAMES}/bin )
@@ -34,3 +35,13 @@ set_target_properties(
     RUNTIME_OUTPUT_DIRECTORY ${LIBCHIK_OUT}
     LIBRARY_OUTPUT_DIRECTORY ${LIBCHIK_OUT}
 )
+
+# set output directories for all builds (Debug, Release, etc.)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set_target_properties(
+    	LibChik PROPERTIES
+    	RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIBCHIK_OUT}
+    	LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIBCHIK_OUT}
+    )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
