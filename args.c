@@ -36,7 +36,7 @@ void args_init(const int argc, const char **argv) {
  *    @return unsigned int              1 if the argument is present, 0 otherwise.
  */
 unsigned int args_has(const char *arg) {
-    unsigned long i;
+    s64 i;
 
     for (i = 0; i < _argc; i++) {
         if (strcmp(_argv[i], arg) == 0) {
@@ -57,7 +57,7 @@ unsigned int args_has(const char *arg) {
  *
  */
 const char *args_get_str(const char *arg) {
-    unsigned long i;
+    s64 i;
 
     for (i = 0; i < _argc; i++) {
         if (strcmp(_argv[i], arg) == 0) {
@@ -73,11 +73,11 @@ const char *args_get_str(const char *arg) {
  *
  *    @param const char *arg     The argument to check for.
  *
- *    @return int             The value of the argument, or -1 if it is not
+ *    @return int             The value of the argument, or 0 if it is not
  * present.
  */
 int args_get_int(const char *arg) {
-    unsigned long i;
+    u64 i;
 
     for (i = 0; i < _argc; i++) {
         if (strcmp(_argv[i], arg) == 0) {
@@ -85,7 +85,32 @@ int args_get_int(const char *arg) {
         }
     }
 
-    return -1;
+    return 0;
+}
+
+/*
+ *    Returns the integer value of the argument.
+ *
+ *    @param const char *arg     The argument to check for.
+ *
+ *    @return float             The value of the argument, or 0.f if it is not
+ * present.
+ */
+float args_get_float(const char* arg, float fallback) {
+    s64 i;
+
+    for (i = 0; i < _argc; i++) {
+        if (strcmp(_argv[i], arg) == 0) {
+            char* end = 0x0;
+            float out = strtof(_argv[i + 1], &end);
+
+            if (end != _argv[i + 1])
+                return out;
+            return fallback;
+        }
+    }
+
+    return fallback;
 }
 
 /*

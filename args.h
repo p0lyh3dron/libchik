@@ -45,10 +45,21 @@ const char *args_get_str(const char *arg);
  *
  *    @param const char *arg     The argument to check for.
  *
- *    @return int             The value of the argument, or -1 if it is not
+ *    @return int             The value of the argument, or 0 if it is not
  * present.
  */
 int args_get_int(const char *arg);
+
+/*
+ *    Returns the integer value of the argument.
+ *
+ *    @param const char *arg     The argument to check for.
+ *    @param float               The fallback default argument value.
+ *
+ *    @return float              The value of the argument, or 0.f if it is not
+ * present.
+ */
+float args_get_float(const char *arg, float fallback);
 
 /*
  *    Returns the executable name.
