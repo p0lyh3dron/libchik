@@ -17,6 +17,8 @@
 
 #define MAX_VECTOR_ATTRIBUTES 16
 
+#define CH_NULL (void *)0x0
+
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
@@ -124,6 +126,15 @@ typedef struct {
     image_t *image;
 } texture_t;
 
+typedef struct {
+    image_t* albedo;
+    image_t* ambient_occlusion;
+    image_t* emission;
+
+    float    ambient_occlusion_power;
+    float    emission_power;
+} material_t;
+
 typedef enum {
     V_R8G8B8A8_U,
     V_R8G8B8A8_S,
@@ -168,7 +179,7 @@ typedef struct {
     v_attrib_t   attributes[MAX_VECTOR_ATTRIBUTES];
     unsigned int count;
     unsigned int stride;
-    void (*f_fun)(fragment_t *, void *, void *);
+    void (*f_fun)(fragment_t *, void *, void *, material_t *);
     void (*v_fun)(void *, void *, void *);
     void (*v_scale)(void *, void *, float);
     void (*v_add)(void *, void *, void *);
