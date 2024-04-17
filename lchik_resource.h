@@ -1,5 +1,5 @@
 /*
- *    resource.h    --    header file for hot-swapping resources
+ *    lchik_resource.h    --    header file for hot-swapping resources
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *

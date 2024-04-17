@@ -1,5 +1,5 @@
 /*
- *    mempool.c    --    source file for memory pool
+ *    lchik_mempool.c    --    source file for memory pool
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -9,7 +9,7 @@
  *    This file defines the functions used for allocating and freeing
  *    memory.
  */
-#include "mempool.h"
+#include "lchik_mempool.h"
 
 /*
  *    Creates a new memory pool.

@@ -1,5 +1,5 @@
 /*
- *    aqueue.h    --    Header for async queue
+ *    lchik_aqueue.h    --    Header for async queue
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -33,7 +33,6 @@ typedef struct {
     pthread_mutex_t lock;
     pthread_cond_t  cond;
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 } aqueue_t;
 

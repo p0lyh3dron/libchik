@@ -1,5 +1,5 @@
 /*
- *    types.h    --    header for general types
+ *    lchik_types.h    --    header for general types
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -22,7 +22,11 @@
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
-typedef size_t             u64;
+#ifdef __unix__
+typedef unsigned long      u64;
+#elif _WIN32
+typedef unsigned long long u64;
+#endif /* __unix__  */
 
 #define ARR_LEN(x) \
     ((sizeof(x) / sizeof(0 [x])) / ((unsigned long)(!(sizeof(x) % sizeof(0 [x])))))

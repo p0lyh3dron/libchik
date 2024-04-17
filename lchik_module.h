@@ -1,5 +1,5 @@
 /*
- *    module.h    --    header stub for module usage
+ *    lchik_module.h    --    header stub for module usage
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on April 17, 2022
  *
@@ -11,8 +11,8 @@
  */
 #pragma once
 
-#include "log.h"
-#include "types.h"
+#include "lchik_log.h"
+#include "lchik_types.h"
 
 /*
  *    Defines this module's entry point.

@@ -1,5 +1,5 @@
 /*
- *    mempool_type.h    --    header file for memory pool type
+ *    lchik_mempool_type.h    --    header file for memory pool type
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "types.h"
+#include "lchik_types.h"
 
 typedef enum {
     MEMFLAG_FREE = 1 << 0,

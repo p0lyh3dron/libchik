@@ -1,5 +1,5 @@
 /*
- *    math.c    --    math operations
+ *    lchik_math.c    --    math operations
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 25, 2022
  *
@@ -8,7 +8,7 @@
  *
  *    This file defines the functions used for math operations.
  */
-#include "chik_math.h"
+#include "lchik_math.h"
 
 // #if defined( __unix__ ) && ( __i386__ )
 #if 1

@@ -1,5 +1,5 @@
 /*
- *    dl.c    --    source for loading dynamic libraries
+ *    lchik_dl.c    --    source for loading dynamic libraries
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -9,7 +9,7 @@
  *    Included here are the definitions for loading dynamic
  *    libraries regardless of platform.
  */
-#include "dl.h"
+#include "lchik_dl.h"
 
 #if __unix__
 #elif _WIN32

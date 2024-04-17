@@ -1,5 +1,5 @@
 /*
- *    args.c    --    source for argument parsing
+ *    lchik_args.c    --    source for argument parsing
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -8,7 +8,7 @@
  *
  *    Included here are the definitions for argument parsing.
  */
-#include "args.h"
+#include "lchik_args.h"
 
 #include <stdlib.h>
 #include <string.h>

@@ -1,5 +1,5 @@
 /*
- *    file.h    --    file handling functions
+ *    lchik_file.h    --    file handling functions
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on June 25, 2022
  *
@@ -9,13 +9,13 @@
  *    The filesystem handles file reading and writing, as well
  *    as a search path lookup.
  */
-#include "file.h"
+#include "lchik_file.h"
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "log.h"
+#include "lchik_log.h"
 
 char _paths[LIBCHIK_FILE_MAX_PATHS][LIBCHIK_FILE_MAX_PATH_LENGTH] = {{0}};
 

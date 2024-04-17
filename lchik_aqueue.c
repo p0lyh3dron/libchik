@@ -1,5 +1,5 @@
 /*
- *    aqueue.c    --    Source for async queue
+ *    lchik_aqueue.c    --    Source for async queue
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -8,7 +8,7 @@
  *
  *    This file provides the definition of the async queue functionality.
  */
-#include "aqueue.h"
+#include "lchik_aqueue.h"
 
 #include "libchik.h"
 
@@ -57,7 +57,6 @@ aqueue_t *aqueue_new(unsigned long size) {
         return nullptr;
     }
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 
     return queue;
@@ -73,7 +72,6 @@ void aqueue_destroy(aqueue_t *queue) {
     pthread_mutex_destroy(&queue->lock);
     pthread_cond_destroy(&queue->cond);
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 
     free(queue->tasks);
@@ -93,14 +91,12 @@ int aqueue_add(aqueue_t *queue, task_t *task) {
 #if __unix__
     pthread_mutex_lock(&queue->lock);
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 
     if (queue->count == queue->size) {
 #if __unix__
         pthread_mutex_unlock(&queue->lock);
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
         return -1;
     }
@@ -116,7 +112,6 @@ int aqueue_add(aqueue_t *queue, task_t *task) {
     pthread_cond_signal(&queue->cond);
     pthread_mutex_unlock(&queue->lock);
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 
     return 0;
@@ -133,7 +128,6 @@ task_t *aqueue_get(aqueue_t *queue) {
 #if __unix__
     pthread_mutex_lock(&queue->lock);
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 
     queue->waiting++;
@@ -141,7 +135,6 @@ task_t *aqueue_get(aqueue_t *queue) {
 #if __unix__
         pthread_cond_wait(&queue->cond, &queue->lock);
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
     }
     queue->waiting--;
@@ -153,7 +146,6 @@ task_t *aqueue_get(aqueue_t *queue) {
 #if __unix__
     pthread_mutex_unlock(&queue->lock);
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 
     return task;
@@ -170,7 +162,6 @@ int aqueue_waiting(aqueue_t *queue) {
 #if __unix__
     pthread_mutex_lock(&queue->lock);
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 
     int waiting = queue->waiting;
@@ -178,7 +169,6 @@ int aqueue_waiting(aqueue_t *queue) {
 #if __unix__
     pthread_mutex_unlock(&queue->lock);
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 
     return waiting;

@@ -1,5 +1,5 @@
 /*
- *    profiler.c    --    source for profiling.
+ *    lchik_profiler.c    --    source for profiling.
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on January 8, 2024
  *
@@ -9,9 +9,9 @@
  *    This file defines the profiler, which is used to 
  *    label a section of code and measure its performance.
  */
-#include "profiler.h"
+#include "lchik_profiler.h"
 
-#include "log.h"
+#include "lchik_log.h"
 
 _profiled_t _profiled[_CHIK_PROFILER_MAX_PROFILED];
 

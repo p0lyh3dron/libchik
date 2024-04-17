@@ -1,5 +1,5 @@
 /*
- *    profiler.h    --    header for profiling.
+ *    lchik_profiler.h    --    header for profiling.
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on January 8, 2024
  *

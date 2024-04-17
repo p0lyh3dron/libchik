@@ -1,5 +1,5 @@
 /*
- *    resource.c    --    source file for hot-swapping resources
+ *    lchik_resource.c    --    source file for hot-swapping resources
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -9,7 +9,7 @@
  *    This file defines the functions used for loading and unloading
  *    resources.
  */
-#include "resource.h"
+#include "lchik_resource.h"
 
 #include <string.h>
 

@@ -1,5 +1,5 @@
 /*
- *    thread.h    --    header for parallel programming
+ *    lchik_thread.h    --    header for parallel programming
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on June 18, 2022
  *
@@ -24,7 +24,6 @@
 #if __unix__
 #include <pthread.h>
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
 
 /*

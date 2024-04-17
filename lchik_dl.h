@@ -1,5 +1,5 @@
 /*
- *    dl.h    --    header for loading dynamic libraries
+ *    lchik_dl.h    --    header for loading dynamic libraries
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -21,7 +21,7 @@
 #error "Platform does not support dynamic libraries."
 #endif /* __unix__  */
 
-#include "types.h"
+#include "lchik_types.h"
 
 /*
  *    Opens a dynamic library.

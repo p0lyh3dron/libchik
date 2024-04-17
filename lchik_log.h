@@ -1,5 +1,5 @@
 /*
- *    log.h    --    header for logging messages.
+ *    lchik_log.h    --    header for logging messages.
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "types.h"
+#include "lchik_types.h"
 
 typedef enum {
     LIBCHIK_LOG_COLOR_CLEAR,

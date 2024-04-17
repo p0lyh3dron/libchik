@@ -1,5 +1,5 @@
 /*
- *    args.h    --    header for argument parsing
+ *    lchik_args.h    --    header for argument parsing
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -11,7 +11,7 @@
  */
 #pragma once
 
-#include "types.h"
+#include "lchik_types.h"
 
 /*
  *    Initializes the argument parser.

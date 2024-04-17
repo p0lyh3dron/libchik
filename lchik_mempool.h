@@ -1,5 +1,5 @@
 /*
- *    mempool.h    --    header file for memory pool
+ *    lchik_mempool.h    --    header file for memory pool
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -12,7 +12,7 @@
  */
 #pragma once
 
-#include "mempool_type.h"
+#include "lchik_mempool_type.h"
 
 #include "libchik.h"
 

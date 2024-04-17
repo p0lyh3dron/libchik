@@ -1,5 +1,5 @@
 /*
- *    file.h    --    file handling functions
+ *    lchik_file.h    --    file handling functions
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on June 25, 2022
  *
@@ -15,7 +15,7 @@
 #define LIBCHIK_FILE_MAX_PATH_LENGTH 1024
 #define LIBCHIK_FILE_MAX_PATHS       256
 
-#include "types.h"
+#include "lchik_types.h"
 
 /*
  *    Initialize the filesystem with the given search paths.

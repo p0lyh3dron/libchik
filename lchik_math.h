@@ -1,5 +1,5 @@
 /*
- *    math.h    --    math operations
+ *    lchik_math.h    --    math operations
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 25, 2022
  *
@@ -12,7 +12,7 @@
 
 #include <math.h>
 
-#include "types.h"
+#include "lchik_types.h"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))

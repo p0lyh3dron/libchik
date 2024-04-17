@@ -1,5 +1,5 @@
 /*
- *    log.c    --    source for logging messages.
+ *    lchik_log.c    --    source for logging messages.
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on March 20, 2022
  *
@@ -8,7 +8,7 @@
  *
  *    Included here are the definitions for logging messages.
  */
-#include "log.h"
+#include "lchik_log.h"
 
 #include <stdarg.h>
 

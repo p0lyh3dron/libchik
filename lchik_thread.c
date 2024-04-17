@@ -1,5 +1,5 @@
 /*
- *    thread.c    --    source for parallel programming
+ *    lchik_thread.c    --    source for parallel programming
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on June 18, 2022
  *
@@ -11,12 +11,12 @@
  *    This file will defines the functions for creating and manipulating
  * threads.
  */
-#include "thread.h"
+#include "lchik_thread.h"
 
 #include <malloc.h>
 #include <memory.h>
 
-#include "aqueue.h"
+#include "lchik_aqueue.h"
 
 aqueue_t *_threadpool = 0;
 int       _threads    = 0;
@@ -68,7 +68,6 @@ int threadpool_init(unsigned long size, unsigned long threads) {
         if (pthread_create(&thread, 0, _threadpool_thread, 0) != 0)
             return -1;
 #else
-//#error "Unsupported platform"
 #endif /* __unix__  */
     }
 

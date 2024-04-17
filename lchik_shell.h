@@ -1,5 +1,5 @@
 /*
- *    shell.h    --    header for interacting with the engine via a shell
+ *    lchik_shell.h    --    header for interacting with the engine via a shell
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on September 15, 2022
  *
@@ -14,7 +14,7 @@
 #ifndef LIBCHIK_SHELL_H
 #define LIBCHIK_SHELL_H
 
-#include "types.h"
+#include "lchik_types.h"
 
 #define LIBCHIK_SHELL_MAX_COMMANDS  256
 #define LIBCHIK_SHELL_MAX_VARIABLES 256

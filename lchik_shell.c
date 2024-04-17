@@ -1,5 +1,5 @@
 /*
- *    shell.c    --    source for interacting with the engine via a shell
+ *    lchik_shell.c    --    source for interacting with the engine via a shell
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on September 15, 2022
  *
@@ -9,12 +9,12 @@
  *    This file defines the functions for interacting with the
  *    engine via a shell.
  */
-#include "shell.h"
+#include "lchik_shell.h"
 
 #include <stdarg.h>
 #include <string.h>
 
-#include "log.h"
+#include "lchik_log.h"
 
 shell_command_t  _coms[LIBCHIK_SHELL_MAX_COMMANDS];
 shell_variable_t _vars[LIBCHIK_SHELL_MAX_VARIABLES];

@@ -1,5 +1,5 @@
 /*
- *    app.c    --    source for application properties
+ *    lchik_app.c    --    source for application properties
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on April 14, 2022
  *
@@ -9,7 +9,7 @@
  *    This file defines all the functionality that describes the
  *    compiled application.
  */
-#include "app.h"
+#include "lchik_app.h"
 
 appinfo_t _app_info = {0};
 

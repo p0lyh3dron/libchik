@@ -1,5 +1,5 @@
 /*
- *    app.h    --    header for application properties
+ *    lchik_app.h    --    header for application properties
  *
  *    Authored by Karl "p0lyh3dron" Kreuze on April 14, 2022
  *
@@ -11,7 +11,7 @@
  */
 #pragma once
 
-#include "types.h"
+#include "lchik_types.h"
 
 typedef struct {
     const char *engine_name;
