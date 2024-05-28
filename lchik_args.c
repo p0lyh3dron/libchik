@@ -13,17 +13,30 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "lchik_app.h"
+#include "lchik_file.h"
+#include "lchik_math.h"
+
 int          _argc = 0;
 const char **_argv = 0;
 
 /*
  *    Initializes the argument parser.
  *
- *    @param const int argc        The number of arguments passed to the
- * program.
+ *    @param const int argc        The number of arguments passed to the program.
  *    @param const char ** argv    The array of arguments passed to the program.
  */
 void args_init(const int argc, const char **argv) {
+    char buf[256] = {0};
+
+    file_update(&_app_k);
+
+    sprintf(buf, "%d", argc);
+    k_ctx_add(_app_ctx, "u32", "argc", buf);
+    k_ctx_add(_app_ctx, "u8[][]", "argv", str_list_to_str(argv, argc, "'n','n','n'"));
+
+    k_ctx_write_ws(_app_ctx, _app_k.path, "Chik");
+
     _argc = argc;
     _argv = argv;
 }
@@ -36,13 +49,24 @@ void args_init(const int argc, const char **argv) {
  *    @return unsigned int              1 if the argument is present, 0 otherwise.
  */
 unsigned int args_has(const char *arg) {
-    s64 i;
+    file_update(&_app_k);
 
-    for (i = 0; i < _argc; i++) {
-        if (strcmp(_argv[i], arg) == 0) {
+    int argc          = atoi(k_ctx_get(_app_ctx, "argc").value);
+    const char **argv = str_to_str_list(k_ctx_get(_app_ctx, "argv").value, argc, "'n','n','n'");
+
+    for (s64 i = 0; i < argc; i++) {
+        if (strcmp(argv[i], arg) == 0) {
+            for (s64 j = 0; j < argc; j++) free(argv[j]);
+
+            free(argv);
+
             return 1;
         }
     }
+
+    for (s64 j = 0; j < argc; j++) free(argv[j]);
+
+    free(argv);
 
     return 0;
 }
@@ -52,20 +76,33 @@ unsigned int args_has(const char *arg) {
  *
  *    @param  const char *arg     The argument to check for.
  *
- *    @return const char *     The value of the argument, or NULL if it is not
- * present.
+ *    @return const char *     The value of the argument, or NULL if it is not present.
  *
  */
 const char *args_get_str(const char *arg) {
-    s64 i;
+    static buf[256] = {0};
+    file_update(&_app_k);
 
-    for (i = 0; i < _argc; i++) {
-        if (strcmp(_argv[i], arg) == 0) {
-            return _argv[i + 1];
+    int argc          = atoi(k_ctx_get(_app_ctx, "argc").value);
+    const char **argv = str_to_str_list(k_ctx_get(_app_ctx, "argv").value, argc, "'n','n','n'");
+
+    for (s64 i = 0; i < argc; i++) {
+        if (strcmp(argv[i], arg) == 0) {
+            strcpy(buf, argv[i + 1]);
+
+            for (s64 j = 0; j < argc; j++) free(argv[j]);
+
+            free(argv);
+
+            return buf;
         }
     }
+    
+    for (s64 j = 0; j < argc; j++) free(argv[j]);
 
-    return 0;
+    free(argv);
+
+    return (const char *)0x0;
 }
 
 /*
@@ -77,15 +114,29 @@ const char *args_get_str(const char *arg) {
  * present.
  */
 int args_get_int(const char *arg) {
-    u64 i;
+    static buf[256] = {0};
+    file_update(&_app_k);
 
-    for (i = 0; i < _argc; i++) {
-        if (strcmp(_argv[i], arg) == 0) {
-            return atoi(_argv[i + 1]);
+    int argc          = atoi(k_ctx_get(_app_ctx, "argc").value);
+    const char **argv = str_to_str_list(k_ctx_get(_app_ctx, "argv").value, argc, "'n','n','n'");
+
+    for (s64 i = 0; i < argc; i++) {
+        if (strcmp(argv[i], arg) == 0) {
+            strcpy(buf, argv[i + 1]);
+
+            for (s64 j = 0; j < argc; j++) free(argv[j]);
+
+            free(argv);
+
+            return atoi(buf);
         }
     }
+    
+    for (s64 j = 0; j < argc; j++) free(argv[j]);
 
-    return 0;
+    free(argv);
+
+    return (const char *)0x0;
 }
 
 /*
@@ -97,20 +148,7 @@ int args_get_int(const char *arg) {
  * present.
  */
 float args_get_float(const char* arg, float fallback) {
-    s64 i;
-
-    for (i = 0; i < _argc; i++) {
-        if (strcmp(_argv[i], arg) == 0) {
-            char* end = 0x0;
-            float out = strtof(_argv[i + 1], &end);
-
-            if (end != _argv[i + 1])
-                return out;
-            return fallback;
-        }
-    }
-
-    return fallback;
+    
 }
 
 /*

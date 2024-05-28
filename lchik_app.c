@@ -11,9 +11,31 @@
  */
 #include "lchik_app.h"
 
-appinfo_t _app_info = {0};
+#include "lchik_file.h"
+#include "lchik_kompact.h"
+#include "lchik_math.h"
+
+watched_file_t _app_k   = {0};
+k_ctx_t       *_app_ctx = (k_ctx_t *)0x0;
 
 const engineinfo_t _engine_info = {"Chik", {0, 0, 0}};
+
+/*
+ *    Returns the name of the appfile.
+ *
+ *    @return const char *    The name of the appfile.
+ */
+const char *app_get_appfile_name(void) { static char buf[256] = {0}; sprintf(buf, "app-%d.k", getpid()); return buf; }
+
+/*
+ *    Updates the app info.
+ */
+void app_update(void) {
+    k_ctx_free(_app_ctx);
+    _app_ctx = k_ctx_new();
+
+    k_ctx_read(_app_ctx, _app_k.path);
+}
 
 /*
  *    Initializes the app info.
@@ -22,8 +44,23 @@ const engineinfo_t _engine_info = {"Chik", {0, 0, 0}};
  *    @param const vec3s_t version     The application version.
  */
 void app_init(const char *app_name, const vec3s_t version) {
-    _app_info.app_name = app_name;
-    _app_info.version  = version;
+    char buf[256] = {0};
+    k_ctx_t *ctx  = k_ctx_new();
+
+    k_ctx_read(ctx, app_get_appfile_name());
+
+    sprintf(buf, "\"%s\"", _engine_info.engine_name);
+    k_ctx_add(ctx, "u8[]", "engine_name", buf);
+    k_ctx_add(ctx, "u32[]", "engine_version", vec3_i_to_str(_engine_info.version, "n,n,n"));
+    sprintf(buf, "\"%s\"", app_name);
+    k_ctx_add(ctx, "u8[]", "app_name", buf);
+    k_ctx_add(ctx, "u32[]", "app_version", vec3_i_to_str(version, "n,n,n"));
+
+    k_ctx_write_ws(ctx, app_get_appfile_name(), "Chik");
+
+    _app_ctx = ctx;
+    
+    file_create(&_app_k, app_get_appfile_name(), app_update);
 }
 
 /*
@@ -31,14 +68,22 @@ void app_init(const char *app_name, const vec3s_t version) {
  *
  *    @return const char *    The application name.
  */
-const char *app_get_name(void) { return _app_info.app_name; }
+const char *app_get_name(void) {
+    file_update(&_app_k);
+
+    return k_ctx_get(_app_ctx, "app_name").value;
+}
 
 /*
  *    Returns the app version.
  *
  *    @return vec3s_t    The application version.
  */
-vec3s_t app_get_version(void) { return _app_info.version; }
+vec3s_t app_get_version(void) { 
+    file_update(&_app_k);
+
+    return str_to_vec3_i(k_ctx_get(_app_ctx, "app_version").value, "n,n,n"); 
+}
 
 /*
  *    Returns the engine name.
@@ -53,3 +98,12 @@ const char *app_get_engine_name(void) { return _engine_info.engine_name; }
  *    @return vec3s_t    The engine version.
  */
 vec3s_t app_get_engine_version(void) { return _engine_info.version; }
+
+/*
+ *    Exits the app.
+ */
+void app_exit(void) {
+    k_ctx_free(_app_ctx);
+    
+    file_delete(_app_k.path);
+}

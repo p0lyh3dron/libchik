@@ -12,8 +12,6 @@
 
 #include <stdarg.h>
 
-FILE *_log_file;
-
 /*
  *    Sets the color of the log messages.
  *
@@ -90,8 +88,6 @@ void log_msg(const char *message, ...) {
     va_end(args_va);
 
     printf("%s", buf);
-    if (_log_file != (FILE *)0x0)
-        fprintf(_log_file, "%s", buf);
 }
 
 /*
@@ -109,12 +105,9 @@ void log_note(const char *note, ...) {
     vsnprintf(buf, LIBCHIK_MAX_LOG_MESSAGE_LENGTH, note, args_va);
     va_end(args_va);
 
-    fprintf(stderr, "note | %s", buf);
-
-    if (_log_file != (FILE *)0x0)
-        fprintf(_log_file, "note | %s", buf);
-
+    fprintf(stderr, "note | ");
     log_set_color(LIBCHIK_LOG_COLOR_CLEAR);
+    fprintf(stderr, "%s", buf);
 }
 
 /*
@@ -132,12 +125,10 @@ void log_warn(const char *warning, ...) {
     vsnprintf(buf, LIBCHIK_MAX_LOG_MESSAGE_LENGTH, warning, args_va);
     va_end(args_va);
 
-    fprintf(stderr, "warning | %s", buf);
-
-    if (_log_file != (FILE *)0x0)
-        fprintf(_log_file, "warning | %s", buf);
-
+    fprintf(stderr, "warning | ");
     log_set_color(LIBCHIK_LOG_COLOR_CLEAR);
+    fprintf(stderr, "%s", buf);
+
 }
 
 /*
@@ -155,12 +146,9 @@ void log_error(const char *error, ...) {
     vsnprintf(buf, LIBCHIK_MAX_LOG_MESSAGE_LENGTH, error, args_va);
     va_end(args_va);
 
-    fprintf(stderr, "error | %s", buf);
-
-    if (_log_file != (FILE *)0x0)
-        fprintf(_log_file, "error | %s", buf);
-
+    fprintf(stderr, "error | ");
     log_set_color(LIBCHIK_LOG_COLOR_CLEAR);
+    fprintf(stderr, "%s", buf);
 }
 
 /*
@@ -178,32 +166,9 @@ void log_fatal(const char *fatal, ...) {
     vsnprintf(buf, LIBCHIK_MAX_LOG_MESSAGE_LENGTH, fatal, args_va);
     va_end(args_va);
 
-    fprintf(stderr, "fatal | %s", buf);
-
-    if (_log_file != (FILE *)0x0)
-        fprintf(_log_file, "fatal | %s", buf);
-
+    fprintf(stderr, "fatal | ");
     log_set_color(LIBCHIK_LOG_COLOR_CLEAR);
+    fprintf(stderr, "%s", buf);
 
     exit(EXIT_FAILURE);
-}
-
-/*
- *    Opens a file for logging.
- *
- *    @param char *file            The file to open.
- */
-void log_open_file(const char *file) {
-    _log_file = fopen(file, "w");
-
-    if (_log_file == (FILE *)0x0)
-        VLOGF_WARN("Failed to open log file: %s", file);
-}
-
-/*
- *    Closes the file opened for logging.
- */
-void log_close_file(void) {
-    if (_log_file != (FILE *)0x0)
-        fclose(_log_file);
 }

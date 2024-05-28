@@ -15,7 +15,15 @@
 #define LIBCHIK_FILE_MAX_PATH_LENGTH 1024
 #define LIBCHIK_FILE_MAX_PATHS       256
 
+#include <sys/stat.h>
+
 #include "lchik_types.h"
+
+typedef struct {
+    char         path[LIBCHIK_FILE_MAX_PATH_LENGTH];
+    struct stat  stat;
+    void       (*callback)();
+} watched_file_t;
 
 /*
  *    Initialize the filesystem with the given search paths.
@@ -43,11 +51,42 @@ void filesystem_add_search_path(const char *path);
 char *file_read(const char *file, unsigned int *size);
 
 /*
+ *    Updates a watched file.
+ *
+ *    @param watched_file_t *file    The file to update.
+ * 
+ *    @return int                     0 on success, -1 on failure.
+ */
+int file_update(watched_file_t *file);
+
+/*
+ *    Creates a watched file.
+ *
+ *    @param watched_file_t *file    The object to create.
+ *    @param const char *path        The path to the file.
+ *    @param void (*callback)(void *) The callback to call when the file is updated.
+ * 
+ *    @return int                     0 on success, -1 on failure.
+ */
+int file_create(watched_file_t *file, const char *path, void (*callback)(void *));
+
+/*
+ *    Deletes a normal file.
+ *
+ *    @param const char *path    The path to the file.
+ * 
+ *    @return int                 0 on success, -1 on failure.
+ */
+int file_delete(const char *path);
+
+/*
  *   Free a file that was read into memory.
  *   Alternatively, you can use free() to free the file.
  *
  *   @param char *file          The file to free.
  */
 void file_free(char *file);
+
+
 
 #endif /* LIBCHIK_FILE_H  */

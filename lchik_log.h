@@ -84,17 +84,6 @@ void log_error(const char *error, ...);
  */
 void log_fatal(const char *fatal, ...);
 
-/*
- *    Opens a file for logging.
- *
- *    @param char *file            The file to open.
- */
-void log_open_file(const char *file);
-/*
- *    Closes the file opened for logging.
- */
-void log_close_file(void);
-
 #define VLOGF_MSG(msg, ...) log_msg("%s | " msg, __func__, __VA_ARGS__)
 #define LOGF_MSG(msg)       log_msg("%s | " msg, __func__)
 

@@ -465,6 +465,103 @@ unsigned int vec3_cross(vec3_t *a, vec3_t *b, vec3_t *c) {
 }
 
 /*
+ *    Converts a vec3s_t to a string.
+ *
+ *    @param vec3s_t a    The vector.
+ *    @param char   *fmt  The format.
+ *
+ *    @return char *    The string.
+ */
+char *vec3_i_to_str(vec3s_t a, char *fmt) {
+    static char str[64];
+
+    if (strcmp(fmt, "n,n,n") == 0) {
+        sprintf(str, "%d,%d,%d", a.x, a.y, a.z);
+    } else if (strcmp(fmt, "n n n") == 0) {
+        sprintf(str, "%d %d %d", a.x, a.y, a.z);
+    }
+
+    return str;
+}
+
+/*
+ *    Converts a string to a vec3s_t.
+ *
+ *    @param char *str    The string.
+ *    @param char *fmt    The format.
+ * 
+ *    @return vec3s_t    The vector.
+ */
+vec3s_t str_to_vec3_i(char *str, char *fmt) {
+    vec3s_t v = {0, 0, 0};
+
+    if (strcmp(fmt, "n,n,n") == 0) {
+        sscanf(str, "%d,%d,%d", &v.x, &v.y, &v.z);
+    } else if (strcmp(fmt, "n n n") == 0) {
+        sscanf(str, "%d %d %d", &v.x, &v.y, &v.z);
+    }
+
+    return v;
+}
+
+/*
+ *    Converts a list of strings to a string.
+ *
+ *    @param char **str    The list of strings.
+ *    @param int    len    The length of the list.
+ *    @param char   *fmt   The format.
+ *
+ *    @return char *    The string.
+ */
+char *str_list_to_str(char **str, int len, char *fmt) {
+    static char s[1024];
+    int         i;
+
+    s[0] = '\0';
+
+    if (strcmp(fmt, "'n','n','n'") == 0) {
+        for (i = 0; i < len; i++) {
+            strcat(s, "\"");
+            strcat(s, str[i]);
+            strcat(s, "\"");
+            if (i < len - 1) {
+                strcat(s, ",");
+            }
+        }
+    }
+
+    return s;
+
+}
+
+/*
+ *    Converts a string to a list of strings.
+ *
+ *    @param char   *str    The string.
+ *    @param int     len    The length of the list.
+ *    @param char   *fmt    The format.
+ *
+ *    @return char **    The list of strings.
+ */
+char **str_to_str_list(char *str, int len, char *fmt) {
+    char **s = (char **)malloc(len * sizeof(char *));
+    int    i;
+
+    if (strcmp(fmt, "'n','n','n'") == 0) {
+        for (i = 0; i < len; i++) {
+            s[i] = (char *)malloc(64 * sizeof(char));
+            sscanf(str, "\"%[^\"]\"", s[i]);
+            str = strchr(str, ',');
+            if (str != NULL) {
+                str++;
+            }
+        }
+    }
+
+    return s;
+}
+
+/*
  *    Adds a vec4.
  *
  *    @param vec4_t *a    The return vector.

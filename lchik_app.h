@@ -11,6 +11,8 @@
  */
 #pragma once
 
+#include "lchik_file.h"
+#include "lchik_kompact.h"
 #include "lchik_types.h"
 
 typedef struct {
@@ -22,6 +24,9 @@ typedef struct {
     const char *app_name;
     vec3s_t     version;
 } appinfo_t;
+
+extern watched_file_t _app_k;
+extern k_ctx_t       *_app_ctx;
 
 /*
  *    Initializes the app info.
@@ -58,3 +63,8 @@ const char *app_get_engine_name(void);
  *    @return vec3s_t    The engine version.
  */
 vec3s_t app_get_engine_version(void);
+
+/*
+ *    Exits the app.
+ */
+void app_exit(void);

@@ -100,6 +100,67 @@ char *file_read(const char *file, unsigned int *size) {
 }
 
 /*
+ *    Updates a watched file.
+ *
+ *    @param watched_file_t *file    The file to update.
+ * 
+ *    @return int                     0 on success, -1 on failure.
+ */
+int file_update(watched_file_t *file) {
+    struct stat st;
+
+    if (stat(file->path, &st) != 0) {
+        return -1;
+    }
+
+    if (st.st_mtime != file->stat.st_mtime) {
+        file->callback();
+        file->stat = st;
+    }
+
+    return 0;
+}
+
+/*
+ *    Creates a watched file.
+ *
+ *    @param watched_file_t *file    The object to create.
+ *    @param const char *path        The path to the file.
+ *    @param void (*callback)(void *) The callback to call when the file is updated.
+ * 
+ *    @return int                     0 on success, -1 on failure.
+ */
+int file_create(watched_file_t *file, const char *path, void (*callback)(void *)) {
+    struct stat st;
+
+    if (stat(path, &st) != 0) {
+        return -1;
+    }
+
+    memcpy(file->path, path, strlen(path));
+    file->stat     = st;
+    file->callback = callback;
+
+    return 0;
+}
+
+/*
+ *    Deletes a normal file.
+ *
+ *    @param const char *path    The path to the file.
+ * 
+ *    @return int                 0 on success, -1 on failure.
+ */
+int file_delete(const char *path) {
+    if (remove(path) != 0) {
+        return -1;
+    }
+
+    return 0;
+
+}
+
+/*
  *   Free a file that was read into memory.
  *   Alternatively, you can use free() to free the file.
  *
