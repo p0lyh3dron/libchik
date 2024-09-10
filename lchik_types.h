@@ -31,17 +31,6 @@ typedef unsigned long long u64;
 #define ARR_LEN(x) \
     ((sizeof(x) / sizeof(0 [x])) / ((unsigned long)(!(sizeof(x) % sizeof(0 [x])))))
 
-#if __unix__
-typedef __uint128_t u128;
-#elif _WIN32
-/*
- *    Probably broken on windows.
- */
-#define DLL_EXPORT  __declspec(dllexport)
-#else
-#error "Platform does not support 128-bit integers."
-#endif /* __unix__  */
-
 typedef char      s8;
 typedef short     s16;
 typedef int       s32;

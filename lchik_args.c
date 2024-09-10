@@ -148,7 +148,7 @@ int args_get_int(const char *arg) {
  * present.
  */
 float args_get_float(const char* arg, float fallback) {
-    
+    return fallback;
 }
 
 /*
