@@ -11,6 +11,7 @@
 #include "lchik_args.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "lchik_app.h"
@@ -52,7 +53,7 @@ unsigned int args_has(const char *arg) {
     file_update(&_app_k);
 
     int argc          = atoi(k_ctx_get(_app_ctx, "argc").value);
-    const char **argv = str_to_str_list(k_ctx_get(_app_ctx, "argv").value, argc, "'n','n','n'");
+    char **argv = str_to_str_list(k_ctx_get(_app_ctx, "argv").value, argc, "'n','n','n'");
 
     for (s64 i = 0; i < argc; i++) {
         if (strcmp(argv[i], arg) == 0) {
@@ -80,11 +81,11 @@ unsigned int args_has(const char *arg) {
  *
  */
 const char *args_get_str(const char *arg) {
-    static buf[256] = {0};
+    static char buf[256] = {0};
     file_update(&_app_k);
 
     int argc          = atoi(k_ctx_get(_app_ctx, "argc").value);
-    const char **argv = str_to_str_list(k_ctx_get(_app_ctx, "argv").value, argc, "'n','n','n'");
+    char **argv = str_to_str_list(k_ctx_get(_app_ctx, "argv").value, argc, "'n','n','n'");
 
     for (s64 i = 0; i < argc; i++) {
         if (strcmp(argv[i], arg) == 0) {
@@ -114,11 +115,11 @@ const char *args_get_str(const char *arg) {
  * present.
  */
 int args_get_int(const char *arg) {
-    static buf[256] = {0};
+    static char buf[256] = {0};
     file_update(&_app_k);
 
     int argc          = atoi(k_ctx_get(_app_ctx, "argc").value);
-    const char **argv = str_to_str_list(k_ctx_get(_app_ctx, "argv").value, argc, "'n','n','n'");
+    char **argv = str_to_str_list(k_ctx_get(_app_ctx, "argv").value, argc, "'n','n','n'");
 
     for (s64 i = 0; i < argc; i++) {
         if (strcmp(argv[i], arg) == 0) {
@@ -136,7 +137,7 @@ int args_get_int(const char *arg) {
 
     free(argv);
 
-    return (const char *)0x0;
+    return -1;
 }
 
 /*

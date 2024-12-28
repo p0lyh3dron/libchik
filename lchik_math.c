@@ -10,6 +10,9 @@
  */
 #include "lchik_math.h"
 
+#include <stdio.h>
+#include <string.h>
+
 // #if defined( __unix__ ) && ( __i386__ )
 #if 1
 #include <xmmintrin.h>
@@ -507,13 +510,13 @@ vec3s_t str_to_vec3_i(char *str, char *fmt) {
 /*
  *    Converts a list of strings to a string.
  *
- *    @param char **str    The list of strings.
- *    @param int    len    The length of the list.
- *    @param char   *fmt   The format.
+ *    @param const char **str    The list of strings.
+ *    @param int    len          The length of the list.
+ *    @param char   *fmt         The format.
  *
  *    @return char *    The string.
  */
-char *str_list_to_str(char **str, int len, char *fmt) {
+char *str_list_to_str(const char **str, int len, char *fmt) {
     static char s[1024];
     int         i;
 

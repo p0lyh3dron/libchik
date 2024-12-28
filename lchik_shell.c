@@ -215,25 +215,26 @@ void shell_execute(char *com) {
  */
 shell_val_u shell_get_variable(char *name) {
     unsigned long i;
+    shell_val_u ret = (shell_val_u){.i = 0};
 
     for (i = 0; i < LIBCHIK_SHELL_MAX_VARIABLES; i++) {
         if (_vars[i].name != nullptr) {
             if (strcmp(_vars[i].name, name) == 0) {
                 switch (_vars[i].type) {
                 case SHELL_VAR_INT:
-                    return (shell_val_u){.i = atoi(_vars[i].val)};
+                    ret.i = atoi(_vars[i].val); break;
                 case SHELL_VAR_FLOAT:
-                    return (shell_val_u){.f = atof(_vars[i].val)};
+                    ret.f = atof(_vars[i].val); break;
                 case SHELL_VAR_STRING:
-                    return (shell_val_u){.s = _vars[i].val};
+                    memcpy(ret.s, _vars[i].val, strlen(_vars[i].val)); break;
                 case SHELL_VAR_BOOL:
-                    return (shell_val_u){
-                        .b = (strcmp(_vars[i].val, "true") == 0)};
+                    ret.b = (strcmp(_vars[i].val, "true") == 0); break;
                 }
             }
         }
     }
-    return (shell_val_u){.i = 0};
+
+    return ret;
 }
 
 /*

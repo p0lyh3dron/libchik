@@ -11,6 +11,9 @@
  */
 #include "lchik_app.h"
 
+#include <stdio.h>
+#include <unistd.h>
+
 #include "lchik_file.h"
 #include "lchik_kompact.h"
 #include "lchik_math.h"
@@ -30,7 +33,7 @@ const char *app_get_appfile_name(void) { static char buf[256] = {0}; sprintf(buf
 /*
  *    Updates the app info.
  */
-void app_update(void) {
+void app_update(void *) {
     k_ctx_free(_app_ctx);
     _app_ctx = k_ctx_new();
 

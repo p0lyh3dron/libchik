@@ -264,13 +264,13 @@ vec3s_t str_to_vec3_i(char *str, char *fmt);
 /*
  *    Converts a list of strings to a string.
  *
- *    @param char **str    The list of strings.
- *    @param int    len    The length of the list.
- *    @param char   *fmt   The format.
+ *    @param const char **str    The list of strings.
+ *    @param int    len          The length of the list.
+ *    @param char   *fmt         The format.
  *
  *    @return char *    The string.
  */
-char *str_list_to_str(char **str, int len, char *fmt);
+char *str_list_to_str(const char **str, int len, char *fmt);
 
 /*
  *    Converts a string to a list of strings.
